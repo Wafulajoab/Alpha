@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     // If the form is not submitted, redirect back to login page
     header("Location: admin_login.php");
+    //header("Location: admin_login.php");
     exit();
 }
 ?>
