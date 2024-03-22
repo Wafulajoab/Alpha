@@ -21,71 +21,53 @@
             align-items: center;
             background-color: darkgrey;
         }
+       
         .navbar {
-            background-color: #444;;
-            width: 100%;
-            padding: 15px 0;
+            background-color:transparent;
+            padding: 20px 0;
             text-align: center;
+            position: fixed; /* Make the navbar fixed */
+            width: 100%; /* Set the width to 100% */
+            top: 0; /* Align the navbar to the top */
+            z-index: 999; /* Ensure the navbar stays on top of other content */
         }
-        .navbar .dropdown {
-            position: relative;
-            display: inline-block;
-            color: white;
-     
-    
-         
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #444;
-            min-width: 180px;
-            z-index: 1;
-        }
-        .dropdown-content a {
-            color: white;
-            padding: 12px 16px;
+
+        .navbar a {
+            color: black;
             text-decoration: none;
-            display: block;
-           
+            margin: 0 20px;
+            border-radius: 25px;
         }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .container {
-            text-align: left;
-            margin-bottom: 50px;
-        }
+
         .button {
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 18px;
-            background-color: yellow;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            background-color: transparent;
+            color: green;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid green;
+            padding: 8px 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            border-radius: 4px;
         }
+
         .button:hover {
-            background-color: white;
+            background-color: green;
+            color: white;
         }
+
         
     </style>
 </head>
 <body>
  
-    <div class="navbar">
-        <div class="dropdown">
-            <span>&#9776;</span>
-            <div class="dropdown-content">
-                <a href="admin_register.php">Register as Admin</a>
-                <a href="admin_login.php">Login as Admin</a>
-                <a href="user_register.php">Register as User</a>
-                <a href="user_login.php">Login as User</a>
-            </div>
-        </div>
-    </div>
+<div class="navbar">
+    <a href="admin_register.php" class="button" id="adminBtn">Register as Admin</a>
+    <a href="admin_login.php" class="button" id="adminBtn">Login as Admin</a>
+    <a href="user_register.php" class="button" id="registerBtn">Register as User</a>
+    <a href="user_login.php" class="button" id="loginBtn">Login as User</a>
+</div>
+
     <div class="container">
         <!-- <h1>Welcome to KeMU Security System</h1> -->
         <!-- Your other content here -->

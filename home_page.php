@@ -44,27 +44,27 @@
             border-radius: 10px;
         }
         .total-deposits {
-            background-color: #4CAF50;
+            background-color: red;
             color: white;
         }
         .account-balance {
-            background-color: #2196F3;
+            background-color: green;
             color: white;
         }
         .total-withdrawn {
-            background-color: #f44336;
+            background-color: black;
             color: white;
         }
         .referral-earnings {
-            background-color: #FF9800;
+            background-color:black;
             color: white;
         }
         .active-investments {
-            background-color: #9C27B0;
+            background-color: green;
             color: white;
         }
         .total-withdrawals {
-            background-color: #FF5722;
+            background-color:red;
             color: white;
         }
       
