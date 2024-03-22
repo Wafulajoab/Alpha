@@ -44,24 +44,24 @@
             border-radius: 10px;
         }
         .phone-number-section {
-            background-color: #9C27B0;
-            color: white;
+            background-color: #F8F8FF;
+            color: black;
             
         }
         .withdrawal-section {
-            background-color: #FF5733; /* Orange */
+            background-color:red; /* Orange */
             color: white;
         }
         .account-balance-section {
-            background-color: #3498DB; /* Blue */
+            background-color: black; /* Blue */
             color: white;
         }
         .stk-push-section {
-            background-color: #27AE60; /* Green */
+            background-color: green; /* Green */
             color: white;
         }
         button {
-            background-color: purple;
+            background-color: black;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -82,7 +82,7 @@
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
     </div>
-
+<br><br><br><br>
     <div class="container">
 
         <div class="section account-balance-section">
@@ -92,11 +92,11 @@
 
         <div class="section phone-number-section">
             <h3>Enter Your Phone Number</h3>
-            <input type="number" placeholder="Phone Number"style="width: 200px; height: 30px;">
+            <input text="number" placeholder="Phone Number"style="width: 200px; height: 30px;">
         </div>
         <div class="section withdrawal-section">
             <h3>Enter Deposit Amount</h3>
-            <input type="number" placeholder="Deposit Amount (Ksh)"style="width: 200px; height: 30px;">
+            <input text="number" placeholder="Deposit Amount (Ksh)"style="width: 200px; height: 30px;">
         </div>
      
         <div class="section stk-push-section">

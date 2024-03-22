@@ -43,7 +43,7 @@
             background-color: #5f04b4;
         }
         .navbar {
-            background-color: black;
+            background-color: #444;
             padding: 20px 0;
             text-align: center;
         }
@@ -77,7 +77,7 @@
         <a href="withdraw.php"><i class="fas fa-money-check-alt"></i> Cashouts</a>
         <a href="profile.php"><i class="fas fa-user"></i> Profile</a>
     </div>
-
+<br><br><br><br>
     <div class="container">
         <table>
             <tr>

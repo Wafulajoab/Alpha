@@ -99,7 +99,7 @@
 </div>
 
     </div>
-
+<br><br><br><br>
     <div class="container">
         <div class="section">
             <h3>Withdrawal Section</h3>
@@ -110,11 +110,11 @@
             
             <div>
                 <h4>Phone Number</h4>
-                <input type="text" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
+                <input text="number" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
             </div>
             <div>
-                <h4>Amount</h4>
-                <input type="number" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
+                <h4>Enter Amount</h4>
+                <input text="number" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
               
             </div>
             <br>

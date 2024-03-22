@@ -44,28 +44,29 @@
             border-radius: 10px;
         }
         .total-deposits {
-            background-color: red;
-            color: white;
+            background-color: #ffcccb; /* Light salmon background */
+            color: #333; /* Dark text color */
+        
         }
         .account-balance {
-            background-color: green;
-            color: white;
+            background-color: #ff9999; /* Light coral background */
+            color: #333; /* Dark text color */
         }
         .total-withdrawn {
-            background-color: black;
-            color: white;
+            background-color: #99ff99; /* Light green background */
+            color: #333; /* Dark text color */
         }
         .referral-earnings {
-            background-color:black;
-            color: white;
+            background-color: #99ccff; /* Light sky blue background */
+            color: #333; /* Dark text color */
         }
         .active-investments {
-            background-color: green;
-            color: white;
+            background-color: #ff9999; /* Light coral background */
+            color: #333; /* Dark text color */
         }
         .total-withdrawals {
-            background-color:red;
-            color: white;
+            background-color: #ffcccb; /* Light salmon background */
+            color: #333; /* Dark text color */
         }
       
     </style>
@@ -79,7 +80,7 @@
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
     </div>
 
-
+<br><br><br>
     <div class="container">
         <div class="section total-deposits">
             <h3>Total Deposits Balance (Ksh.)</h3>
