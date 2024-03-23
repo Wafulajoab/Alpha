@@ -1,3 +1,9 @@
+<?php
+include "get_account_info.php"; // Include the PHP file with account info functions
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,32 +88,33 @@
 </div>
 
 <br><br><br>
-    <div class="container">
+<div class="container">
         <div class="section total-deposits">
             <h3>Total Deposits Balance (Ksh.)</h3>
-            <p>100,000</p>
+            <p><?php echo $totalDepositsBalance; ?></p>
         </div>
         <div class="section account-balance">
             <h3>Account Balance (Ksh.)</h3>
-            <p>50,000</p>
+            <p><?php echo $accountBalance; ?></p>
         </div>
         <div class="section total-withdrawn">
             <h3>Total Withdrawn (Ksh.)</h3>
-            <p>20,000</p>
+            <p><?php echo $totalWithdrawn; ?></p>
         </div>
         <div class="section referral-earnings">
             <h3>Referrals Earnings (Ksh.)</h3>
-            <p>10,000</p>
+            <p><?php echo $referralsEarnings; ?></p>
         </div>
         <div class="section active-investments">
             <h3>Active Investments (Ksh.)</h3>
-            <p>30,000</p>
+            <p><?php echo $activeInvestments; ?></p>
         </div>
-        <div class="section total-withdrawals">
+        <!-- <div class="section total-withdrawals">
             <h3>Total Matured Investments (Ksh.)</h3>
-            <p>15,000</p>
-        </div>
+            <p><?php echo $totalMaturedInvestments; ?></p>
+        </div> -->
     </div>
+
 <br><br><br><br>
      <!-- Footer -->
      <footer id="footer">

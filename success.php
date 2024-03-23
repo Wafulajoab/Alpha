@@ -8,7 +8,10 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            padding: 20px;
+            padding: 10px;
+            max-width: 50%;
+          
+
         }
         .success-message {
             background-color: #4caf50;
@@ -23,7 +26,7 @@
     <div class="success-message">
         <h2>Success!</h2>
         <p>Your investment has been recorded successfully.</p>
-        <a href="home_page.php">Go back to Home Page</a>
+        <a href="investments.php">Go back</a>
     </div>
 </body>
 </html>

@@ -26,28 +26,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["psw"];
     $confirm_password = $_POST["psw-confirm"];
 
-   // Validate username, phone number, and password
-if (empty($username) || empty($phone_number) || empty($password)) {
-    echo "<script>alert('All fields are required');</script>";
-    header("Location: user_register.php");
-    exit();
-} elseif (strlen($username) < 4) {
-    echo "<script>alert('Username must have at least 4 characters');</script>";
-    header("Location: user_register.php");
-    exit();
-} elseif (!preg_match('/^\d{10}$/', $phone_number)) {
-    echo "<script>alert('Phone number must have at least 10 digits');</script>";
-    header("Location: user_register.php");
-    exit();
-} elseif (strlen($password) < 6) {
-    echo "<script>alert('Password must have at least 6 characters');</script>";
-    header("Location: user_register.php");
-    exit();
-} elseif ($password != $confirm_password) {
-    echo "<script>alert('Passwords do not match');</script>";
-    header("Location: user_register.php");
-    exit();
-}
+    // Validate username, phone number, and password
+    if (empty($username) || empty($phone_number) || empty($password)) {
+        echo "<script>alert('All fields are required');</script>";
+        header("Location: user_register.php");
+        exit();
+    } elseif (strlen($username) < 4) {
+        echo "<script>alert('Username must have at least 4 characters');</script>";
+        header("Location: user_register.php");
+        exit();
+    } elseif (!preg_match('/^\d{10}$/', $phone_number)) {
+        echo "<script>alert('Phone number must have at least 10 digits');</script>";
+        header("Location: user_register.php");
+        exit();
+    } elseif (strlen($password) < 6) {
+        echo "<script>alert('Password must have at least 6 characters');</script>";
+        header("Location: user_register.php");
+        exit();
+    } elseif ($password != $confirm_password) {
+        echo "<script>alert('Passwords do not match');</script>";
+        header("Location: user_register.php");
+        exit();
+    }
 
     // Prepare an INSERT statement
     $sql = "INSERT INTO users (username, phone_number, password) VALUES (?, ?, ?)";

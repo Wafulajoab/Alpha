@@ -29,7 +29,7 @@ $username = $_SESSION['username'];
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
-    $package_name = $_POST['package_name'];
+    $package_name = isset($_POST['package_name']) ? $_POST['package_name'] : '';
     $amount = $_POST['amount'];
     $duration = $_POST['duration'];
 
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepare and execute the SQL statement to insert data into the investments table
     $sql = "INSERT INTO investments (package_name, amount, duration, username, maturity_date) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sdis", $package_name, $amount, $duration, $username, $maturity_date);
+    $stmt->bind_param("sdiss", $package_name, $amount, $duration, $username, $maturity_date); // Corrected type definition string
 
     // Check if the statement executed successfully
     if ($stmt->execute()) {

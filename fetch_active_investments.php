@@ -1,37 +1,41 @@
 <?php
-// Include your database connection file
 $servername = "localhost";
-$username = "root"; // Replace with your MySQL username
-$password = ""; // Replace with your MySQL password
+$username = "root";
+$password = "";
 $database = "alpha";
 
-// Create a connection to the database
-$conn = new mysqli($servername, $username, $password, $database);
+// Create connection
+$connection = mysqli_connect($servername, $username, $password, $database);
 
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Check connection
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
-// Get active investments from the active_investments table
-$sql = "SELECT * FROM active_investments";
-$result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    // Display active investments
-    while ($row = $result->fetch_assoc()) {
-        echo "<div>";
-        echo "<p>Username: " . $row['username'] . "</p>";
-        echo "<p>Package Name: " . $row['package_name'] . "</p>";
-        echo "<p>Amount: Ksh " . $row['amount'] . "</p>";
-        echo "<p>Duration: " . $row['duration'] . " days</p>";
-        echo "<p>Maturity Date: " . $row['maturity_date'] . "</p>";
-        echo "</div>";
+$query = "SELECT * FROM active_investments";
+$result = mysqli_query($connection, $query);
+
+if (mysqli_num_rows($result) > 0) {
+    echo '<table border="1">
+            <tr>
+                <th>Investor Name</th>
+                <th>Package Name</th>
+                <th>Investment Amount</th>
+                <th>Investment Duration</th>
+                <th>Start Date</th>
+            </tr>';
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo '<tr>
+                <td>' . $row['investor_name'] . '</td>
+                <td>' . $row['package_name'] . '</td>
+                <td>' . $row['investment_amount'] . '</td>
+                <td>' . $row['investment_duration'] . ' days</td>
+                <td>' . $row['start_date'] . '</td>
+              </tr>';
     }
+    echo '</table>';
 } else {
-    echo "No active investments.";
+    echo 'No active investments found.';
 }
-
-// Close the database connection
-$conn->close();
 ?>

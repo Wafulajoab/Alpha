@@ -86,7 +86,7 @@
     <div class="container">
         <!-- Silver Package form -->
         <div class="section investment-options-section">
-            <form action="silver_investment_process.php" method="POST">
+            <form action="investments_process.php" method="POST">
                 <h3>Silver Package</h3>
                 <p>Earn 15% after 2 days</p>
                 <p>Minimum capital - Ksh 500 (2 days)</p>
@@ -99,7 +99,7 @@
 
         <!-- Bronze Package form -->
         <div class="section current-investment-section">
-            <form action="investment_process.php" method="POST">
+            <form action="investments_process.php" method="POST">
                 <h3>Bronze Package</h3>
                 <p>Earn 30% after 3 days</p>
                 <p>Minimum capital - Ksh 1000 (3 days)</p>
@@ -113,7 +113,7 @@
 
         <!-- Gold Package form -->
         <div class="section total-investments-section">
-            <form action="investment_process.php" method="POST">
+            <form action="investments_process.php" method="POST">
                 <h3>Gold Package</h3>
                 <p>Earn 50% after 6 days</p>
                 <p>Minimum capital - Ksh 2000 (6 days)</p>
@@ -127,7 +127,7 @@
 
         <!-- Executive Package form -->
         <div class="section invest-now-section">
-            <form action="investment_process.php" method="POST">
+            <form action="investments_process.php" method="POST">
                 <h3>Executive Package</h3>
                 <p>Earn 100% after 10 days</p>
                 <p>Minimum capital - Ksh 5000 (10 days)</p>

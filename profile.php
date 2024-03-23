@@ -42,16 +42,23 @@
         .edit-profile-link:hover, .logout:hover {
             background-color: #5f04b4;
         }
-        .navbar {
+         .navbar {
             background-color: #444;
             padding: 20px 0;
             text-align: center;
+            position: fixed; /* Fixed positioning */
+            top: 0; /* Fixed to the top */
+            width: 100%; /* Full width */
         }
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 0 20px;
             border-radius: 25px;
+        }
+        .navbar .icon {
+            font-size: 20px;
+            margin-right: 5px;
         }
         .footer {
             background: lavender;
@@ -85,18 +92,42 @@
                 <th>Attribute</th>
                 <th>Value</th>
             </tr>
-            <tr>
-                <td>Username</td>
-                <td>johndoe123</td>
-            </tr>
-            <tr>
-                <td>Phone Number</td>
-                <td>254123456789</td>
-            </tr>
-            <tr>
-                <td>Balance</td>
-                <td>Ksh 10,000</td>
-            </tr>
+            <?php
+                // Assuming you have established a database connection
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $database = "alpha";
+
+                $conn = new mysqli($servername, $username, $password, $database);
+
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                $sql = "SELECT username, phone_number, balance FROM users WHERE id = 1"; // Assuming the user's ID is 1, modify this query accordingly
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>Username</td>";
+                        echo "<td>" . $row["username"] . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                        echo "<td>Phone Number</td>";
+                        echo "<td>" . $row["phone_number"] . "</td>";
+                        echo "</tr>";
+                        echo "<tr>";
+                        echo "<td>Balance</td>";
+                        echo "<td>Ksh " . $row["balance"] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "0 results";
+                }
+                $conn->close();
+            ?>
         </table>
         <a href="edit_profile.php" class="edit-profile-link"><i class="fas fa-edit"></i> Edit Profile</a>
 
