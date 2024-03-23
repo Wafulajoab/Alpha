@@ -86,16 +86,13 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-    <div class="navbar">
-    <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
-    <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-    <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-    <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashouts</a>
-    <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
- 
-
-    
+<div class="navbar">
+        <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
+        <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
+        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
+        <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
+        <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
 </div>
 
     </div>

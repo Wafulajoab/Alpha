@@ -70,13 +70,14 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="home_page.php"><i class="fas fa-home"></i> Home</a>
-        <a href="deposits.php"><i class="fas fa-money-bill-alt"></i> Deposit</a>
-        <a href="investments.php"><i class="fas fa-chart-line"></i> Invest</a>
-        <a href="withdraw.php"><i class="fas fa-money-check-alt"></i> Cashouts</a>
-        <a href="profile.php"><i class="fas fa-user"></i> Profile</a>
-    </div>
+<div class="navbar">
+        <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
+        <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
+        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
+        <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
+        <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
+</div>
 <br><br><br><br>
     <div class="container">
         <table>

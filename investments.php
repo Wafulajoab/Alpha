@@ -74,90 +74,75 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
+<div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
+        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-    </div>
+</div>
 
     <div class="container">
+        <!-- Silver Package form -->
         <div class="section investment-options-section">
-            <!-- Silver Package form -->
             <form action="silver_investment_process.php" method="POST">
                 <h3>Silver Package</h3>
                 <p>Earn 15% after 2 days</p>
                 <p>Minimum capital - Ksh 500 (2 days)</p>
                 <p>Maximum capital - Ksh 150,000 </p>
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px;
-                 height: 30px;">
-                 <input type="hidden" name="duration" value="2">
+                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
+                <input type="hidden" name="duration" value="2">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
 
-        
-
-
-
+        <!-- Bronze Package form -->
         <div class="section current-investment-section">
-             <!-- Bronze Package form -->
-             <form action="investment_process.php" method="POST">
-            <h3>Bronze Package</h3>
-            <p>Earn 30% after 3 days</p>
-            <p>Minimum capital - Ksh 1000 (3 days)</p>
-            <p>Maximum capital - Ksh 150,000 </p>
             <form action="investment_process.php" method="POST">
+                <h3>Bronze Package</h3>
+                <p>Earn 30% after 3 days</p>
+                <p>Minimum capital - Ksh 1000 (3 days)</p>
+                <p>Maximum capital - Ksh 150,000 </p>
                 <input type="hidden" name="package_name" value="Bronze Package">
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px;
-                 height: 30px;">
+                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
                 <input type="hidden" name="duration" value="3">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
 
-
-
+        <!-- Gold Package form -->
         <div class="section total-investments-section">
-             <!-- Gold Package form -->
-             <form action="investment_process.php" method="POST">
-            <h3>Gold Package</h3>
-            <p>Earn 50% after 6 days</p>
-            <p>Minimum capital - Ksh 2000 (6 days)</p>
-            <p>Maximum capital - Ksh 150,000 </p>
             <form action="investment_process.php" method="POST">
+                <h3>Gold Package</h3>
+                <p>Earn 50% after 6 days</p>
+                <p>Minimum capital - Ksh 2000 (6 days)</p>
+                <p>Maximum capital - Ksh 150,000 </p>
                 <input type="hidden" name="package_name" value="Gold Package">
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px;
-                 height: 30px;">
+                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
                 <input type="hidden" name="duration" value="6">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
 
-
-
+        <!-- Executive Package form -->
         <div class="section invest-now-section">
-             <!-- Executive Package form -->
-             <form action="investment_process.php" method="POST">
-            <h3>Executive Package</h3>
-            <p>Earn 100% after 10 days</p>
-            <p>Minimum capital - Ksh 5000 (10 days)</p>
-            <p>Maximum capital - Ksh 150,000 </p>
             <form action="investment_process.php" method="POST">
+                <h3>Executive Package</h3>
+                <p>Earn 100% after 10 days</p>
+                <p>Minimum capital - Ksh 5000 (10 days)</p>
+                <p>Maximum capital - Ksh 150,000 </p>
                 <input type="hidden" name="package_name" value="Executive Package">
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px;
-                 height: 30px;">
+                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
                 <input type="hidden" name="duration" value="10">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
-
-        
     </div>
-    <br><br><br>
-    <!-- Footer -->
-    <footer id="footer">
+
+    <br><br><br><br>
+     <!-- Footer -->
+     <footer id="footer">
         <style>
             #footer {
                 position: fixed;
@@ -168,18 +153,22 @@
                 text-align: center;
                 padding: 0.1rem;
             }
+
             .footer p {
                 justify-content: center;
             }
+
             .footer a {
                 color: green;
                 text-decoration: underline;
                 font-weight: bold;
             }
         </style>
+
         <div class="footer">
             <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
         </div>
     </footer>
+</body>
 </body>
 </html>

@@ -44,21 +44,21 @@
             border-radius: 10px;
         }
         .phone-number-section {
-            background-color: #F8F8FF;
-            color: black;
+            background-color: #ffcccb; /* Light salmon background */
+            color: #333; /* Dark text color */
             
         }
         .withdrawal-section {
-            background-color:red; /* Orange */
-            color: white;
+            background-color: #99ff99; /* Light green background */
+            color: #333; /* Dark text color */
         }
         .account-balance-section {
-            background-color: black; /* Blue */
-            color: white;
+            background-color: #ff9999; /* Light coral background */
+            color: #333; /* Dark text color */
         }
         .stk-push-section {
-            background-color: green; /* Green */
-            color: white;
+            background-color: #ffcccb; /* Light salmon background */
+            color: #333; /* Dark text color */
         }
         button {
             background-color: black;
@@ -75,13 +75,14 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
+<div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
+        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-    </div>
+</div>
 <br><br><br><br>
     <div class="container">
 

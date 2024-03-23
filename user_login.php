@@ -59,7 +59,7 @@
             border-radius: 8px;
         }
         button {
-            background-color: cyan;
+            background-color: green;
             padding: 14px 20px;
             margin: 8px;
             border: none;
