@@ -2,7 +2,16 @@
 include "get_account_info.php"; // Include the PHP file with account info functions
 ?>
 
+<?php
+session_start(); // Start the session
 
+// Check if the username is set in the session
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Get the username from the session
+} else {
+    $username = 'Guest'; // Default to 'Guest' if username is not set in the session
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,17 +84,31 @@ include "get_account_info.php"; // Include the PHP file with account info functi
             color: #333; /* Dark text color */
         }
       
+        .username {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: yellow;
+            font-weight: bold;
+            font-size: 25px;
+            font-family: Arial, sans-serif;
+        
+        }
+
     </style>
 </head>
 <body>
-<div class="navbar">
+    <!-- Navigation Bar -->
+    <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
 </div>
+    </div>
+
 
 <br><br><br>
 <div class="container">
@@ -114,6 +137,9 @@ include "get_account_info.php"; // Include the PHP file with account info functi
             <p><?php echo $totalMaturedInvestments; ?></p>
         </div> -->
     </div>
+
+<!-- Display username -->
+<div class="username"><?php echo $username; ?></div>
 
 <br><br><br><br>
      <!-- Footer -->

@@ -74,14 +74,16 @@
     </style>
 </head>
 <body>
-<div class="navbar">
+    <!-- Navigation Bar -->
+    
+    <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-</div>
+    </div>
 
     <div class="container">
         <!-- Silver Package form -->
@@ -91,6 +93,7 @@
                 <p>Earn 15% after 2 days</p>
                 <p>Minimum capital - Ksh 500 (2 days)</p>
                 <p>Maximum capital - Ksh 150,000 </p>
+                <input type="hidden" name="package_name" value="Silver Package">
                 <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
                 <input type="hidden" name="duration" value="2">
                 <button type="submit">Invest Now</button>

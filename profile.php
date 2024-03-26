@@ -77,11 +77,12 @@
     </style>
 </head>
 <body>
-<div class="navbar">
+    <!-- Navigation Bar -->
+    <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
 </div>
@@ -93,43 +94,50 @@
                 <th>Value</th>
             </tr>
             <?php
-                // Assuming you have established a database connection
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $database = "alpha";
+session_start(); // Start or resume the session
 
-                $conn = new mysqli($servername, $username, $password, $database);
+// Check if the 'username' session variable is set
+if (!isset($_SESSION['username'])) {
+    // Redirect the user to the login page or display an error message
+    header("Location: login.php");
+    exit(); // Stop further execution
+}
 
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+// Assuming you have established a database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "alpha";
 
-                $sql = "SELECT username, phone_number, balance FROM users WHERE id = 1"; // Assuming the user's ID is 1, modify this query accordingly
-                $result = $conn->query($sql);
+$conn = new mysqli($servername, $username, $password, $database);
 
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>Username</td>";
-                        echo "<td>" . $row["username"] . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                        echo "<td>Phone Number</td>";
-                        echo "<td>" . $row["phone_number"] . "</td>";
-                        echo "</tr>";
-                        echo "<tr>";
-                        echo "<td>Balance</td>";
-                        echo "<td>Ksh " . $row["balance"] . "</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "0 results";
-                }
-                $conn->close();
-            ?>
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Retrieve user information based on their login details
+$username = $_SESSION['username']; // Assuming 'username' is set in the session after login
+$sql = "SELECT username, phone_number, balance FROM users WHERE username = '$username'"; // Update query to fetch existing columns
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Display user information in a table
+    echo "<table>";
+    echo "<tr><th>Attribute</th><th>Value</th></tr>";
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr><td>Username</td><td>" . $row["username"] . "</td></tr>";
+        echo "<tr><td>Phone Number</td><td>" . $row["phone_number"] . "</td></tr>";
+        echo "<tr><td>Balance</td><td>Ksh " . $row["balance"] . "</td></tr>";
+    }
+    echo "</table>";
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>
+
         </table>
-        <a href="edit_profile.php" class="edit-profile-link"><i class="fas fa-edit"></i> Edit Profile</a>
+
 
         <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>

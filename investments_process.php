@@ -33,6 +33,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST['amount'];
     $duration = $_POST['duration'];
 
+    // Check if the investment amount is less than the minimum for the selected package
+    $min_investment = 0; // Default minimum investment
+
+    if ($package_name == 'Silver Package') {
+        $min_investment = 500;
+    } elseif ($package_name == 'Bronze Package') {
+        $min_investment = 1000;
+    } elseif ($package_name == 'Gold Package') {
+        $min_investment = 2000;
+    } elseif ($package_name == 'Executive Package') {
+        $min_investment = 5000;
+    }
+
+    if ($amount < $min_investment) {
+        // Display the pop-up message
+        echo '<script>alert("Minimum investment is ' . $min_investment . ' for ' . $package_name . '");</script>';
+        // Redirect to the same page after 2 seconds
+        echo '<script>setTimeout(function(){ window.location.href = "investments.php"; }, 2000);</script>';
+        // Exit the script
+        exit();
+    }
+
     // Calculate the maturity date based on the current date and investment duration
     $maturity_date = date('Y-m-d', strtotime("+$duration days"));
 
@@ -58,3 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close the database connection
 $conn->close();
 ?>
+
+<!-- JavaScript code for pop-up message and redirection -->
+<script>
+    // Display the pop-up message
+    alert("Minimum investment is <?php echo $min_investment; ?> for <?php echo $package_name; ?>");
+    // Redirect to the same page after 2 seconds
+    setTimeout(function() {
+        window.location.href = "investments.php";
+    }, 2000);
+</script>

@@ -30,7 +30,7 @@ function getTotalDepositsBalance($conn) {
 // Function to fetch total withdrawn
 function getTotalWithdrawn($conn) {
     $userId = $_SESSION['user_id'] ?? 0; // Default value if user_id is not set
-    $sql = "SELECT SUM(withdraw_amount) AS total_withdrawn FROM withdrawals WHERE user_id = ?";
+    $sql = "SELECT SUM(withdrawal_amount) AS total_withdrawn FROM withdrawals WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -75,11 +75,10 @@ function getActiveInvestments($conn) {
 
 // Fetch user's account information
 $totalDepositsBalance = getTotalDepositsBalance($conn);
-$accountBalance = $totalDepositsBalance - getTotalWithdrawn($conn);
 $totalWithdrawn = getTotalWithdrawn($conn);
+$accountBalance = $totalDepositsBalance - $totalWithdrawn;
 $referralsEarnings = getReferralsEarnings($conn);
 $activeInvestments = getActiveInvestments($conn);
-
 
 // Close the connection
 $conn->close();

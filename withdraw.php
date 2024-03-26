@@ -86,37 +86,47 @@
     </style>
 </head>
 <body>
-<div class="navbar">
+    <!-- Navigation Bar -->
+    <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
 </div>
-
     </div>
 <br><br><br><br>
     <div class="container">
         <div class="section">
-            <h3>Withdrawal Section</h3>
-            <div>
-                <h4>Account Balance</h4>
-                <p>Ksh 1000</p> <!-- Example account balance, replace with actual balance -->
-            </div>
-            
-            <div>
-                <h4>Phone Number</h4>
-                <input text="number" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
-            </div>
-            <div>
-                <h4>Enter Amount</h4>
-                <input text="number" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
-              
-            </div>
-            <br>
-            <button>Withdraw</button>
-        </div>
+        <form action="withdraw_process.php" method="POST">
+    <h3>Withdrawal Section</h3>
+    <div>
+    <div>
+    <h4>Account Balance</h4>
+    <?php
+    if (isset($total_balance)) {
+        echo "<p>Ksh " . $total_balance . "</p>";
+    } else {
+        echo "<p>Account balance not available</p>";
+    }
+    ?>
+</div>
+
+</div>
+
+    <div>
+        <h4>Phone Number</h4>
+        <input type="text" name="phone_number" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
+    </div>
+    <div>
+        <h4>Enter Amount</h4>
+        <input type="number" name="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
+    </div>
+    <br>
+    <button type="submit">Withdraw</button>
+</form>
+
     </div>
 
     <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>

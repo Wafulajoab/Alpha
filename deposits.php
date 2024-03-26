@@ -72,19 +72,78 @@
         button:hover {
             background-color: #8a2be2;
         }
+
+        .payment-details-section {
+        background-color: #ccffff; /* Light blue background */
+        color: #333; /* Dark text color */
+        border-radius: 10px;
+        margin: 20px 0; /* Adjusted margin */
+        padding: 10px;
+        text-align: center;
+        margin: 0 auto; /* Center align horizontally */
+        width: 41%; /* Adjust width as needed */
+    }
+
+    .payment-details-section h3 {
+        margin-bottom: 10px; /* Adjusted margin */
+    }
+
+    .payment-details-section p {
+        margin-bottom: 5px; /* Adjusted margin */
+    }
+
+
+    
+   
+    .upload-section h3 {
+        margin-bottom: 10px; /* Adjusted margin */
+    }
+
+    .upload-section input[type="file"] {
+        margin-bottom: 15px; /* Adjusted margin */
+    }
+
+    .upload-section button {
+        background-color: #008080; /* Teal background */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .upload-section button:hover {
+        background-color: #006666; /* Darker teal on hover */
+    }
+
     </style>
 </head>
 <body>
-<div class="navbar">
+    <!-- Navigation Bar -->
+    <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
 </div>
-<br><br><br><br>
+<br>
+
     <div class="container">
+    <div class="section payment-details-section">
+        <h3>Payment Details</h3>
+        <p>Paybill Number: 123456</p>
+        <p>Account Number: 7890123456</p>
+        <p>Bank Name: IM BANK</p>
+
+        <h3>Upload Deposit Receipt</h3>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <input type="file" accept="image/*" id="deposit-receipt" name="deposit-receipt">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 
         <div class="section account-balance-section">
             <h3>Total Account Balance (Ksh)</h3>
