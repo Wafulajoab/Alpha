@@ -92,6 +92,7 @@
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
         <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
+        <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
 </div>
