@@ -9,14 +9,39 @@
     <style>
         /* CSS styles */
         body {
-            background: darkgrey;
             font-family: Arial, sans-serif;
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            background-color: darkgrey;
+        }
+
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background-color: #444;
+            color: white;
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap;
+            align-items: center;
+            padding: 10px;
+            
+          
+        }
+
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            border-radius: 25px;
+        }
+        .navbar .icon {
+            font-size: 20px;
+            margin-right: 5px;
         }
 
         ::after,
@@ -62,20 +87,6 @@
 
         .container-right {
             order: 2; /* Ensure Normal announcements are on the right */
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background-color: purple;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
         }
 
         .navbar ul {
@@ -132,6 +143,17 @@
             padding: 5px;
             margin-top: 10px;
         }
+
+        .container.container-left input[name="title"] {
+    width: 100%; /* Adjust as needed */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
+}
+
 
         button {
             width: 70px;
@@ -250,6 +272,28 @@
             background-color: #0056b3;
         }
 
+        .container-left,
+        .container-right {
+            width: 50%;
+            float: left;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+            /* CSS styles for the submit button */
+            .reply-form button[type="submit"] {
+                padding: 8px 16px; /* Adjust padding as needed */
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease-in-out;
+            }
+
+            .reply-form button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+
     </style>
 </head>
 
@@ -257,7 +301,7 @@
     <nav>
         <div class="container">
             <div class="navbar">
-                <h2>KEMU SECURITY SYSTEM</h2>
+                <h2>ALPHA FINANCE</h2>
                 <ul>
                 <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
                 <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
@@ -286,7 +330,7 @@
     </div>
 
     <div class="container container-right">
-        <h2>Normal Announcements</h2>
+        <h2>Investors Chat Section</h2>
         <div class="announcements" id="announcement-container">
             <!-- Include PHP code to fetch announcements -->
            <?php

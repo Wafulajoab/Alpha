@@ -15,7 +15,7 @@
             flex-direction: column;
         }
         .navbar {
-            background-color: purple;
+            background-color: green;
             padding: 30px 0;
             text-align: center;
             position: fixed;
@@ -35,7 +35,7 @@
             text-decoration: none;
             padding: 10px;
             font-weight: bold;
-            background-color: purple;
+            background-color: transparent;
             border-radius: 25px;
             margin: 25px;
             border: 2px solid white;
@@ -172,25 +172,32 @@
 <div class="navbar">
         <a href='displayadmins.php'>Admins</a>
         <a href='display_users.php'>User Management</a>
-        <a href='display_visitors.php'>Visitors Records</a>
+        <a href='display_investments.php'>Investments Records</a>
         <a href='admin_announcements.php'>Post Announcements</a>
-        <a href='incidentsadmin.php'>Incident Reports</a>
-        <a href='displaycontact.php'>Contacts</a>
+        <a href='cashouts_records.php' >Cashouts</a>
     </div>
 
     <div style='width: 90%; margin: 0 auto; padding-top: 10px;'> <!-- Adjust padding-top to accommodate navbar height -->
     <br><br><br><br>
     <div class="image">
-        <img src="kmu.jpeg" alt="KMU Logo" style="border-radius: 50%;">
+        <!-- <img src="images/aplha.webp" alt="avatar" style="border-radius: 50%;"> -->
     </div>
     <div class="container">
         <div class="left-section">
             <h2>Create Announcement</h2>
-            <form action="process_announcement.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-                <label for="announcement_content">Announcement Content:</label>
-                <textarea id="announcement_content" name="announcement_content" rows="4" cols="50" required></textarea>
-                <input type="submit" value="Submit" class="button">
-            </form>
+      
+    <form action="process_announcement.php" method="POST" enctype="multipart/form-data" style="max-width: 800px; margin: auto;">
+    <label for="announcement_content">Announcement Content:</label>
+
+    <textarea name="announcement_content" required id="announcement_content" rows="4" cols="50" style="display: block; width: 100%;"></textarea><br>
+
+    <label for="file" style="display: block; margin-bottom: 5px;">Choose File:</label>
+    <input type="file" name="file" id="file" style="display: block; margin-bottom: 10px;">
+
+    <input type="submit" value="Submit" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
+
+</form>
+
         </div>
 
         <div class="right-section">
@@ -201,7 +208,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "kemu"; // Database name
+$dbname = "alpha"; // Database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -220,8 +227,8 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<div class='announcement'>";
         echo "<div style='display: flex; align-items: center;'>"; // Flex container for image and username
-        echo "<img src='kmu.jpeg' alt='Profile Icon' style='width: 45px; height: 45px; border-radius: 50%;'>";
-        echo "<p style='margin-left: 10px;'><strong> Chief Security Officer (CSO)</strong></p>"; // Username CSO in bold
+        echo "<img src='images/aplha.webp' alt='Profile Icon' style='width: 45px; height: 45px; border-radius: 50%;'>";
+        echo "<p style='margin-left: 10px;'><strong> Chief Executive Officer (CEO)</strong></p>"; // Username CSO in bold
         echo "</div>";
         echo "<p>" . $row["announcement_content"] . "</p>";
         echo "<p> " . $row["announcement_date"] . "</p>"; // Display date and time

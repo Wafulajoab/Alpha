@@ -1,3 +1,19 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "alpha";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -142,11 +158,154 @@
                 <button type="submit">Invest Now</button>
             </form>
         </div>
+
+        <!-- Running Investments Table with Countdown Column -->
+        <div class="container">
+            <h2>Running Investments</h2>
+            <style>
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+
+                th, td {
+                    padding: 10px;
+                    text-align: left;
+                }
+
+                th {
+                    background-color: #444;
+                    color: #fff;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+
+                tr:hover {
+                    background-color: #ddd;
+                }
+
+                .status-active {
+                    color: green;
+                }
+
+                .status-closed {
+                    color: red;
+                }
+            </style>
+           
+                <tbody id="investments-table-body"> <!-- Added ID for JavaScript manipulation -->
+                    <!-- Sample data for demonstration purposes -->
+                    <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "alpha";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if there are any active investments
+$sql = "SELECT * FROM investments WHERE status = 'Active'";
+$result = $conn->query($sql);
+
+// Fetch running investments from the database again to get end dates for countdown
+$sql = "SELECT * FROM investments WHERE status = 'Active'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // Display the investments table
+    echo '<table border="1">
+            <thead>
+                <tr>
+                    <th>Investment ID</th>
+                    <th>Package Name</th>
+                    <th>Amount (Ksh)</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Countdown</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+    // Output data of each row
+    while ($row = $result->fetch_assoc()) {
+        // Check if the required array keys exist before accessing them
+        $investmentId = isset($row['investment_id']) ? $row['investment_id'] : '';
+        $packageName = isset($row['package_name']) ? $row['package_name'] : '';
+        $amount = isset($row['amount']) ? $row['amount'] : '';
+        $startDate = isset($row['start_date']) ? $row['start_date'] : '';
+        $endDate = isset($row['end_date']) ? $row['end_date'] : '';
+
+        echo "<tr>
+                <td>" . $investmentId . "</td>
+                <td>" . $packageName . "</td>
+                <td>" . $amount . "</td>
+                <td>" . $startDate . "</td>
+                <td>" . $endDate . "</td>
+                <td><span id='countdown-" . $investmentId . "'></span></td>
+                <td><span class='status-active'>Active</span></td>
+              </tr>";
+    }
+
+    echo '</tbody>
+        </table>';
+} else {
+    echo "No active investments found.";
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <br><br><br><br>
-     <!-- Footer -->
-     <footer id="footer">
+    <script>
+        // JavaScript code for calculating and updating countdown
+        function updateCountdown(endDate, countdownElementId) {
+            var countDownDate = new Date(endDate).getTime();
+
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+                document.getElementById(countdownElementId).innerHTML = days + " days";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById(countdownElementId).innerHTML = "Matured";
+                }
+            }, 1000);
+        }
+
+        // Call the updateCountdown function for each investment
+        <?php
+        // Fetch running investments from the database again to get end dates for countdown
+        $sql = "SELECT * FROM investments WHERE status = 'Active'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "updateCountdown('" . $row['end_date'] . "', 'countdown-" . $row['investment_id'] . "');";
+            }
+        }
+        ?>
+    </script>
+
+    <footer id="footer">
         <style>
             #footer {
                 position: fixed;
@@ -173,6 +332,5 @@
             <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
         </div>
     </footer>
-</body>
 </body>
 </html>

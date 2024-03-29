@@ -34,6 +34,7 @@ if (isset($_SESSION['username'])) {
             position: fixed; /* Fixed positioning */
             top: 0; /* Fixed to the top */
             width: 100%; /* Full width */
+            
         }
         .navbar a {
             color: #fff;
@@ -88,7 +89,7 @@ if (isset($_SESSION['username'])) {
             position: absolute;
             top: 20px;
             left: 20px;
-            color: yellow;
+            color: white;
             font-weight: bold;
             font-size: 25px;
             font-family: Arial, sans-serif;

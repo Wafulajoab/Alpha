@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KEMU Security System</title>
+    <title>Alpha Investments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
          body {
@@ -137,8 +137,8 @@
                 <img src="images/aplha.webp" alt="Logo">
             </div>
             <div class="button-container">
-                <button onclick="window.location.href='cso_announcements.php'"> Chief Security Officer(CSO) Announcement</button>
-                <button onclick="window.location.href='normal_announcements.php'">Normal Announcements</button>
+                <button onclick="window.location.href='cso_announcements.php'"> CEO Announcements</button>
+                <button onclick="window.location.href='normal_announcements.php'">Investors Chat Zone</button>
             </div>
         </div>
     </div>

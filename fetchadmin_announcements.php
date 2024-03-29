@@ -3,15 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSO Announcements</title>
+    <title>CEO Announcements</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-      body {
-        font-family: Arial, sans-serif; /* Specify your preferred font family */
-        background-color: #f4f4f7; /* Set background color */
-        margin: 0; /* Remove default margin */
-        padding: 0; /* Remove default padding */
-      }
+         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: darkgrey;
+        }
+        .navbar {
+            background-color: #444;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed; /* Fixed positioning */
+            top: 0; /* Fixed to the top */
+            width: 100%; /* Full width */
+         
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            border-radius: 25px;
+        }
+        .navbar .icon {
+            font-size: 20px;
+            margin-right: 5px;
+        }
       .container {
         background-color: #f4f4f7; /* Transparent background */
         padding-top: 0px;
@@ -44,21 +63,22 @@
 <nav>
     <div class="container">
         <div class="navbar">
-            <h2>KEMU SECURITY SYSTEM</h2>
+            <h2>ALPHA FINANCE</h2>
             <ul>
-            <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="visitors_records.php"><i class="fas fa-book"></i> Visitors-records</a></li>
-            <li><a href="incidents.php"><i class="fas fa-exclamation-triangle"></i> Incidents</a></li>
-            <li><a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a></li>
-            <li><a href="contact.php"><i class="fas fa-address-book"></i> Contacts</a></li>
-            <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li> 
+            <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
+            <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
+            <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
+            <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
+            <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
+            <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
+            <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
             </ul>
         </div>
     </div>
 </nav>
-
+<!-- 
 <div class="container">
-<img src="kmu.jpeg" alt="KMU Logo" style="width: 15%; display: block; margin: 0 auto; padding-top: 0px; border-radius: 50%;">
+<img src="images/aplha.webp" alt="avatar" style="width: 10%; display: block; margin: 0 auto; padding-top: 0px; border-radius: 50%;"> -->
 
     <?php
         // PHP code to fetch and display all announcements
@@ -76,7 +96,7 @@
         }
 
         // Fetch all announcements from the database
-        $sql = "SELECT * FROM announcements ORDER BY announcement_date DESC"; // Removed the LIMIT clause
+        $sql = "SELECT * FROM announcements ORDER BY created_at DESC"; // Use the correct column name
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -84,11 +104,11 @@
             while ($row = $result->fetch_assoc()) {
                 echo "<div class='announcement'>";
                 echo "<div style='display: flex; align-items: center;'>"; // Flex container for image and username
-                echo "<img src='kmu.jpeg' alt='Profile Icon'>";
-                echo "<p><strong> Chief Security Officer (CSO)</strong></p>"; // Username CSO in bold
+                echo "<img src='images/aplha.webp' alt='Profile Icon'>";
+                echo "<p><strong> Chief Executive Officer (CEO)</strong></p>"; // Username CSO in bold
                 echo "</div>";
                 echo "<p>" . $row["announcement_content"] . "</p>";
-                echo "<p> " . $row["announcement_date"] . "</p>"; // Display date and time
+                echo "<p> " . $row["created_at"] . "</p>"; // Display date and time
                 echo "<div class=''>";
                 echo "<a href='#'></a> <a href='#'></a>";
                 echo "</div>";

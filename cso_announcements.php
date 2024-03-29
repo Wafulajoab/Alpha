@@ -64,8 +64,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 60px;
-            background-color: purple;
+            height: 20px;
             color: white;
             display: flex;
             justify-content: space-between;
@@ -119,7 +118,7 @@
 <nav>
     <div class="container">
         <div class="navbar">
-            <h2>KEMU SECURITY SYSTEM</h2>
+            <h2>ALPHA FINANCE</h2>
             <ul>
             <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
             <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
@@ -132,7 +131,7 @@
         </div>
     </div>
 </nav>
-<br>
+<br><br>
 <div class="container">
     <h2>CSO Announcements</h2>
     <div class="announcements" id="announcement-container">
