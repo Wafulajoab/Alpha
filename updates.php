@@ -72,7 +72,7 @@
         .button-container button {
             margin: 10px;
             padding: 10px 30px;
-            background-color: purple;
+            background-color:blue;
             color: white;
             border: none;
             border-radius: 25px;
@@ -90,9 +90,9 @@
             margin: 0 auto;
             text-align: center;
             margin-top: 100px; /* Adjust margin-top as needed */
-            background-color: #f5f5f5; /* Set background color */
+            background-color:navy; /* Set background color */
             padding: 3%; /* Add padding for better appearance */
-            border-radius: 25px; /* Add border-radius for rounded corners */
+            border-radius: 50px; /* Add border-radius for rounded corners */
             position: relative; /* Added position relative */
         }
 
@@ -100,6 +100,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 20px;
+            color: white;
         }
 
         .announcement-logo {
@@ -107,7 +108,8 @@
         }
 
         .announcement-logo img {
-            width: 30%; /* Set width to 10% of the container */
+            width: 20%; /* Set width to 10% of the container */
+            border-radius: 50px; /* Add border-radius for rounded corners */
         }
     </style>
 </head>

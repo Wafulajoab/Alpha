@@ -89,11 +89,7 @@
 </div>
 <br><br><br><br>
     <div class="container">
-        <table>
-            <tr>
-                <th>Attribute</th>
-                <th>Value</th>
-            </tr>
+        
             <?php
 session_start(); // Start or resume the session
 

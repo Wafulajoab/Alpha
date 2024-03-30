@@ -197,8 +197,7 @@ if ($conn->connect_error) {
             </style>
            
                 <tbody id="investments-table-body"> <!-- Added ID for JavaScript manipulation -->
-                    <!-- Sample data for demonstration purposes -->
-                    <?php
+                <?php
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -212,12 +211,12 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if there are any active investments
-$sql = "SELECT * FROM investments WHERE status = 'Active'";
-$result = $conn->query($sql);
+// Update status to "Matured" for investments that have exceeded maturity date
+$updateSql = "UPDATE investments SET status = 'Matured' WHERE maturity_date < NOW() AND status = 'Active'";
+$conn->query($updateSql);
 
-// Fetch running investments from the database again to get end dates for countdown
-$sql = "SELECT * FROM investments WHERE status = 'Active'";
+// Fetch all investments from the database
+$sql = "SELECT *, TIMESTAMPDIFF(SECOND, NOW(), maturity_date) AS countdown_seconds FROM investments";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -225,13 +224,14 @@ if ($result->num_rows > 0) {
     echo '<table border="1">
             <thead>
                 <tr>
-                    <th>Investment ID</th>
+                    <th>Unique ID</th>
+                    <th>Username</th>
                     <th>Package Name</th>
-                    <th>Amount (Ksh)</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Countdown</th>
+                    <th>Duration</th>
+                    <th>Maturity Date</th>
                     <th>Status</th>
+                    <th>Amount (Ksh)</th>
+                    <th>Countdown</th>
                 </tr>
             </thead>
             <tbody>';
@@ -239,32 +239,49 @@ if ($result->num_rows > 0) {
     // Output data of each row
     while ($row = $result->fetch_assoc()) {
         // Check if the required array keys exist before accessing them
-        $investmentId = isset($row['investment_id']) ? $row['investment_id'] : '';
+        $uniqueId = isset($row['unique_id']) ? $row['unique_id'] : '';
+        $username = isset($row['username']) ? $row['username'] : '';
         $packageName = isset($row['package_name']) ? $row['package_name'] : '';
+        $duration = isset($row['duration']) ? $row['duration'] : '';
+        $maturityDate = isset($row['maturity_date']) ? $row['maturity_date'] : '';
+        $status = isset($row['status']) ? $row['status'] : '';
         $amount = isset($row['amount']) ? $row['amount'] : '';
-        $startDate = isset($row['start_date']) ? $row['start_date'] : '';
-        $endDate = isset($row['end_date']) ? $row['end_date'] : '';
+        $countdownSeconds = isset($row['countdown_seconds']) ? $row['countdown_seconds'] : '';
+
+        // Format countdown display
+        $countdownDisplay = formatCountdown($countdownSeconds);
 
         echo "<tr>
-                <td>" . $investmentId . "</td>
+                <td>" . $uniqueId . "</td>
+                <td>" . $username . "</td>
                 <td>" . $packageName . "</td>
+                <td>" . $duration . " days</td>
+                <td>" . $maturityDate . "</td>
+                <td><span class='status-" . strtolower($status) . "'>" . $status . "</span></td>
                 <td>" . $amount . "</td>
-                <td>" . $startDate . "</td>
-                <td>" . $endDate . "</td>
-                <td><span id='countdown-" . $investmentId . "'></span></td>
-                <td><span class='status-active'>Active</span></td>
+                <td id='countdown-" . $uniqueId . "'>" . $countdownDisplay . "</td>
               </tr>";
     }
 
     echo '</tbody>
         </table>';
 } else {
-    echo "No active investments found.";
+    echo "No investments found.";
 }
 
 // Close the database connection
 $conn->close();
+
+function formatCountdown($seconds) {
+    $days = floor($seconds / (60 * 60 * 24));
+    $hours = floor(($seconds % (60 * 60 * 24)) / (60 * 60));
+    $minutes = floor(($seconds % (60 * 60)) / 60);
+    $seconds = $seconds % 60;
+
+    return sprintf("%02d days, %02d hrs, %02d mins, %02d secs", $days, $hours, $minutes, $seconds);
+}
 ?>
+
 
                 </tbody>
             </table>
@@ -303,6 +320,7 @@ $conn->close();
             }
         }
         ?>
+
     </script>
 
     <footer id="footer">
