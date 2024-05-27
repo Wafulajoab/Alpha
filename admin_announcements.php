@@ -185,18 +185,16 @@
     <div class="container">
         <div class="left-section">
             <h2>Create Announcement</h2>
-      
-    <form action="process_announcement.php" method="POST" enctype="multipart/form-data" style="max-width: 800px; margin: auto;">
+            <form action="process_announcement.php" method="POST" enctype="multipart/form-data" style="max-width: 800px; margin: auto;">
     <label for="announcement_content">Announcement Content:</label>
-
     <textarea name="announcement_content" required id="announcement_content" rows="4" cols="50" style="display: block; width: 100%;"></textarea><br>
 
     <label for="file" style="display: block; margin-bottom: 5px;">Choose File:</label>
     <input type="file" name="file" id="file" style="display: block; margin-bottom: 10px;">
 
     <input type="submit" value="Submit" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
-
 </form>
+
 
         </div>
 
@@ -204,7 +202,7 @@
             <h2 class="fixed-title">Recent Announcements</h2>
             
             <?php
-// PHP code to fetch and display all announcements
+// PHP code to fetch and display all announcements with download links for PDF files
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -235,6 +233,18 @@ if ($result->num_rows > 0) {
         echo "<div class='edit-delete'>";
         echo "<a href='#'>Edit</a> | <a href='#'>Delete</a>";
         echo "</div>";
+        
+        // Check if the 'file_name' key exists in $row and it's not empty
+        if (isset($row["file_name"]) && !empty($row["file_name"])) {
+            echo "<div class='edit-delete'>";
+            echo "<a href='uploads/" . $row["file_name"] . "' download>Download File</a>"; // Add a download link for the file
+            echo "</div>";
+        } else {
+            echo "<div class='edit-delete'>";
+            echo "No file available."; // Display a message indicating no file is available
+            echo "</div>";
+        }
+        
         echo "</div>";
         
     }

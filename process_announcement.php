@@ -17,6 +17,27 @@ if ($conn->connect_error) {
 if (isset($_POST['announcement_content']) && !empty($_POST['announcement_content'])) {
     $announcement_content = $_POST['announcement_content'];
 
+    // Check if file was uploaded without errors
+if(isset($_FILES["file"]) && $_FILES["file"]["error"] == 0){
+    $file_name = $_FILES["file"]["name"];
+    $file_tmp = $_FILES["file"]["tmp_name"];
+    $file_type = $_FILES["file"]["type"];
+    $file_size = $_FILES["file"]["size"];
+
+    // Specify the directory where you want to save uploaded files
+    $upload_dir = "uploads/";
+
+    // Move the uploaded file to the specified directory
+    if(move_uploaded_file($file_tmp, $upload_dir . $file_name)){
+        echo "File uploaded successfully.";
+        // You can save the file information to the database if needed
+    }else{
+        echo "Error uploading file.";
+    }
+}else{
+    echo "No file uploaded or an error occurred.";
+}
+
     // Check if file was uploaded successfully
     if (isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
         // If you want to allow file uploads
