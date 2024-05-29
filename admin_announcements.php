@@ -271,7 +271,7 @@ $conn->close();
     </footer>
     <script>
         // JavaScript function to go back to the previous page
-        function goBack(-1) {
+        function goBack() {
             window.history.back();
         }
 

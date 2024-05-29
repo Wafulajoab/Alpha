@@ -47,6 +47,32 @@
     <p>Your registration as an admin was successful.</p>
     <p>You can now <a href="admin_login.php">Login</a> with your credentials.</p>
 </div>
+<footer id="footer">
+    <style>
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: lavender;
+            text-align: center;
+            padding: 0.1rem;
+        }
 
+        .footer p {
+            justify-content: center;
+        }
+
+        .footer a {
+            color: green;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+    </style>
+
+    <div class="footer">
+    <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
+    </div>
+</footer>
 </body>
 </html>

@@ -62,9 +62,9 @@
 <body>
  
 <div class="navbar">
+    <a href="admin_register.php" class="button" id="adminBtn">Register as Admin</a>
+    <a href="admin_login.php" class="button" id="adminBtn">Login as Admin</a>
    
-    <a href="user_register.php" class="button" id="registerBtn">Register as User</a>
-    <a href="user_login.php" class="button" id="loginBtn">Login as User</a>
 </div>
 
     <div class="container">
