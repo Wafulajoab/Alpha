@@ -12,23 +12,49 @@
             padding: 0;
             background-color: #f0f0f0;
         }
+        .navbar {
+            background-color: #444;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px; /* Set a fixed width for the sidebar */
+            height: 100%; /* Full height */
+        }
+        .navbar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 25px;
+            text-align: left;
+            padding-left: 20px;
+        }
+        .navbar .icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
         .container {
-            max-width: 800px;
+            max-width: 400px;
             margin: 0 auto;
             padding: 20px;
+            margin-left: 220px; /* To adjust for the sidebar */
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .profile-info {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
+        .profile-info h2 {
+            margin-top: 0;
         }
-        th {
-            background-color: #f2f2f2;
+        .profile-info p {
+            margin: 10px 0;
+            font-size: 16px;
         }
         .edit-profile-link, .logout {
             display: inline-block;
@@ -42,28 +68,10 @@
         .edit-profile-link:hover, .logout:hover {
             background-color: #5f04b4;
         }
-         .navbar {
-            background-color: #444;
-            padding: 20px 0;
-            text-align: center;
-            position: fixed; /* Fixed positioning */
-            top: 0; /* Fixed to the top */
-            width: 100%; /* Full width */
-        }
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 20px;
-            border-radius: 25px;
-        }
-        .navbar .icon {
-            font-size: 20px;
-            margin-right: 5px;
-        }
         .footer {
-            background: lavender;
+            background: #444;
             text-align: center;
-            padding: 10px;
+            padding: 0.01rem;
             position: fixed;
             bottom: 0;
             left: 0;
@@ -81,61 +89,56 @@
     <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
+        <a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
+        <a href="updates.php"><i class="fas fa-bullhorn icon"></i>Updates</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-</div>
-<br><br><br><br>
+    </div>
+
     <div class="container">
-        
-            <?php
-session_start(); // Start or resume the session
+        <?php
+        session_start(); // Start or resume the session
 
-// Check if the 'username' session variable is set
-if (!isset($_SESSION['username'])) {
-    // Redirect the user to the login page or display an error message
-    header("Location: login.php");
-    exit(); // Stop further execution
-}
+        // Check if the 'username' session variable is set
+        if (!isset($_SESSION['username'])) {
+            // Redirect the user to the login page or display an error message
+            header("Location: login.php");
+            exit(); // Stop further execution
+        }
 
-// Assuming you have established a database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "alpha";
+        // Assuming you have established a database connection
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $database = "alpha";
 
-$conn = new mysqli($servername, $username, $password, $database);
+        $conn = new mysqli($servername, $username, $password, $database);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
 
-// Retrieve user information based on their login details
-$username = $_SESSION['username']; // Assuming 'username' is set in the session after login
-$sql = "SELECT username, phone_number, balance FROM users WHERE username = '$username'"; // Update query to fetch existing columns
-$result = $conn->query($sql);
+        // Retrieve user information based on their login details
+        $username = $_SESSION['username']; // Assuming 'username' is set in the session after login
+        $sql = "SELECT username, phone_number, balance FROM users WHERE username = '$username'"; // Update query to fetch existing columns
+        $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    // Display user information in a table
-    echo "<table>";
-    echo "<tr><th>Attribute</th><th>Value</th></tr>";
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr><td>Username</td><td>" . $row["username"] . "</td></tr>";
-        echo "<tr><td>Phone Number</td><td>" . $row["phone_number"] . "</td></tr>";
-        echo "<tr><td>Balance</td><td>Ksh " . $row["balance"] . "</td></tr>";
-    }
-    echo "</table>";
-} else {
-    echo "0 results";
-}
-$conn->close();
-?>
-
-        </table>
-
-
+        if ($result->num_rows > 0) {
+            // Display user information in a div
+            echo "<div class='profile-info'>";
+            echo "<h2>Profile Information</h2>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<p><strong>Username:</strong> " . $row["username"] . "</p>";
+                echo "<p><strong>Phone Number:</strong> " . $row["phone_number"] . "</p>";
+                echo "<p><strong>Balance:</strong> Ksh " . $row["balance"] . "</p>";
+            }
+            echo "</div>";
+        } else {
+            echo "0 results";
+        }
+        $conn->close();
+        ?>
         <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSO Announcements</title>
+    <title>CEO Announcements</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* CSS styles */
@@ -122,9 +122,9 @@
             <ul>
             <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
             <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-            <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
+            <a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a>
             <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-            <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
+            <a href="updates.php"><i class="fas fa-bullhorn action"></i>Updates</a>
             <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
             <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
             </ul>
@@ -133,7 +133,7 @@
 </nav>
 <br><br>
 <div class="container">
-    <h2>CSO Announcements</h2>
+    <h2>CEO Announcements</h2>
     <div class="announcements" id="announcement-container">
         <?php include 'fetchadmin_announcements.php'; ?>
     </div>

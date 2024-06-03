@@ -6,7 +6,7 @@
     <title>Alpha Investments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-         body {
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -17,24 +17,28 @@
             padding: 20px 0;
             text-align: center;
             position: fixed; /* Fixed positioning */
-            top: 0; /* Fixed to the top */
-            width: 100%; /* Full width */
+            top: 0;
+            left: 0;
+            width: 200px; /* Set a fixed width for the sidebar */
+            height: 100%; /* Full height */
         }
         .navbar a {
+            display: block;
             color: #fff;
             text-decoration: none;
-            margin: 0 20px;
+            margin: 10px 0;
+            padding: 10px;
             border-radius: 25px;
+            text-align: left;
+            padding-left: 20px;
         }
         .navbar .icon {
             font-size: 20px;
-            margin-right: 5px;
+            margin-right: 10px;
         }
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 60px; /* Adjusted margin-top for content below the fixed navbar */
+            margin-left: 220px; /* Adjust margin-left to accommodate the fixed navbar */
+            padding: 20px;
         }
         /* CSS for Footer */
         #footer {
@@ -42,21 +46,18 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: lavender;
+            background: #444;
             text-align: center;
-            padding: 0.1rem;
+            padding: 0.01rem;
         }
-
         .footer p {
             justify-content: center;
         }
-
         .footer a {
             color: green;
             text-decoration: underline;
             font-weight: bold;
         }
-
         /* CSS for Buttons */
         .button-container {
             width: 100%;
@@ -68,45 +69,39 @@
             flex-direction: column;
             margin-top: 20px;
         }
-
         .button-container button {
             margin: 10px;
             padding: 10px 30px;
-            background-color:blue;
+            background-color: blue;
             color: white;
             border: none;
             border-radius: 25px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         .button-container button:hover {
             background-color: green;
         }
-
         /* CSS for Announcement Div */
         .announcement-container {
             width: 20%;
             margin: 0 auto;
             text-align: center;
             margin-top: 100px; /* Adjust margin-top as needed */
-            background-color:navy; /* Set background color */
+            background-color: navy; /* Set background color */
             padding: 3%; /* Add padding for better appearance */
             border-radius: 50px; /* Add border-radius for rounded corners */
             position: relative; /* Added position relative */
         }
-
         .announcement-title {
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 20px;
             color: white;
         }
-
         .announcement-logo {
             margin-bottom: 10px;
         }
-
         .announcement-logo img {
             width: 20%; /* Set width to 10% of the container */
             border-radius: 50px; /* Add border-radius for rounded corners */
@@ -115,36 +110,34 @@
 </head>
 <body>
     <nav>
-        <div class="container">
-            <!-- Navigation Bar -->
-    <div class="navbar">
-         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
+      <!-- Navigation Bar -->
+      <div class="navbar">
+        <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
+        <a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
+        <a href="updates.php"><i class="fas fa-bullhorn icon"></i>Updates</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
     </div>
-    </div>
-        </div>
+
     </nav>
-
-    <!-- Announcements Div -->
-    <div class="announcement-container">
-        <div class="announcement-title">Announcements</div>
-        <!-- Logo and Buttons section -->
-        <div class="logo-and-buttons">
-            <div class="announcement-logo">
-                <img src="images/aplha.webp" alt="Logo">
-            </div>
-            <div class="button-container">
-                <button onclick="window.location.href='cso_announcements.php'"> CEO Announcements</button>
-                <button onclick="window.location.href='normal_announcements.php'">Investors Chat Zone</button>
+    <div class="container">
+        <!-- Announcements Div -->
+        <div class="announcement-container">
+            <div class="announcement-title">Announcements</div>
+            <!-- Logo and Buttons section -->
+            <div class="logo-and-buttons">
+                <div class="announcement-logo">
+                    <img src="images/aplha.webp" alt="Logo">
+                </div>
+                <div class="button-container">
+                    <button onclick="window.location.href='cso_announcements.php'"> CEO Announcements</button>
+                    <button onclick="window.location.href='normal_announcements.php'">Investors Chat Zone</button>
+                </div>
             </div>
         </div>
     </div>
-
     <footer id="footer">
         <div class="footer">
             <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>

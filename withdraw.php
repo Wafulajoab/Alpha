@@ -16,19 +16,25 @@
             background-color: #444;
             padding: 20px 0;
             text-align: center;
-            position: fixed; /* Fixed positioning */
-            top: 0; /* Fixed to the top */
-            width: 100%; /* Full width */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px; /* Set a fixed width for the sidebar */
+            height: 100%; /* Full height */
         }
         .navbar a {
+            display: block;
             color: #fff;
             text-decoration: none;
-            margin: 0 20px;
+            margin: 10px 0;
+            padding: 10px;
             border-radius: 25px;
+            text-align: left;
+            padding-left: 20px;
         }
         .navbar .icon {
             font-size: 20px;
-            margin-right: 5px;
+            margin-right: 10px;
         }
         .container {
             display: flex;
@@ -90,12 +96,12 @@
     <div class="navbar">
         <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
         <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-        <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
+        <a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a>
         <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
+        <a href="updates.php"><i class="fas fa-bullhorn icon"></i>Updates</a>
         <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
         <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-</div>
+    </div>
     </div>
 <br><br><br><br>
     <div class="container">
@@ -140,9 +146,9 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                background: lavender;
+                background: #444;
                 text-align: center;
-                padding: 0.1rem;
+                padding: 0.01rem;
             }
             .footer p {
                 justify-content: center;

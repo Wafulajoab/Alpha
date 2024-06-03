@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     
-    <style>
+     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: darkgrey;
@@ -14,21 +14,52 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-left: 200px; /* Adjust to make room for the navbar */
         }
         .navbar {
-            background-color:#444;
+            background-color: #444;
             padding: 20px 0;
             text-align: center;
-           
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px; /* Fixed width for the navbar */
+            height: 100%; /* Full height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the buttons vertically */
         }
         .navbar a {
             color: #fff;
             text-decoration: none;
-            margin: 0 20px;
+            margin: 10px 0;
             border-radius: 25px;
+            padding: 10px 20px; /* Adjust padding as needed */
+        }
+        .navbar a:hover {
+            background-color: green; /* Change to desired hover background color */
+            color: #333; /* Change to desired hover text color */
+        }
+        .button {
+            background-color: transparent;
+            color: green;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid green;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            border-radius: 4px;
+        }
+        .button:hover {
+            background-color: green;
+            color: white;
+        }
+        .button:active {
+            transform: translateY(1px);
         }
         .container {
-            max-width: 20%;
+            max-width: 400px;
             padding: 20px;
             background-color: #fff;
             border-radius: 25px;
@@ -70,7 +101,7 @@
         button {
             width: 100%;
             padding: 10px;
-            background-color:black;
+            background-color: black;
             color: #fff;
             border: none;
             border-radius: 25px;
@@ -79,38 +110,25 @@
         button:hover {
             background-color: #0056b3;
         }
-       
-        .navbar a {
-        padding: 10px 20px; /* Adjust padding as needed */
-    }
-    .navbar a:hover {
-        background-color: green; /* Change to desired hover background color */
-        color: #333; /* Change to desired hover text color */
-    }
-
-    .button {
-    background-color: transparent;
-    color: green;
-    text-decoration: none;
-    font-weight: bold;
-    border: 2px solid green;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    border-radius: 4px;
-}
-
-.button:hover {
-    background-color: green;
-    color: white;
-}
-
-.button:active {
-    transform: translateY(1px);
-}
-
-
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: lavender;
+            text-align: center;
+            padding: 0.1rem;
+        }
+        footer p {
+            margin: 0;
+        }
+        footer a {
+            color: green;
+            text-decoration: underline;
+            font-weight: bold;
+        }
     </style>
+
 </head>
 <body>
 
@@ -150,9 +168,9 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: lavender;
+            background: #444;
             text-align: center;
-            padding: 0.1rem;
+            padding: 1rem;
         }
 
         .footer p {
