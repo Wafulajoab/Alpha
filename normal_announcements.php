@@ -4,44 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEO Announcements</title>
+    <title>CSO Announcements</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* CSS styles */
         body {
+            background: darkgrey;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: darkgrey;
+            display: flex;
         }
 
-        
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 40px;
+            width: 200px;
+            height: 100vh;
             background-color: #444;
             color: white;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
             padding: 10px;
-            
-          
         }
-
 
         .navbar a {
             color: #fff;
             text-decoration: none;
-            margin: 0 20px;
+            margin: 10px 0;
             border-radius: 25px;
         }
+
         .navbar .icon {
             font-size: 20px;
-            margin-right: 5px;
+            margin-right: 15px;
+        }
+
+        .navbar ul {
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            padding: .5rem;
+            margin: .5rem 0;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: rgb(250, 246, 246);
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 1.5rem;
+            padding: 0.5px;
+            margin: 1.5rem 0;
+            font-family: Arial, sans-serif;
+            color: rgb(250, 245, 245);
         }
 
         ::after,
@@ -74,45 +101,28 @@
             height: 10vh;
         }
 
-        .container {
-            background-color:lavender;
-            width: 48%; /* Adjust as needed */
-            margin-top: 70px;
+        .main-content {
+            margin-left: 200px;
+            display: flex;
+            flex: 1;
             padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: lavender;
+            width: 50%;
+            margin: 10px;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .container-left {
-            order: 1; /* Ensure chat section is on the left */
+            order: 1;
         }
 
         .container-right {
-            order: 2; /* Ensure Normal announcements are on the right */
-        }
-
-        .navbar ul {
-            display: flex;
-            list-style-type: none;
-            top: 0;
-        }
-
-        .navbar ul li {
-            padding: .5rem;
-            margin: .5rem;
-        }
-
-        .navbar ul li a {
-            text-decoration: none;
-            color: rgb(250, 246, 246);
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .navbar h2 {
-            font-size: 1.5rem;
-            padding: 0.5px;
-            margin: 1.5rem;
-            font-family: Arial, sans-serif;
-            color: rgb(250, 245, 245);
+            order: 2;
         }
 
         .announcements {
@@ -144,17 +154,6 @@
             margin-top: 10px;
         }
 
-        .container.container-left input[name="title"] {
-    width: 100%; /* Adjust as needed */
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 2px solid #007bff;
-    border-radius: 8px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease-in-out;
-}
-
-
         button {
             width: 70px;
             padding: 5px;
@@ -182,17 +181,17 @@
         }
 
         .profile-picture {
-            width: 50px; /* Adjust size as needed */
-            height: 50px; /* Adjust size as needed */
-            border-radius: 50%; /* Makes the image round */
-            overflow: hidden; /* Ensures the image stays within the circular boundary */
-            margin-right: 10px; /* Adds spacing between the profile picture and announcement content */
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
         }
 
         .profile-picture img {
-            width: 100%; /* Ensures the image fills the circular boundary */
-            height: 100%; /* Ensures the image fills the circular boundary */
-            object-fit: cover; /* Covers the circular boundary with the image */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .reply-button {
@@ -272,68 +271,39 @@
             background-color: #0056b3;
         }
 
-        .container-left,
-        .container-right {
-            width: 50%;
-            float: left;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-            /* CSS styles for the submit button */
-            .reply-form button[type="submit"] {
-                padding: 8px 16px; /* Adjust padding as needed */
-                background-color: #007bff;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease-in-out;
-            }
-
-            .reply-form button[type="submit"]:hover {
-                background-color: #0056b3;
-            }
-
     </style>
 </head>
 
 <body>
-    <nav>
-        <div class="container">
-            <div class="navbar">
-                <h2>ALPHA FINANCE</h2>
-                <ul>
-                <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
-                <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-                <a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a>
-                <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-                <a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a>
-                <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
-                <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-                </ul>
-            </div>
-        </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <h2>ALPHA FINANCE</h2>
+        <ul>
+            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+            <li><a href="updates.php"><i class="fas fa-bullhorn icon"></i>Updates</a></li>
+            <li><a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a></li>
+            <li><a href="profile.php"><i class="fas fa-user icon"></i>Profile</a></li>
+        </ul>
     </nav>
 
-    <div class="container container-left">
-    <h2>Chat Section</h2>
-    <form action="n_announcement.php" method="POST">
-        <input type="text" name="title" placeholder="Title" required>
-        <textarea name="content" placeholder="Your message" required></textarea>
-        <button type="submit">Send</button>
-    </form>
-</div>
-
-
-         
+    <div class="main-content">
+        <div class="container container-left">
+            <h2>Chat Section</h2>
+            <form action="n_announcement.php" method="POST">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="content" placeholder="Your message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
         </div>
-    </div>
 
-    <div class="container container-right">
-        <h2>Investors Chat Section</h2>
-        <div class="announcements" id="announcement-container">
-            <!-- Include PHP code to fetch announcements -->
-           <?php
+        <div class="container container-right">
+            <h2>Normal Announcements</h2>
+            <div class="announcements" id="announcement-container">
+                <!-- Include PHP code to fetch announcements -->
+                <?php
 // Include database connection file
 $servername = "localhost";
 $username = "root"; // Your database username
@@ -352,110 +322,76 @@ try {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reply_content']) && isset($_POST['announcement_id'])) {
     $replyContent = $_POST['reply_content'];
     $announcementId = $_POST['announcement_id'];
-
-    // Insert reply into the database
-    $stmt = $pdo->prepare("INSERT INTO announcement_replies (announcement_id, reply_content) VALUES (:announcement_id, :reply_content)");
-    $stmt->bindParam(':announcement_id', $announcementId);
-    $stmt->bindParam(':reply_content', $replyContent);
-    $stmt->execute();
+    $insertReplyQuery = "INSERT INTO replies (announcement_id, content, timestamp) VALUES (?, ?, NOW())";
+    $stmt = $pdo->prepare($insertReplyQuery);
+    $stmt->execute([$announcementId, $replyContent]);
 }
 
 // Fetch announcements from the database
-$stmt = $pdo->prepare("SELECT * FROM normal_announcements ORDER BY created_at DESC");
-$stmt->execute();
+$query = "SELECT * FROM announcements ORDER BY created_at DESC"; // Use the correct column here
+$stmt = $pdo->query($query);
 $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Display announcements
 foreach ($announcements as $announcement) {
-    echo '<div class="announcement">';
-    echo '<div class="profile-picture">';
-    echo '<img src="images/jmtech.jpg" alt="Profile Picture">';
-    echo '</div>';
-    echo '<div class="announcement-content">';
-    echo '<h3>' . $announcement['title'] . '</h3>';
-    echo '<p>' . $announcement['content'] . '</p>';
-    echo '<p>Date: ' . $announcement['created_at'] . '</p>'; // Display date and time
-    echo '<button class="reply-button" onclick="toggleReplyForm(this)">Reply</button>';
-    echo '<div class="reply-form">';
-    echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="POST">';
-    echo '<input type="hidden" name="announcement_id" value="' . $announcement['id'] . '">';
-    echo '<textarea name="reply_content" placeholder="Write your reply here"></textarea>';
-    echo '<button type="submit">Submit</button>';
-    echo '</form>';
-    echo '</div>';
-    echo '</div>';
-    echo '</div>';
+    $title = isset($announcement['title']) ? htmlspecialchars($announcement['title']) : 'No title';
+    $content = isset($announcement['content']) ? htmlspecialchars($announcement['content']) : 'No content';
+    $timestamp = isset($announcement['created_at']) ? htmlspecialchars($announcement['created_at']) : 'No timestamp'; // Use the correct column here
+    $id = isset($announcement['id']) ? $announcement['id'] : 0;
+
+    echo "<div class='announcement'>";
+    echo "<h3>$title</h3>";
+    echo "<p>$content</p>";
+    echo "<p class='timestamp'>$timestamp</p>";
+    echo "<button class='reply-button' onclick='toggleReplyForm($id)'>Reply</button>";
+    echo "<div class='reply-form' id='reply-form-$id'>";
+    echo "<form action='' method='POST'>";
+    echo "<input type='hidden' name='announcement_id' value='$id'>";
+    echo "<textarea name='reply_content' placeholder='Write your reply...' required></textarea>";
+    echo "<button type='submit'>Submit Reply</button>";
+    echo "</form>";
+    echo "</div>";
+
+    // Fetch replies for the current announcement
+    $repliesQuery = "SELECT * FROM replies WHERE announcement_id = ? ORDER BY timestamp ASC";
+    $repliesStmt = $pdo->prepare($repliesQuery);
+    $repliesStmt->execute([$id]);
+    $replies = $repliesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo "<div class='replies'>";
+    foreach ($replies as $reply) {
+        $replyContent = isset($reply['content']) ? htmlspecialchars($reply['content']) : 'No reply content';
+        $replyTimestamp = isset($reply['timestamp']) ? htmlspecialchars($reply['timestamp']) : 'No reply timestamp';
+        echo "<div class='reply'>";
+        echo "<p>$replyContent</p>";
+        echo "<p class='timestamp'>$replyTimestamp</p>";
+        echo "</div>";
+    }
+    echo "</div>";
+
+    echo "</div>";
 }
 ?>
 
 
-
-
-<div class="announcements" id="announcement-container">
-    <?php
-    // Fetch announcements from the database
-    $stmt = $pdo->prepare("SELECT * FROM normal_announcements ORDER BY created_at DESC");
-    $stmt->execute();
-    $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Display announcements
-    foreach ($announcements as $announcement) {
-        echo '<div class="announcement">';
-        echo '<div class="profile-picture">';
-        echo '<img src="images/jmtech.jpg" alt="Profile Picture">';
-        echo '</div>';
-        echo '<div class="announcement-content">';
-        echo '<h3>' . $announcement['title'] . '</h3>';
-        echo '<p>' . $announcement['content'] . '</p>';
-        echo '<p>Date: ' . $announcement['created_at'] . '</p>'; // Display date and time
-
-        // Fetch and display replies for this announcement
-        $replyStmt = $pdo->prepare("SELECT * FROM announcement_replies WHERE announcement_id = :announcement_id ORDER BY created_at ASC");
-        $replyStmt->bindParam(':announcement_id', $announcement['id']);
-        $replyStmt->execute();
-        $replies = $replyStmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($replies as $reply) {
-            echo '<div class="reply">';
-            echo '<div class="profile-picture">';
-            echo '<img src="images/jmtt.jpg" alt="Profile Picture">';
-            echo '</div>';
-            echo '<div class="reply-content">';
-            echo '<p>' . $reply['reply_content'] . '</p>';
-            echo '<p>Reply Date: ' . $reply['created_at'] . '</p>'; // Display reply date and time
-            echo '</div>';
-            echo '</div>';
-        }
-
-        echo '<button class="reply-button" onclick="toggleReplyForm(this)">Reply</button>';
-        echo '<div class="reply-form">';
-        echo '<form action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="POST">';
-        echo '<input type="hidden" name="announcement_id" value="' . $announcement['id'] . '">';
-        echo '<textarea name="reply_content" placeholder="Write your reply here"></textarea>';
-        echo '<button type="submit">Submit</button>';
-        echo '</form>';
-        echo '</div>';
-
-        echo '</div>'; // .announcement-content
-        echo '</div>'; // .announcement
-    }
-    ?>
-</div>
-
-
+            </div>
         </div>
     </div>
 
-    <footer id="footer">
-        <div class="footer">
-            <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
-        </div>
-    </footer>
+    <div id="footer">
+        <footer class="footer">
+            <p>&copy; 2023 <a href="#">ALPHA FINANCE</a>. All rights reserved.</p>
+        </footer>
+    </div>
 
     <script>
-        function toggleReplyForm(button) {
-            const replyForm = button.nextElementSibling;
-            replyForm.classList.toggle('show-reply-form');
+        // JavaScript code
+        function toggleReplyForm(announcementId) {
+            var form = document.getElementById('reply-form-' + announcementId);
+            if (form.classList.contains('show-reply-form')) {
+                form.classList.remove('show-reply-form');
+            } else {
+                form.classList.add('show-reply-form');
+            }
         }
     </script>
 </body>

@@ -140,7 +140,7 @@
         <div class="container">
             <div class="icon" id="icon">
                 <div class="image" style="text-align: center;">
-                    <img src="images/aplha.webp" class="image2" alt="avatar">
+                    <img src="images/alpha.webp" class="image2" alt="avatar">
                 </div>
                 <h1 class="sign" style="text-align: center;"><i class="fas fa-user-plus"></i> Sign Up</h1>
                 <p class="sign">Please fill this form to register to Alpha Finance</p>

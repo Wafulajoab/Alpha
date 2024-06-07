@@ -11,8 +11,8 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-image: url('images/aplha.webp');
-            background-size: cover;
+            background-image: url('images/alpha.webp');
+            background-size: 70%;
             background-position: center;
             height: 100vh;
             display: flex;
@@ -40,7 +40,7 @@
         }
 
         .button {
-            background-color: transparent;
+            background-color:yellow;
             color: green;
             text-decoration: none;
             font-weight: bold;

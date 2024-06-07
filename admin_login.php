@@ -143,7 +143,7 @@
 
 <div class="container">
     <div class="image" style="text-align: center;">
-        <img src="images/aplha.webp" class="image2" alt="avatar" style="max-width: 30%; height: auto;">
+        <img src="images/alpha.webp" class="image2" alt="avatar" style="max-width: 30%; height: auto;">
     </div>
     <h2>Admin Login</h2>
     

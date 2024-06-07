@@ -115,22 +115,19 @@
     </style>
 </head>
 <body>
-<nav>
-    <div class="container">
-        <div class="navbar">
-            <h2>ALPHA FINANCE</h2>
-            <ul>
-            <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
-            <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-            <a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a>
-            <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-            <a href="updates.php"><i class="fas fa-bullhorn action"></i>Updates</a>
-            <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
-            <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- Navigation Bar -->
+<nav class="navbar">
+        <h2>ALPHA FINANCE</h2>
+        <ul>
+            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+            <li><a href="summary.php"><i class="fas fa-file-alt"></i>Summary</a></li>
+            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+            <li><a href="updates.php"><i class="fas fa-bullhorn"></i>Updates</a></li>
+            <li><a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a></li>
+            <li><a href="profile.php"><i class="fas fa-user icon"></i>Profile</a></li>
+        </ul>
+    </nav>
 <br><br>
 <div class="container">
     <h2>CEO Announcements</h2>

@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="container">
     <div class="image" style="text-align: center;">
-        <img src="images/aplha.webp" class="image2" alt="avatar" style="max-width: 15%; height: auto;">
+        <img src="images/alpha.webp" class="image2" alt="avatar" style="max-width: 15%; height: auto;">
     </div>
     <h2>Admin Registration</h2>
 

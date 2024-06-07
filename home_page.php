@@ -34,29 +34,57 @@ if (isset($_SESSION['username'])) {
             min-height: 100vh;
         }
         .navbar {
-            background-color: #444;
-            padding: 20px 0;
-            text-align: center;
             position: fixed;
             top: 0;
             left: 0;
-            width: 200px; /* Set a fixed width for the sidebar */
-            height: 100%; /* Full height */
+            width: 200px;
+            height: 100vh;
+            background-color: #444;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
         }
         .navbar a {
-            display: block;
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
-            padding: 10px;
             border-radius: 25px;
-            text-align: left;
-            padding-left: 20px;
         }
         .navbar .icon {
             font-size: 20px;
-            margin-right: 10px;
+            margin-right: 15px;
         }
+        .navbar ul {
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            padding: .5rem;
+            margin: .5rem 0;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: rgb(250, 246, 246);
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            font-size: 1.5rem;
+            padding: 0.5px;
+            margin: 1.5rem 0;
+            font-family: Arial, sans-serif;
+            color: rgb(250, 245, 245);
+        }
+
         .container {
             margin-left: 220px; /* Adjust margin-left for content to be next to the sidebar */
             padding: 20px;
@@ -126,16 +154,18 @@ if (isset($_SESSION['username'])) {
 </head>
 <body>
     <!-- Navigation Bar -->
-    <div class="navbar">
-        <a href="home_page.php"><i class="fas fa-home icon"></i>Home</a>
-        <a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a>
-        <a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a>
-        <a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a>
-        <a href="updates.php"><i class="fas fa-bullhorn icon"></i>Updates</a>
-        <a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a>
-        <a href="profile.php"><i class="fas fa-user icon"></i>Profile</a>
-    </div>
-
+    <nav class="navbar">
+        <h2>ALPHA FINANCE</h2>
+        <ul>
+            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+            <li><a href="updates.php"><i class="fas fa-bullhorn icon"></i>Updates</a></li>
+            <li><a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a></li>
+            <li><a href="profile.php"><i class="fas fa-user icon"></i>Profile</a></li>
+        </ul>
+    </nav>
     <!-- Main Content -->
     <div class="container">
         <div class="section total-deposits">

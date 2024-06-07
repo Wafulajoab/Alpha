@@ -111,7 +111,7 @@
 <br><br>
 <form action="users_login_process.php" method="post">
     <div class="imgcontainer">
-        <img src="images/aplha.webp" alt="Avatar" class="avatar">
+        <img src="images/alpha.webp" alt="Avatar" class="avatar">
     </div>
     <p class="error-message">
         <?php
