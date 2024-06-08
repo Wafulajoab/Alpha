@@ -130,9 +130,9 @@
 </head>
 <body> 
     <!-- Navbar -->
-    <div class="navbar">
+    <!-- <div class="navbar">
     <h1 style="color: white; margin: 0;">Alpha Finance</h1>
-</div>
+</div> -->
 
 <br><br><br>
     <!-- Form -->
@@ -158,10 +158,10 @@
                 </label>
                 <p class="sign">By creating an account with this security system, you agree to our<a href="#" style="color:blue">Terms & Privacy</a></p>
                 <div class="clearfix">
-                    <button class="sign" type="submit" class="signupbtn"><i class="fas fa-check"></i> Sign Up</button>
-                    <li><a href="user_login.php"><i class="fas fa-info-circle"></i> Already have an account Login as User here</a></li> 
-                    <br>
-                    <li><a href="admin_login.php"><i class="fas fa-info-circle"></i> Already have an account Login as Admin here</a></li>
+                    <button class="sign" type="submit" class="signupbtn"><i class="fas fa-check icon"></i> Sign Up</button>
+                    <li><a href="user_login.php"><i class="fas fa-info-circle icon"></i> Already have an account Login as User here</a></li> 
+                    <!-- <br>
+                    <li><a href="admin_login.php"><i class="fas fa-info-circle"></i> Already have an account Login as Admin here</a></li> -->
                 </div>
             </div>
         </div>

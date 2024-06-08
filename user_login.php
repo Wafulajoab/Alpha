@@ -104,9 +104,9 @@
 </head>
 <body>
 
-<div class="navbar">
+<!-- <div class="navbar">
     <h1 style="color: white; margin: 0;">Alpha Finance</h1>
-</div>
+</div> -->
 
 <br><br>
 <form action="users_login_process.php" method="post">
@@ -136,6 +136,7 @@
 
     <div class="container" style="background-color: whitesmoke; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
         <li><a href="user_register.php"><i class="fas fa-user-plus"></i> Register</a></li>
+        <br>
         <span class="psw"><a href="#" style="font-family: Arial, sans-serif; color: rgb(1, 1, 104);"><i class="fas fa-question-circle"></i> Forgot password?</a></span>
     </div>
 </form>
