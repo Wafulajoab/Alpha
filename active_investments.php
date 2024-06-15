@@ -15,14 +15,18 @@ if ($conn->connect_error) {
 }
 
 // Update status to "Matured" for investments that have exceeded maturity date
-$updateSql = "UPDATE investments SET status = 'Matured' WHERE maturity_date < NOW() AND status = 'Active'";
-$conn->query($updateSql);
-
+$updateSql = "UPDATE investments SET status = 'Matured' WHERE maturityDate < NOW() AND status = 'Active'";
+if (!$conn->query($updateSql)) {
+    die("Error updating investments: " . $conn->error);
+}
 
 // Fetch all active investments from the database
-$sql = "SELECT *, TIMESTAMPDIFF(SECOND, NOW(), maturity_date) AS countdown_seconds FROM investments WHERE status = 'Active'";
+$sql = "SELECT *, TIMESTAMPDIFF(SECOND, NOW(), maturityDate) AS countdown_seconds FROM investments WHERE status = 'Active'";
 $result = $conn->query($sql);
 
+if (!$result) {
+    die("Error fetching investments: " . $conn->error);
+}
 
 // Function to format countdown
 function formatCountdown($seconds) {
@@ -48,11 +52,56 @@ function formatCountdown($seconds) {
             margin: 0;
             padding: 0;
             background-color: darkgrey;
+            transition: margin-left 0.3s ease;
+        }
+        .container {
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #444;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .status-active {
+            color: green;
+        }
+        .status-matured {
+            color: red;
+        }
+        .status-pending {
+            color: orange;
+        }
+        .menu-icon {
+            color: white;
+            font-size: 40px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            transition: left 0.3s ease;
         }
         .navbar {
             position: fixed;
             top: 0;
-            left: 0;
+            left: -200px;
             width: 200px;
             height: 100vh;
             background-color: #444;
@@ -60,7 +109,11 @@ function formatCountdown($seconds) {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
+            padding: 0;
+            transition: left 0.3s ease;
+        }
+        .navbar.show {
+            left: 0;
         }
         .navbar a {
             color: #fff;
@@ -97,39 +150,6 @@ function formatCountdown($seconds) {
             font-family: Arial, sans-serif;
             color: rgb(250, 245, 245);
         }
-        .container {
-            margin-left: 220px;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #444;
-            color: #fff;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #ddd;
-        }
-        .status-active {
-            color: green;
-        }
-        .status-matured {
-            color: red;
-        }
-        .status-pending {
-            color: orange;
-        }
         footer {
             position: fixed;
             bottom: 0;
@@ -137,8 +157,12 @@ function formatCountdown($seconds) {
             width: 100%;
             background: #444;
             text-align: center;
-            padding: 0.5rem;
-            color: white;
+            padding: 0.01rem;
+            z-index: 999;
+        }
+        footer p {
+            justify-content: center;
+            margin: 0;
         }
         footer a {
             color: green;
@@ -148,21 +172,26 @@ function formatCountdown($seconds) {
     </style>
 </head>
 <body>
- <!-- Navigation Bar -->
- <nav class="navbar">
+    <!-- Menu Icon -->
+    <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <br><br><br>
         <h2>ALPHA FINANCE</h2>
         <ul>
-            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
-            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-            <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-            <li><a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a></li>
-            <li><a href="profile.php"><i class="fas fa-user icon"></i>Profile</a></li>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-
-    <div class="container">
+<br>
+    <div class="container" id="content">
         <h2>Running Investments</h2>
         <table>
             <thead>
@@ -182,14 +211,14 @@ function formatCountdown($seconds) {
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>
-                                <td>" . $row['unique_id'] . "</td>
-                                <td>" . $_SESSION['username'] . "</td>
-                                <td>" . $row['package_name'] . "</td>
+                                <td>" . $row['id'] . "</td>
+                                <td>" . $row['username'] . "</td>
+                                <td>" . $row['packageName'] . "</td>
                                 <td>" . $row['duration'] . "</td>
-                                <td>" . $row['maturity_date'] . "</td>
+                                <td>" . $row['maturityDate'] . "</td>
                                 <td class='status-" . strtolower($row['status']) . "'>" . $row['status'] . "</td>
                                 <td>" . $row['amount'] . "</td>
-                                <td id='countdown-" . $row['unique_id'] . "'>" . formatCountdown($row['countdown_seconds']) . "</td>
+                                <td id='countdown-" . $row['id'] . "'>" . formatCountdown($row['countdown_seconds']) . "</td>
                               </tr>";
                     }
                 } else {
@@ -202,10 +231,22 @@ function formatCountdown($seconds) {
     </div>
 
     <footer>
-        <p><span>Company.<strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></span></p>
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
 
+    <!-- JavaScript -->
     <script>
+        function toggleNavbar() {
+            const navbar = document.getElementById('navbar');
+            const content = document.getElementById('content');
+            navbar.classList.toggle('show');
+            if (navbar.classList.contains('show')) {
+                content.style.marginLeft = '200px';
+            } else {
+                content.style.marginLeft = '0';
+            }
+        }
+
         function updateCountdown(endDate, countdownElementId) {
             var countDownDate = new Date(endDate).getTime();
 
@@ -216,30 +257,28 @@ function formatCountdown($seconds) {
                 var days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000)) / 1000);
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById(countdownElementId).innerHTML = days + " days, " + hours + " hrs, " + minutes + " mins, " + seconds + " secs";
+                document.getElementById(countdownElementId).innerHTML = days + " days, " + hours + " hrs, " +
+                    minutes + " mins, " + seconds + " secs";
 
                 if (distance < 0) {
                     clearInterval(x);
-                    document.getElementById(countdownElementId).innerHTML = "Matured";
+                    document.getElementById(countdownElementId).innerHTML = "EXPIRED";
                 }
             }, 1000);
         }
 
-        <?php
-        // Re-fetch running investments for countdown update
-        $conn = new mysqli($servername, $username, $password, $database);
-        $sql = "SELECT * FROM investments WHERE status = 'Active'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php
+            $result->data_seek(0);
             while ($row = $result->fetch_assoc()) {
-                echo "updateCountdown('" . $row['maturity_date'] . "', 'countdown-" . $row['unique_id'] . "');";
+                $maturityDate = $row['maturityDate'];
+                $id = $row['id'];
+                echo "updateCountdown('$maturityDate', 'countdown-$id');";
             }
-        }
-        $conn->close();
-        ?>
+            ?>
+        });
     </script>
 </body>
 </html>

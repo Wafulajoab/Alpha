@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal</title>
+    <title>Finance Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
     <style>
         body {
@@ -11,11 +11,26 @@
             margin: 0;
             padding: 0;
             background-color: darkgrey;
+            display: flex;
+            transition: margin-left 0.3s ease; /* Add transition for body sliding effect */
         }
+
+        .menu-icon {
+            color: white; /* Icon color */
+            font-size: 40px; /* Icon size */
+            margin-right: 10px; /* Right margin for spacing */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            position: absolute; /* Position the icon */
+            top: 10px; /* Adjust top position */
+            left: 10px; /* Adjust left position */
+            z-index: 1000; /* Ensure icon appears above other content */
+            transition: left 0.3s ease; /* Add transition for sliding effect */
+        }
+
         .navbar {
             position: fixed;
             top: 0;
-            left: 0;
+            left: -200px; /* Initially hide the navbar */
             width: 200px;
             height: 100vh;
             background-color: #444;
@@ -23,18 +38,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
+            padding: 0;
+            transition: left 0.3s ease; /* Add transition for sliding effect */
         }
+
+        .navbar.show {
+            left: 0; /* Show the navbar */
+        }
+
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
+
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
+
         .navbar ul {
             display: flex;
             flex-direction: column;
@@ -64,21 +87,37 @@
             color: rgb(250, 245, 245);
         }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 60px; /* Adjusted margin-top for content below the fixed navbar */
-        }
-        .section {
-            width: 30%;
-            margin: 10px 0; /* Adjusted margin */
-            padding: 20px;
-            text-align: center;
-            border-radius: 10px;
-            background-color: #f0f0f0; /* Light gray background */
-            color: #333; /* Dark text color */
-        }
+         /* Styles for centering and fixing the withdrawal section */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Set the container height to viewport height */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999; /* Ensure it stays above other content */
+    }
+
+    .section {
+        width: 50vh;
+        text-align: center;
+        border-radius: 10px;
+        background-color: #f0f0f0; /* Light gray background */
+        color: #333; /* Dark text color */
+        padding: 20px;
+    }
+
+    /* Styles for the logout link */
+    .logout {
+        position: fixed;
+        bottom: 20px; /* Adjust bottom position */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000; /* Ensure it stays above other content */
+    }
+
         button {
             background-color: green;
             color: white;
@@ -88,111 +127,114 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #8a2be2; /* Dark purple on hover */
         }
+
         .btn-back {
             background-color: #333;
         }
+
         .btn-logout {
             background-color: #f00; /* Red for logout button */
         }
 
 
-        /* Add these styles to your existing CSS */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0; /* Adjust to be aligned with the container */
+            width: 100%; /* Adjust width based on the navbar width */
+            background: #444;
+            text-align: center;
+            padding: 0.01rem;
+            z-index: 999; /* Ensure it stays above other content */
+        }
 
-.logout {
-    background-color: #8a2be2; /* Dark purple */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin: 0 10px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
+        footer p {
+            justify-content: center;
+            margin: 0; /* Remove default margin */
+        }
 
-.logout:hover {
-    background-color: #5f04b4; /* Dark purple on hover */
-}
-
-
-
+        footer a {
+            color: green;
+            text-decoration: underline;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+    <!-- Menu Icon -->
+    <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
+
     <!-- Navigation Bar -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
+        <br><br><br>
         <h2>ALPHA FINANCE</h2>
         <ul>
-            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
-            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-            <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-            <li><a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a></li>
-            <li><a href="profile.php"><i class="fas fa-user icon"></i>Profile</a></li>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-    </div>
-<br><br><br><br>
+
+    <!-- Main Content -->
     <div class="container">
+        <!-- Withdrawal Section -->
         <div class="section">
-        <form action="withdraw_process.php" method="POST">
-    <h3>Withdrawal Section</h3>
-    <div>
-    <div>
-    <h4>Account Balance</h4>
-    <?php
-    if (isset($total_balance)) {
-        echo "<p>Ksh " . $total_balance . "</p>";
-    } else {
-        echo "<p>Account balance not available</p>";
-    }
-    ?>
-</div>
-
-</div>
-
-    <div>
-        <h4>Phone Number</h4>
-        <input type="text" name="phone_number" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
+            <form action="withdraw_process.php" method="POST">
+                <h3>Withdrawal Section</h3>
+                <div>
+                    <div>
+                        <h4>Account Balance</h4>
+                        <?php
+                        if (isset($total_balance)) {
+                            echo "<p>Ksh " . $total_balance . "</p>";
+                        } else {
+                            echo "<p>Account balance not available</p>";
+                        }
+                        ?>
+                    </div>
+                </div>
+                <div>
+                    <h4>Phone Number</h4>
+                    <input type="text" name="phone_number" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
+                </div>
+                <div>
+                    <h4>Enter Amount</h4>
+                    <input type="text" name="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
+                </div>
+                <br>
+                <button type="submit">Withdraw</button>
+            </form>
+        </div>
+        <a href="" class="logout"><i class=""></i></a>
     </div>
-    <div>
-        <h4>Enter Amount</h4>
-        <input type="number" name="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
-    </div>
-    <br>
-    <button type="submit">Withdraw</button>
-</form>
-
-    </div>
-
-    <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
     <!-- Footer -->
-    <footer id="footer">
-        <style>
-            #footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background: #444;
-                text-align: center;
-                padding: 0.01rem;
-            }
-            .footer p {
-                justify-content: center;
-            }
-            .footer a {
-                color: green;
-                text-decoration: underline;
-                font-weight: bold;
-            }
-        </style>
-        <div class="footer">
-            <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
-        </div>
+    <footer>
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
+
+
+    <!-- JavaScript -->
+    <script>
+        function toggleNavbar() {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('show');
+            const container = document.querySelector('.container');
+            if (navbar.classList.contains('show')) {
+                container.style.marginLeft = '200px'; /* Adjust margin when navbar is shown */
+            } else {
+                container.style.marginLeft = '0'; /* Reset margin when navbar is hidden */
+            }
+        }
+    </script>
 </body>
 </html>

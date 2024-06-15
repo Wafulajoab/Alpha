@@ -1,63 +1,31 @@
 <?php
-session_start();
+// Database connection
+include('db_connection.php');
 
-// Check if the admin is logged in
-if (!isset($_SESSION['admin_username'])) {
-    header("Location: admin_login.php");
-    exit();
+// Fetch user data
+$query = "SELECT id, username, phone_number, balance FROM users";
+$result = mysqli_query($conn, $query);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($conn));
 }
 
-// Include the database connection file
-include 'db_connection.php';
+// Handle delete user action
+if (isset($_POST['delete_user'])) {
+    $user_id = $_POST['user_id'];
+    
+    // Perform the delete query
+    $delete_query = "DELETE FROM users WHERE id = $user_id";
+    $delete_result = mysqli_query($conn, $delete_query);
 
-// Fetch dashboard data
-$admin_username = $_SESSION['admin_username'];
-// Include the database connection file
-include 'db_connection.php';
-
-// Fetch total number of users
-$queryTotalUsers = "SELECT COUNT(*) AS total_users FROM users";
-$resultTotalUsers = mysqli_query($conn, $queryTotalUsers);
-
-if ($resultTotalUsers) {
-    $rowTotalUsers = mysqli_fetch_assoc($resultTotalUsers);
-    $totalUsers = $rowTotalUsers['total_users'];
-} else {
-    $totalUsers = 0; // Default value if the query fails
+    if ($delete_result) {
+        echo "<script>alert('User deleted successfully');</script>";
+        // Redirect or reload the page after deletion
+        echo "<script>window.location.href = 'admin_users.php';</script>";
+    } else {
+        echo "<script>alert('Failed to delete user');</script>";
+    }
 }
-// Fetch total deposits (You need to implement the query and logic for total deposits)
-$queryTotalDeposits = "SELECT SUM(amount) AS total_deposits FROM deposits WHERE status = 'completed'";
-$resultTotalDeposits = mysqli_query($conn, $queryTotalDeposits);
-
-if ($resultTotalDeposits) {
-    $rowTotalDeposits = mysqli_fetch_assoc($resultTotalDeposits);
-    $totalDeposits = $rowTotalDeposits['total_deposits'];
-} else {
-    $totalDeposits = 0.00; // Default value if the query fails
-}
-
-// Fetch total withdrawals (You need to implement the query and logic for total withdrawals)
-$queryTotalWithdrawals = "SELECT SUM(amount) AS total_withdrawals FROM withdrawals WHERE status = 'completed'";
-$resultTotalWithdrawals = mysqli_query($conn, $queryTotalWithdrawals);
-
-if ($resultTotalWithdrawals) {
-    $rowTotalWithdrawals = mysqli_fetch_assoc($resultTotalWithdrawals);
-    $totalWithdrawals = $rowTotalWithdrawals['total_withdrawals'];
-} else {
-    $totalWithdrawals = 0.00; // Default value if the query fails
-}
-
-// Fetch total investments (You need to implement the query and logic for total investments)
-$queryTotalInvestments = "SELECT SUM(amount) AS total_investments FROM investments WHERE status = 'active'";
-$resultTotalInvestments = mysqli_query($conn, $queryTotalInvestments);
-
-if ($resultTotalInvestments) {
-    $rowTotalInvestments = mysqli_fetch_assoc($resultTotalInvestments);
-    $totalInvestments = $rowTotalInvestments['total_investments'];
-} else {
-    $totalInvestments = 0.00; // Default value if the query fails
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +33,7 @@ if ($resultTotalInvestments) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin - Manage Users</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
     <style>
         body {
@@ -145,37 +113,12 @@ if ($resultTotalInvestments) {
         .container {
             margin-left: 0;
             padding: 20px;
-            max-width: 1000px;
+            max-width: 50%;
             width: 100%;
             transition: margin-left 0.3s ease;
         }
         .container.shifted {
             margin-left: 200px;
-        }
-        .section {
-            width: 60%;
-            margin: 20px 0;
-            padding: 20px;
-            text-align: center;
-            border-radius: 100%;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .total-users {
-            background-color: #ffcccb;
-            color: #333;
-        }
-        .total-deposits {
-            background-color: #ff9999;
-            color: #333;
-        }
-        .total-withdrawals {
-            background-color: #99ff99;
-            color: #333;
-        }
-        .total-investments {
-            background-color: #99ccff;
-            color: #333;
         }
         .admin-name {
             position: absolute;
@@ -185,6 +128,22 @@ if ($resultTotalInvestments) {
             font-weight: bold;
             font-size: 25px;
             font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #444;
+            color: white;
         }
         footer {
             position: fixed;
@@ -204,6 +163,17 @@ if ($resultTotalInvestments) {
             color: green;
             text-decoration: underline;
             font-weight: bold;
+        }
+        .actions button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .actions button.delete {
+            background-color: #f44336;
+            color: white;
         }
     </style>
 </head>
@@ -225,25 +195,33 @@ if ($resultTotalInvestments) {
         </ul>
     </nav>
     <!-- Main Content -->
-    <div class="container" id="container">
-        <div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
-        <div class="section total-users">
-            <h2>Total Active Users</h2>
-            <p><?php echo number_format($totalUsers); ?></p>
-        </div>
-        <div class="section total-deposits">
-            <h2>Total Deposits</h2>
-            <p>Ksh <?php echo number_format($totalDeposits, 2); ?></p>
-        </div>
-        <div class="section total-withdrawals">
-            <h2>Total Withdrawals</h2>
-            <p>Ksh <?php echo number_format($totalWithdrawals, 2); ?></p>
-        </div>
-        <div class="section total-investments">
-            <h2>Total Investments</h2>
-            <p>Ksh <?php echo number_format($totalInvestments, 2); ?></p>
-        </div>
-    </div>
+<div class="container" id="container">
+    <div class="admin-name">Manage Users</div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Phone Number</th>
+            <th>Balance</th> <!-- Add Balance Column Header -->
+            <th>Actions</th>
+        </tr>
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+            <tr>
+                <td><?php echo $row['id']; ?></td>
+                <td><?php echo $row['username']; ?></td>
+                <td><?php echo $row['phone_number']; ?></td>
+                <td><?php echo $row['balance']; ?></td> <!-- Display Balance Value -->
+                <td class="actions">
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                        <button type="submit" name="delete_user" class="delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+
     <footer>
         <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>

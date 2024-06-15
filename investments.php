@@ -1,18 +1,3 @@
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "alpha";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,11 +11,31 @@ if ($conn->connect_error) {
             margin: 0;
             padding: 0;
             background-color: darkgrey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease; /* Add transition for body sliding */
         }
+
+        /* Menu icon styles */
+        .menu-icon {
+            color: white; /* Icon color */
+            font-size: 40px; /* Icon size */
+            margin-right: 10px; /* Right margin for spacing */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            position: absolute; /* Position the icon */
+            top: 10px; /* Adjust top position */
+            left: 10px; /* Adjust left position */
+            z-index: 1000; /* Ensure icon appears above other content */
+            transition: left 0.3s ease; /* Add transition for sliding effect */
+        }
+
+        /* Navbar styles */
         .navbar {
             position: fixed;
             top: 0;
-            left: 0;
+            left: -200px; /* Initially hide the navbar */
             width: 200px;
             height: 100vh;
             background-color: #444;
@@ -38,18 +43,26 @@ if ($conn->connect_error) {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
+            padding: 0;
+            transition: left 0.3s ease; /* Add transition for sliding effect */
         }
+
+        .navbar.show {
+            left: 0; /* Show the navbar */
+        }
+
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
+
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
+
         .navbar ul {
             display: flex;
             flex-direction: column;
@@ -79,14 +92,41 @@ if ($conn->connect_error) {
             color: rgb(250, 245, 245);
         }
 
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0; /* Adjust to be aligned with the container */
+            width: 100%; /* Adjust width based on the navbar width */
+            background: #444;
+            text-align: center;
+            padding: 0.01rem;
+            z-index: 999; /* Ensure it stays above other content */
+        }
+
+        footer p {
+            justify-content: center;
+            margin: 0; /* Remove default margin */
+        }
+
+        footer a {
+            color: green;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 60px; /* Adjusted margin-top for content below the fixed navbar */
+            transition: margin-left 0.3s ease; /* Add transition for sliding effect */
         }
+        .container.shifted {
+            margin-left: 200px; /* Adjust margin when navbar is shown */
+        }
+        
         .section {
-            width: 40%;
+            width: 100%;
             margin: 10px 0; /* Adjusted margin */
             padding: 20px;
             text-align: center;
@@ -104,8 +144,8 @@ if ($conn->connect_error) {
             background-color: #99ff99; /* Light green background */
             color: #333; /* Dark text color */
         }
-        .invest-now-section {
-            background-color: #99ccff; /* Light sky blue background */
+        .executive-investment-section {
+            background-color: #ffd700; /* Gold background */
             color: #333; /* Dark text color */
         }
         button {
@@ -123,104 +163,108 @@ if ($conn->connect_error) {
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <h2>ALPHA FINANCE</h2>
-        <ul>
-            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
-            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-            <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-            <li><a href="withdraw.php"><i class="fas fa-money-check-alt icon"></i>Cashout</a></li>
-            <li><a href="profile.php"><i class="fas fa-user icon"></i>Profile</a></li>
-        </ul>
-    </nav>
 
-    <div class="container">
+ <!-- Menu Icon -->
+ <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
+
+<!-- Navigation Bar -->
+<nav class="navbar" id="navbar">
+    <br><br><br>
+    <h2>ALPHA FINANCE</h2>
+    <ul>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+   </ul>
+</nav>
+    <div class="container" id="container">
         <!-- Silver Package form -->
         <div class="section investment-options-section">
-        <form action="investments_process.php" method="POST">
-    <h3>Silver Package</h3>
-    <p>Earn 15% after 2 days</p>
-    <p>Minimum capital - Ksh 500 (2 days)</p>
-    <p>Maximum capital - Ksh 150,000 </p>
-    <input type="hidden" name="package_name" value="Silver Package">
-    <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
-    <input type="hidden" name="duration" value="2">
-    <button type="submit">Invest Now</button>
-        </form>
-        </div>
-
-        <!-- Bronze Package form -->
-        <div class="section current-investment-section">
-            <form action="investments_process.php" method="POST">
-                <h3>Bronze Package</h3>
-                <p>Earn 30% after 3 days</p>
-                <p>Minimum capital - Ksh 1000 (3 days)</p>
+        <form action="process_investment.php" method="POST">
+                <h3>Silver Package</h3>
+                <p>Earn 15% after 3 days</p>
+                <p>Minimum capital - Ksh 500 (3 days)</p>
                 <p>Maximum capital - Ksh 150,000 </p>
-                <input type="hidden" name="package_name" value="Bronze Package">
-                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
+                <input type="hidden" name="package_name" value="Silver Package">
+                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
                 <input type="hidden" name="duration" value="3">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
 
-        <!-- Gold Package form -->
-        <div class="section total-investments-section">
-            <form action="investments_process.php" method="POST">
-                <h3>Gold Package</h3>
-                <p>Earn 50% after 6 days</p>
-                <p>Minimum capital - Ksh 2000 (6 days)</p>
+        <!-- Bronze Package form -->
+        <div class="section investment-options-section">
+            <form onsubmit="return validateInvestment('Bronze Package', 2000, 150000)" method="POST">
+                <h3>Bronze Package</h3>
+                <p>Earn 30% after 4 days</p>
+                <p>Minimum capital - Ksh 1,000 (4 days)</p>
                 <p>Maximum capital - Ksh 150,000 </p>
-                <input type="hidden" name="package_name" value="Gold Package">
-                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
-                <input type="hidden" name="duration" value="6">
+                <input type="hidden" name="package_name" value="Bronze Package">
+                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
+                <input type="hidden" name="duration" value="4">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
 
-        <!-- Executive Package form -->
-        <div class="section invest-now-section">
-            <form action="investments_process.php" method="POST">
+        <!-- Gold Package form -->
+        <div class="section investment-options-section">
+            <form onsubmit="return validateInvestment('Gold Package', 1500, 150000)" method="POST">
+                <h3>Gold Package</h3>
+                <p>Earn 45% after 5 days</p>
+                <p>Minimum capital - Ksh 1,500 (5 days)</p>
+                <p>Maximum capital - Ksh 150,000 </p>
+                <input type="hidden" name="package_name" value="Gold Package">
+                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
+                <input type="hidden" name="duration" value="5">
+                <button type="submit">Invest Now</button>
+            </form>
+        </div>
+
+        <!-- Diamond Package form -->
+        <div class="section investment-options-section">
+            <form onsubmit="return validateInvestment('Executive Package', 2000, 150000)" method="POST">
                 <h3>Executive Package</h3>
                 <p>Earn 100% after 10 days</p>
-                <p>Minimum capital - Ksh 5000 (10 days)</p>
+                <p>Minimum capital - Ksh 2,000 (10 days)</p>
                 <p>Maximum capital - Ksh 150,000 </p>
                 <input type="hidden" name="package_name" value="Executive Package">
-                <input text="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;">
+                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
                 <input type="hidden" name="duration" value="10">
                 <button type="submit">Invest Now</button>
             </form>
         </div>
     </div>
-<br><br><br><br>
-    <footer id="footer">
-        <style>
-            #footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background: #444;
-                text-align: center;
-                padding: 0.01rem;
-            }
 
-            .footer p {
-                justify-content: center;
-            }
-
-            .footer a {
-                color: green;
-                text-decoration: underline;
-                font-weight: bold;
-            }
-        </style>
-
-        <div class="footer">
-            <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
-        </div>
+    <footer>
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
+
+
+    <script>
+        // Function to toggle the navbar
+        function toggleNavbar() {
+            var navbar = document.getElementById('navbar');
+            var container = document.getElementById('container');
+            var body = document.body;
+            navbar.classList.toggle('show');
+            container.classList.toggle('shifted');
+            body.classList.toggle('shifted'); // Slide the body content along with the navbar
+        }
+
+        // Validation function
+        function validateInvestment(packageName, minAmount, maxAmount) {
+            var amount = parseInt(document.querySelector(`form[onsubmit="return validateInvestment('${packageName}', ${minAmount}, ${maxAmount})"] input[name='amount']`).value);
+            if (isNaN(amount) || amount < minAmount || amount > maxAmount) {
+                alert(`Please enter an amount between Ksh ${minAmount} and Ksh ${maxAmount} for the ${packageName}.`);
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

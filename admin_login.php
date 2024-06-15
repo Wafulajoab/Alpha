@@ -2,165 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    
-     <style>
+    <!-- Include Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Styles for body, navbar, and footer */
         body {
-            font-family: Arial, sans-serif;
             background-color: darkgrey;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-left: 200px; /* Adjust to make room for the navbar */
+            border-radius: 25px;
+            font-family: Arial, sans-serif;
+            margin: 0; /* Added to remove default margin */
+            padding: 0; /* Added to remove default padding */
         }
         .navbar {
-            background-color: #444;
-            padding: 20px 0;
+            background-color:#444;
+            position: fixed; /* Fixed position */
+            top: 0; /* Fixed to top */
+            left: 0; /* Fixed to left */
+            right: 0; /* Fixed to right */
+            z-index: 1000; /* Ensuring navbar stays on top */
+            padding: 10px ;
             text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 200px; /* Fixed width for the navbar */
-            height: 100%; /* Full height */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center the buttons vertically */
+            width: 100%; /* Full width */
         }
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            margin: 10px 0;
-            border-radius: 25px;
-            padding: 10px 20px; /* Adjust padding as needed */
+
+        /* Existing Styles */
+        img {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
         }
-        .navbar a:hover {
-            background-color: green; /* Change to desired hover background color */
-            color: #333; /* Change to desired hover text color */
-        }
-        .button {
-            background-color: transparent;
-            color: green;
-            text-decoration: none;
-            font-weight: bold;
-            border: 2px solid green;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-            border-radius: 4px;
-        }
-        .button:hover {
-            background-color: green;
-            color: white;
-        }
-        .button:active {
-            transform: translateY(1px);
-        }
-        .container {
-            max-width: 400px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 25px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: auto;
-            margin-top: 20px;
-            margin-bottom: auto; /* Added */
-        }
-        h2 {
+        .imgcontainer {
             text-align: center;
-            margin-bottom: 20px;
+            margin-top: 3rem;
         }
-        label {
-            display: block;
-            margin-bottom: 6px;
+        form {
+            background-color: whitesmoke;
+            opacity: 1;
+            border-radius: 25px;
+            width: 20%; /* Adjust the width as needed */
+            margin: auto; /* Center the form horizontally */
+            margin-top: 50px; /* Adjust the top margin as needed */
+            padding: 10px; /* Add padding for better spacing */
         }
-        input[type="text"],
-        input[type="password"] {
+        input[type=text], input[type=password] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid wheat;
             box-sizing: border-box;
-        }
-        .password-toggle {
-            position: relative;
-        }
-        .password-toggle input[type="password"] {
-            padding-right: 30px;
-        }
-        .password-toggle .toggle-password {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
+            border-radius: 8px;
         }
         button {
-            width: 100%;
-            padding: 10px;
-            background-color: black;
-            color: #fff;
+            background-color: green;
+            padding: 14px 20px;
+            margin: 8px;
             border: none;
-            border-radius: 25px;
             cursor: pointer;
+            width: 100%;
+            border-radius: 25px;
+            opacity: 0.9;
         }
         button:hover {
-            background-color: #0056b3;
+            opacity: 1;
         }
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: lavender;
-            text-align: center;
-            padding: 0.1rem;
+        .psw a {
+            color: rgb(253, 253, 253);
+            text-decoration: none;
         }
-        footer p {
-            margin: 0;
+        input[type=text]:focus, input[type=password]:focus {
+            background-color: rgb(255, 255, 255);
+            outline: none;
         }
-        footer a {
-            color: green;
-            text-decoration: underline;
-            font-weight: bold;
+        .cancelbtn {
+            padding: 14px 20px;
+            background-color: rgb(0, 26, 255);
+        }
+        .signupbtn {
+            float: center;
+            width: 50%;
+        }
+        .container {
+            padding: 16px;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        @media screen and (max-width: 300px) {
+            .cancelbtn, .signupbtn {
+                width: 100%;
+            }
         }
     </style>
-
 </head>
 <body>
 
-<div class="navbar">
-    <a href="admin_register.php" class="button" id="adminBtn">Register as Admin</a>
-    <a href="admin_login.php" class="button" id="adminBtn">Login as Admin</a>
-    <a href="user_register.php" class="button" id="registerBtn">Register as User</a>
-    <a href="user_login.php" class="button" id="loginBtn">Login as User</a>
-</div>
-
-</div>
-
-<div class="container">
-    <div class="image" style="text-align: center;">
-        <img src="images/alpha.webp" class="image2" alt="avatar" style="max-width: 30%; height: auto;">
+<br><br>
+<form action="admin_login_process.php" method="post">
+    <div class="imgcontainer">
+        <img src="images/alpha.webp" alt="Avatar" class="avatar">
     </div>
-    <h2>Admin Login</h2>
-    
-    <form action="adlogin_process.php" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" autocomplete="off" required><br><br>
+    <p class="error-message">
+        <?php
+        if (isset($_GET['error']) && $_GET['error'] == 'invalid') {
+            echo "Invalid username or password. Please try again.";
+        }
+        ?>
+    </p>
+    <div class="container">
+        <label class="username" for="username"><b><i class="fas fa-user"></i> Admin Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required autocomplete="off">
 
-        <div class="password-toggle">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" autocomplete="off" required>
-            <span class="toggle-password" onclick="togglePasswordVisibility()">Show</span>
-        </div><br><br>
+        <label class="password" for="psw"><b><i class="fas fa-lock"></i> Admin Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required autocomplete="off">
 
-        <button type="submit">Login</button>
-       
-    </form>
-</div>
+        <button id="buttonMe" type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <label>
+            <input type="checkbox" checked="checked" name="remember">
+            <span class="remember"><i class="fas fa-check"></i> Remember me</span>
+        </label>
+    </div>
+
+    <div class="container" style="background-color: whitesmoke; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
+        <li><a href="admin_register.php"><i class="fas fa-user-plus"></i> Register as Admin</a></li>
+        <br>
+        <span class="psw"><a href="#" style="font-family: Arial, sans-serif; color: rgb(1, 1, 104);"><i class="fas fa-question-circle"></i> Forgot password?</a></span>
+    </div>
+</form>
+
 <footer id="footer">
     <style>
         #footer {
@@ -168,9 +142,9 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #444;
+            background: lavender;
             text-align: center;
-            padding: 1rem;
+            padding: 0.1rem;
         }
 
         .footer p {
@@ -185,23 +159,8 @@
     </style>
 
     <div class="footer">
-    <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
+        <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
     </div>
 </footer>
-<script>
-    function togglePasswordVisibility() {
-        var passwordField = document.getElementById("password");
-        var toggleButton = document.querySelector(".toggle-password");
-
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            toggleButton.textContent = "Hide";
-        } else {
-            passwordField.type = "password";
-            toggleButton.textContent = "Show";
-        }
-    }
-</script>
-
 </body>
 </html>

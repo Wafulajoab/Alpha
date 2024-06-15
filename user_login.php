@@ -104,10 +104,6 @@
 </head>
 <body>
 
-<!-- <div class="navbar">
-    <h1 style="color: white; margin: 0;">Alpha Finance</h1>
-</div> -->
-
 <br><br>
 <form action="users_login_process.php" method="post">
     <div class="imgcontainer">

@@ -7,57 +7,28 @@ if (!isset($_SESSION['admin_username'])) {
     exit();
 }
 
-// Include the database connection file
-include 'db_connection.php';
-
-// Fetch dashboard data
 $admin_username = $_SESSION['admin_username'];
+
 // Include the database connection file
 include 'db_connection.php';
 
-// Fetch total number of users
-$queryTotalUsers = "SELECT COUNT(*) AS total_users FROM users";
-$resultTotalUsers = mysqli_query($conn, $queryTotalUsers);
+// Handle approve/reject actions
+if (isset($_POST['action']) && isset($_POST['deposit_id'])) {
+    $action = $_POST['action'];
+    $deposit_id = $_POST['deposit_id'];
+    $status = $action === 'approve' ? 'Approved' : 'Rejected';
 
-if ($resultTotalUsers) {
-    $rowTotalUsers = mysqli_fetch_assoc($resultTotalUsers);
-    $totalUsers = $rowTotalUsers['total_users'];
-} else {
-    $totalUsers = 0; // Default value if the query fails
-}
-// Fetch total deposits (You need to implement the query and logic for total deposits)
-$queryTotalDeposits = "SELECT SUM(amount) AS total_deposits FROM deposits WHERE status = 'completed'";
-$resultTotalDeposits = mysqli_query($conn, $queryTotalDeposits);
+    $updateQuery = "UPDATE deposits SET status='$status' WHERE id=$deposit_id";
+    mysqli_query($conn, $updateQuery);
 
-if ($resultTotalDeposits) {
-    $rowTotalDeposits = mysqli_fetch_assoc($resultTotalDeposits);
-    $totalDeposits = $rowTotalDeposits['total_deposits'];
-} else {
-    $totalDeposits = 0.00; // Default value if the query fails
+    // Refresh the page to see the updated status
+    header("Location: admin_deposits.php");
+    exit();
 }
 
-// Fetch total withdrawals (You need to implement the query and logic for total withdrawals)
-$queryTotalWithdrawals = "SELECT SUM(amount) AS total_withdrawals FROM withdrawals WHERE status = 'completed'";
-$resultTotalWithdrawals = mysqli_query($conn, $queryTotalWithdrawals);
-
-if ($resultTotalWithdrawals) {
-    $rowTotalWithdrawals = mysqli_fetch_assoc($resultTotalWithdrawals);
-    $totalWithdrawals = $rowTotalWithdrawals['total_withdrawals'];
-} else {
-    $totalWithdrawals = 0.00; // Default value if the query fails
-}
-
-// Fetch total investments (You need to implement the query and logic for total investments)
-$queryTotalInvestments = "SELECT SUM(amount) AS total_investments FROM investments WHERE status = 'active'";
-$resultTotalInvestments = mysqli_query($conn, $queryTotalInvestments);
-
-if ($resultTotalInvestments) {
-    $rowTotalInvestments = mysqli_fetch_assoc($resultTotalInvestments);
-    $totalInvestments = $rowTotalInvestments['total_investments'];
-} else {
-    $totalInvestments = 0.00; // Default value if the query fails
-}
-
+// Fetch deposits data
+$queryDeposits = "SELECT * FROM deposits";
+$resultDeposits = mysqli_query($conn, $queryDeposits);
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +36,7 @@ if ($resultTotalInvestments) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Deposits</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
     <style>
         body {
@@ -157,7 +128,7 @@ if ($resultTotalInvestments) {
             margin: 20px 0;
             padding: 20px;
             text-align: center;
-            border-radius: 100%;
+            border-radius: 10px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -205,6 +176,52 @@ if ($resultTotalInvestments) {
             text-decoration: underline;
             font-weight: bold;
         }
+        .section.deposits {
+            background-color: #eaeaea;
+            color: #333;
+            width: 80%;
+        }
+        .section.deposits table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .section.deposits th, .section.deposits td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        .action-buttons {
+    display: flex;
+    justify-content: center;
+}
+.action-buttons form {
+    display: inline-block;
+    margin: 0 5px;
+}
+.action-buttons button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px; /* Add border radius */
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Add transition for hover effect */
+}
+.action-buttons button:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Change background color on hover */
+    color: black; /* Change text color on hover */
+    transform: scale(1.1); /* Add a slight scale effect on hover */
+}
+.approve-button {
+    background-color: #4CAF50;
+    color: white;
+}
+.reject-button {
+    background-color: #f44336;
+    color: white;
+}
+
     </style>
 </head>
 <body>
@@ -224,34 +241,56 @@ if ($resultTotalInvestments) {
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
+
     <!-- Main Content -->
     <div class="container" id="container">
+        <!-- Existing admin name display -->
         <div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
-        <div class="section total-users">
-            <h2>Total Active Users</h2>
-            <p><?php echo number_format($totalUsers); ?></p>
-        </div>
-        <div class="section total-deposits">
-            <h2>Total Deposits</h2>
-            <p>Ksh <?php echo number_format($totalDeposits, 2); ?></p>
-        </div>
-        <div class="section total-withdrawals">
-            <h2>Total Withdrawals</h2>
-            <p>Ksh <?php echo number_format($totalWithdrawals, 2); ?></p>
-        </div>
-        <div class="section total-investments">
-            <h2>Total Investments</h2>
-            <p>Ksh <?php echo number_format($totalInvestments, 2); ?></p>
+
+        <!-- Section for displaying deposits -->
+        <div class="section deposits">
+            <h2>Deposits</h2>
+            <?php
+            if (mysqli_num_rows($resultDeposits) > 0) {
+                // Table header
+                echo "<table>";
+                echo "<tr><th>ID</th><th>Username</th><th>Transaction Code</th><th>Amount</th><th>Date</th><th>Action</th></tr>";
+
+                // Loop through each row of data
+                while ($rowDeposit = mysqli_fetch_assoc($resultDeposits)) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($rowDeposit['id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($rowDeposit['username']) . "</td>";
+                    echo "<td>" . htmlspecialchars($rowDeposit['transaction_code']) . "</td>";
+                    echo "<td>" . htmlspecialchars($rowDeposit['deposit_amount']) . "</td>";
+                    echo "<td>" . htmlspecialchars($rowDeposit['created_at']) . "</td>";
+                    echo "<td class='action-buttons'>";
+                    echo "<form method='post' action=''>";
+                    echo "<input type='hidden' name='deposit_id' value='" . htmlspecialchars($rowDeposit['id']) . "'>";
+                    echo "<button type='submit' name='action' value='approve' class='approve-button'>Approve</button>";
+                    echo "</form>";
+                    echo "<form method='post' action=''>";
+                    echo "<input type='hidden' name='deposit_id' value='" . htmlspecialchars($rowDeposit['id']) . "'>";
+                    echo "<button type='submit' name='action' value='reject' class='reject-button'>Reject</button>";
+                    echo "</form>";
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<p>No deposits found.</p>";
+            }
+            ?>
         </div>
     </div>
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; 2023 Your Website. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
     </footer>
 
     <script>
         function toggleNavbar() {
-            var navbar = document.getElementById('navbar');
-            var container = document.getElementById('container');
+            const navbar = document.getElementById('navbar');
+            const container = document.getElementById('container');
             navbar.classList.toggle('show');
             container.classList.toggle('shifted');
         }
