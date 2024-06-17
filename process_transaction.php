@@ -18,29 +18,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
 
     // Validate form data
     if (!empty($deposit_amount) && !empty($transaction_code)) {
-        // Insert the deposit record into the deposits table
-        $stmt = $conn->prepare("INSERT INTO deposits (username, deposit_amount, transaction_code, status) VALUES (?, ?, ?, 'pending')");
-        $stmt->bind_param("sds", $username, $deposit_amount, $transaction_code);
-        
-        if ($stmt->execute()) {
-            // Update the totalDepositsBalance in the accounts table
-            $stmt = $conn->prepare("INSERT INTO accounts (username, totalDepositsBalance) VALUES (?, ?) 
-                                    ON DUPLICATE KEY UPDATE totalDepositsBalance = totalDepositsBalance + VALUES(totalDepositsBalance)");
-            $stmt->bind_param("sd", $username, $deposit_amount);
-            
+        // Check if the transaction code already exists
+        $stmt = $conn->prepare("SELECT transaction_code FROM deposits WHERE transaction_code = ?");
+        $stmt->bind_param("s", $transaction_code);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $message = "Transaction code already exists. Please use a different code.";
+            $status = "failure";
+        } else {
+            // Insert the deposit record into the deposits table
+            $stmt = $conn->prepare("INSERT INTO deposits (username, deposit_amount, transaction_code, status) VALUES (?, ?, ?, 'pending')");
+            $stmt->bind_param("sds", $username, $deposit_amount, $transaction_code);
+
             if ($stmt->execute()) {
-                $message = "Deposited Successfully";
-                $status = "success";
+                // Update the totalDepositsBalance in the accounts table
+                $stmt = $conn->prepare("INSERT INTO accounts (username, totalDepositsBalance) VALUES (?, ?) 
+                                        ON DUPLICATE KEY UPDATE totalDepositsBalance = totalDepositsBalance + VALUES(totalDepositsBalance)");
+                $stmt->bind_param("sd", $username, $deposit_amount);
+
+                if ($stmt->execute()) {
+                    $message = "Deposited Successfully";
+                    $status = "success";
+                } else {
+                    $message = "Failed to update total deposits balance. Please try again.";
+                    $status = "failure";
+                }
             } else {
-                $message = "Failed to update total deposits balance. Please try again.";
+                $message = "Failed to record the deposit. Please try again.";
                 $status = "failure";
             }
-        } else {
-            $message = "Failed to record the deposit. Please try again.";
-            $status = "failure";
-        }
 
-        $stmt->close();
+            $stmt->close();
+        }
     } else {
         $message = "Please fill in all fields.";
         $status = "failure";
@@ -103,7 +114,7 @@ $conn->close();
             if (status === "success") {
                 alert("Deposited Successfully");
             } else {
-                alert("Failed to Deposit");
+                alert(message);
             }
         });
     </script>

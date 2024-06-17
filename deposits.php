@@ -22,9 +22,25 @@ $stmt_balance = $conn->prepare($query_balance);
 $stmt_balance->bind_param("s", $username);
 $stmt_balance->execute();
 $result_balance = $stmt_balance->get_result();
-$balance_row = $result_balance->fetch_assoc();
-$totalDepositsBalance = $balance_row['totalDepositsBalance'];
+
+$totalDepositsBalance = 0; // Default value
+if ($balance_row = $result_balance->fetch_assoc()) {
+    if (isset($balance_row['totalDepositsBalance'])) {
+        $totalDepositsBalance = $balance_row['totalDepositsBalance'];
+    } else {
+        echo "<div style='color: red; font-weight: bold;'>Error: totalDepositsBalance column not found in the query result.</div>";
+    }
+} else {
+    echo "<div style='color: red; font-weight: bold;'>Error: No result returned for the total deposits balance query.</div>";
+}
+
+// Output the total deposit balance for debugging
+echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'>
+        <strong>Total Deposits Balance:</strong><br> KSH " . htmlspecialchars($totalDepositsBalance) . "
+      </div>";
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

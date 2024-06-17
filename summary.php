@@ -261,7 +261,7 @@
                             <td>Ksh 172,500</td>
                         </tr>
                         <tr>
-                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='invest.php?package=silver'">Invest Now</button></td>
+                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='silver_package.php'">Invest Now</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -270,7 +270,7 @@
 
         <div class="investment-package bronze-package">
             <h3>BRONZE PACKAGE 🥉</h3>
-            <p>Earn 30% profits of your investments in 4 days</p>
+            <p>Earn 25% profits of your investments in 4 days</p>
             <div class="investment-calculator">
                 <p>Investment calculator for Bronze Package</p>
                 <table>
@@ -298,7 +298,7 @@
                             <td>Ksh 195,000</td>
                         </tr>
                         <tr>
-                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='invest.php?package=bronze'">Invest Now</button></td>
+                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='bronze_package.php'">Invest Now</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -307,7 +307,7 @@
 
         <div class="investment-package gold-package">
             <h3>GOLD PACKAGE 🏆</h3>
-            <p>Earn 45% profits of your investments in 5 days</p>
+            <p>Earn 50% profits of your investments in 6 days</p>
             <div class="investment-calculator">
                 <p>Investment calculator for Gold Package</p>
                 <table>
@@ -335,7 +335,7 @@
                             <td>Ksh 217,500</td>
                         </tr>
                         <tr>
-                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='invest.php?package=gold'">Invest Now</button></td>
+                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='gold_package.php'">Invest Now</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -344,7 +344,7 @@
 
         <div class="investment-package executive-package">
             <h3>EXECUTIVE PACKAGE 💎</h3>
-            <p>Earn 60% profits of your investments in 6 days</p>
+            <p>Earn 100% profits of your investments in 10 days</p>
             <div class="investment-calculator">
                 <p>Investment calculator for Executive Package</p>
                 <table>
@@ -372,7 +372,7 @@
                             <td>Ksh 240,000</td>
                         </tr>
                         <tr>
-                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='invest.php?package=executive'">Invest Now</button></td>
+                            <td colspan="2"><button class="invest-btn" onclick="window.location.href='executive_package.php'">Invest Now</button></td>
                         </tr>
                     </tbody>
                 </table>

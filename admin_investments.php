@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -20,21 +14,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the logged-in user's username
-$loggedInUsername = $_SESSION['username'];
-
-// Update status to "Matured" for investments that have exceeded maturity date
+// Update status to "Matured" for investments that have exceeded the maturity date
 $updateSql = "UPDATE investments SET status = 'Matured' WHERE maturity_date < NOW() AND status = 'Active'";
 if (!$conn->query($updateSql)) {
     die("Error updating investments: " . $conn->error);
 }
 
-// Fetch all active investments for the logged-in user from the database
-$sql = "SELECT *, TIMESTAMPDIFF(SECOND, NOW(), maturity_date) AS countdown_seconds FROM investments WHERE status = 'Active' AND username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $loggedInUsername);
-$stmt->execute();
-$result = $stmt->get_result();
+// Fetch all investments from the database
+$sql = "SELECT *, TIMESTAMPDIFF(SECOND, NOW(), maturity_date) AS countdown_seconds FROM investments";
+$result = $conn->query($sql);
+
+if (!$result) {
+    die("Error fetching investments: " . $conn->error);
+}
 
 // Function to format countdown
 function formatCountdown($seconds) {
@@ -46,12 +38,13 @@ function formatCountdown($seconds) {
     return sprintf("%02d days, %02d hrs, %02d mins, %02d secs", $days, $hours, $minutes, $seconds);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Investments</title>
+    <title>Admin - Manage Investments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
@@ -179,27 +172,25 @@ function formatCountdown($seconds) {
     </style>
 </head>
 <body>
-    <!-- Menu Icon -->
-    <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
-
+     <!-- Menu Icon -->
+     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
         <br><br><br>
-        <h2>ALPHA FINANCE</h2>
+        <h2>ADMIN PANEL</h2>
         <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
-        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
-        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+            <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+            <li><a href="admin_users.php"><i class="fas fa-users icon"></i>Manage Users</a></li>
+            <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
+            <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
+            <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
+            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+            <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-<br>
+<br><br>
     <div class="container" id="content">
-        <h2>Running Investments</h2>
+        <h2>Manage All Investments</h2>
         <table>
             <thead>
                 <tr>
@@ -229,7 +220,7 @@ function formatCountdown($seconds) {
                               </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='8'>No active investments found.</td></tr>";
+                    echo "<tr><td colspan='8'>No investments found.</td></tr>";
                 }
                 $conn->close();
                 ?>
@@ -266,29 +257,32 @@ function formatCountdown($seconds) {
                     let minutes = parseInt(timeParts[4]);
                     let seconds = parseInt(timeParts[6]);
 
-                    // Decrement the countdown
                     if (seconds > 0) {
                         seconds--;
-                    } else if (minutes > 0) {
-                        minutes--;
-                        seconds = 59;
-                    } else if (hours > 0) {
-                        hours--;
-                        minutes = 59;
-                        seconds = 59;
-                    } else if (days > 0) {
-                        days--;
-                        hours = 23;
-                        minutes = 59;
-                        seconds = 59;
+                    } else {
+                        if (minutes > 0) {
+                            seconds = 59;
+                            minutes--;
+                        } else {
+                            if (hours > 0) {
+                                seconds = 59;
+                                minutes = 59;
+                                hours--;
+                            } else {
+                                if (days > 0) {
+                                    seconds = 59;
+                                    minutes = 59;
+                                    hours = 23;
+                                    days--;
+                                }
+                            }
+                        }
                     }
-
-                    countdownCell.textContent = `${days.toString().padStart(2, '0')} days, ${hours.toString().padStart(2, '0')} hrs, ${minutes.toString().padStart(2, '0')} mins, ${seconds.toString().padStart(2, '0')} secs`;
+                    countdownCell.textContent = `${days} days, ${hours} hrs, ${minutes} mins, ${seconds} secs`;
                 }
             });
         }
 
-        // Update countdowns every second
         setInterval(updateCountdowns, 1000);
     </script>
 </body>

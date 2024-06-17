@@ -1,9 +1,9 @@
 <?php
 // Database connection
-$host = 'localhost'; // or your database host
-$dbname = 'alpha'; // Changed database name to alpha
-$username = 'root'; // Replace with your database username
-$password = ''; // Replace with your database password
+$host = 'localhost';
+$dbname = 'alpha';
+$username = 'root';
+$password = '';
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $dbname);
@@ -23,7 +23,8 @@ function getAccountInfo($username) {
         'referralsEarnings' => 0
     ];
 
-    $sql = "SELECT totalDepositsBalance, accountBalance, totalWithdrawn, referralsEarnings FROM accounts WHERE username = ?";
+    // Get the current account balance, last deposit update time, total withdrawn, and referrals earnings
+    $sql = "SELECT accountBalance, lastDepositUpdate, totalWithdrawn, referralsEarnings FROM accounts WHERE username = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         die("Error preparing statement: " . $conn->error);
@@ -31,13 +32,45 @@ function getAccountInfo($username) {
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->bind_result(
-        $accountInfo['totalDepositsBalance'], 
         $accountInfo['accountBalance'], 
+        $lastDepositUpdate, 
         $accountInfo['totalWithdrawn'], 
         $accountInfo['referralsEarnings']
     );
     $stmt->fetch();
     $stmt->close();
+
+    // Check if lastDepositUpdate is NULL, if so, consider all deposits
+    if ($lastDepositUpdate === null) {
+        $lastDepositUpdate = '1970-01-01 00:00:00'; // Use a very old date
+    }
+
+    // Get the total deposits since the last update
+    $sql = "SELECT SUM(deposit_amount) AS totalDepositsBalance FROM deposits WHERE username = ? AND status = 'Approved' AND deposit_date > ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
+    }
+    $stmt->bind_param("ss", $username, $lastDepositUpdate);
+    $stmt->execute();
+    $stmt->bind_result($newDeposits);
+    $stmt->fetch();
+    $stmt->close();
+
+    // If there are new deposits, update the account balance and the last deposit update time
+    if ($newDeposits) {
+        $accountInfo['accountBalance'] += $newDeposits;
+        $accountInfo['totalDepositsBalance'] += $newDeposits;
+
+        $sql = "UPDATE accounts SET accountBalance = ?, lastDepositUpdate = NOW() WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $conn->error);
+        }
+        $stmt->bind_param("ds", $accountInfo['accountBalance'], $username);
+        $stmt->execute();
+        $stmt->close();
+    }
 
     return $accountInfo;
 }
@@ -66,7 +99,6 @@ function getTotalActiveInvestments($username) {
 
     return $totalActiveInvestments;
 }
-
 
 // Check if a session is not already active before starting one
 if (session_status() == PHP_SESSION_NONE) {

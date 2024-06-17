@@ -92,14 +92,6 @@
             color: rgb(250, 245, 245);
         }
 
-        /* Bronze Package styles */
-.bronze-package {
-    background-color: #ffc0cb; /* Pink background for Bronze Package */
-    color: #333; /* Dark text color */
-}
-
-/* Other package styles (Silver, Gold, Executive) can be similarly defined with different background colors */
-
         footer {
             position: fixed;
             bottom: 0;
@@ -144,18 +136,6 @@
             background-color: #ffcccb; /* Light salmon background */
             color: #333; /* Dark text color */
         }
-        .current-investment-section {
-            background-color: #ff9999; /* Light coral background */
-            color: #333; /* Dark text color */
-        }
-        .total-investments-section {
-            background-color: #99ff99; /* Light green background */
-            color: #333; /* Dark text color */
-        }
-        .executive-investment-section {
-            background-color: #ffd700; /* Gold background */
-            color: #333; /* Dark text color */
-        }
         button {
             background-color: green;
             color: white;
@@ -190,11 +170,13 @@
         <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
    </ul>
 </nav>
-<div class="container" id="container">
+    <div class="container" id="container">
         <!-- Silver Package form -->
-        <div class="section investment-options-section bronze-package">
-            <img src="images/silver.jpg" alt="silver Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
-            <form action="process_investment.php" onsubmit="return validateInvestment('Silver Package', 500, 150000)" method="POST">
+                 <!-- silver Package form -->
+<div class="section investment-options-section bronze-package">
+<img src="images/silver.jpg" alt="silver Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
+
+            <form action="process_investment.php" method="POST">
                 <h3>Silver Package</h3>
                 <p>Earn 15% after 3 days</p>
                 <p>Minimum capital - Ksh 500 </p>
@@ -205,55 +187,8 @@
                 <button type="submit">Invest Now</button>
             </form>
         </div>
-
-      <!-- Bronze Package form -->
-      <div class="section investment-options-section bronze-package">
-            <img src="images/bronze.jpeg" alt="Bronze Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
-            <form action="process_investment.php" onsubmit="return validateInvestment('Bronze Package', 1000, 150000)" method="POST">
-                <h3>Bronze Package</h3>
-                <p>Earn 25% after 4 days</p>
-                <p>Minimum capital - Ksh 1,000</p>
-                <p>Maximum capital - Ksh 150,000</p>
-                <input type="hidden" name="package_name" value="Bronze Package">
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
-                <input type="hidden" name="duration" value="4">
-                <button type="submit">Invest Now</button>
-            </form>
-        </div>
-
-        <!-- Gold Package form -->   
-<div class="section investment-options-section bronze-package">
-<img src="images/gold.jpg" alt="Bronze Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
-
-            <form onsubmit="return validateInvestment('Gold Package', 1500, 150000)" method="POST">
-                <h3>Gold Package</h3>
-                <p>Earn 50% after 6 days</p>
-                <p>Minimum capital - Ksh 1,500 </p>
-                <p>Maximum capital - Ksh 150,000 </p>
-                <input type="hidden" name="package_name" value="Gold Package">
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
-                <input type="hidden" name="duration" value="6">
-                <button type="submit">Invest Now</button>
-            </form>
-        </div>
-
-        <!-- executive Package form -->
-        <div class="section investment-options-section bronze-package">
-<img src="images/exe.jpg" alt="Bronze Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
-
-            <form onsubmit="return validateInvestment('Executive Package', 2000, 150000)" method="POST">
-                <h3>Executive Package</h3>
-                <p>Earn 100% after 10 days</p>
-                <p>Minimum capital - Ksh 2,000 </p>
-                <p>Maximum capital - Ksh 150,000 </p>
-                <input type="hidden" name="package_name" value="Executive Package">
-                <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
-                <input type="hidden" name="duration" value="10">
-                <button type="submit">Invest Now</button>
-            </form>
-        </div>
-        <br><br>
     </div>
+
     <footer>
         <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
@@ -267,17 +202,7 @@
             var body = document.body;
             navbar.classList.toggle('show');
             container.classList.toggle('shifted');
-            body.classList.toggle('shifted');
-        }
-
-        // Validation function
-        function validateInvestment(packageName, minAmount, maxAmount) {
-            var amount = parseInt(document.querySelector(`form[onsubmit="return validateInvestment('${packageName}', ${minAmount}, ${maxAmount})"] input[name='amount']`).value);
-            if (isNaN(amount) || amount < minAmount || amount > maxAmount) {
-                alert(`Please enter an amount between Ksh ${minAmount} and Ksh ${maxAmount} for the ${packageName}.`);
-                return false;
-            }
-            return true;
+            body.classList.toggle('shifted'); // Slide the body content along with the navbar
         }
     </script>
 </body>
