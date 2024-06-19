@@ -178,14 +178,19 @@ if ($resultTotalInvestments) {
             color: #333;
         }
         .admin-name {
-            position: absolute;
-            top: 20px;
-            left: 220px;
-            color: black;
-            font-weight: bold;
-            font-size: 25px;
-            font-family: Arial, sans-serif;
-        }
+    position: absolute;
+    top: 20px;
+    left: 220px; /* Initial position */
+    color: black;
+    font-weight: bold;
+    font-size: 25px;
+    font-family: Arial, sans-serif;
+    transition: left 0.3s ease; /* Transition property added */
+}
+.admin-name.slide-in {
+    left: 20px; /* New position when sliding in */
+}
+
         footer {
             position: fixed;
             bottom: 0;
@@ -212,10 +217,16 @@ if ($resultTotalInvestments) {
     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+  
+
+        <div class="image" style="text-align: center; margin-top: 20px;">
+         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+            </div>
+
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+            <li><a href="admin_activation.php"><i class="fas fa-users icon"></i>Accounts Activation</a></li>
             <li><a href="admin_users.php"><i class="fas fa-users icon"></i>Manage Users</a></li>
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
@@ -226,6 +237,7 @@ if ($resultTotalInvestments) {
     </nav>
     <!-- Main Content -->
     <div class="container" id="container">
+        
         <div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
         <div class="section total-users">
             <h2>Total Active Users</h2>
@@ -249,12 +261,22 @@ if ($resultTotalInvestments) {
     </footer>
 
     <script>
-        function toggleNavbar() {
-            var navbar = document.getElementById('navbar');
-            var container = document.getElementById('container');
-            navbar.classList.toggle('show');
-            container.classList.toggle('shifted');
+         function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
+    }
     </script>
 </body>
 </html>

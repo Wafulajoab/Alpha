@@ -37,6 +37,48 @@ function formatCountdown($seconds) {
 
     return sprintf("%02d days, %02d hrs, %02d mins, %02d secs", $days, $hours, $minutes, $seconds);
 }
+
+// Function to calculate earnings based on amount and package name
+function calculateEarnings($amount, $packageName) {
+    // Dummy logic for calculating earnings. Adjust this based on your actual logic.
+    $interestRate = 0.05; // 5% interest rate as an example
+    if ($packageName === "Gold") {
+        $interestRate = 0.1; // 10% interest rate for Gold package
+    } elseif ($packageName === "Silver") {
+        $interestRate = 0.07; // 7% interest rate for Silver package
+    }
+    return $amount * $interestRate;
+}
+
+
+// Function to calculate total amount
+function calculateTotalAmount($totalMaturityValues) {
+    return array_sum($totalMaturityValues);
+}
+
+// Function to calculate total expected earnings
+function calculateTotalEarnings($totalMaturityValues) {
+    $totalEarnings = 0;
+    foreach ($totalMaturityValues as $value) {
+        $totalEarnings += calculateEarnings($value, ""); // You may need to adjust this based on your logic
+    }
+    return $totalEarnings;
+}
+
+// Function to calculate total maturity value
+function calculateTotalMaturityValue($totalMaturityValues) {
+    return array_sum($totalMaturityValues);
+}
+
+// Function to calculate net profit/loss
+function calculateNetProfitLoss($totalMaturityValues) {
+    $totalEarnings = calculateTotalEarnings($totalMaturityValues);
+    $totalAmount = calculateTotalAmount($totalMaturityValues);
+    $netProfitLoss = $totalEarnings - $totalAmount;
+    return $netProfitLoss;
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -177,9 +219,15 @@ function formatCountdown($seconds) {
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
         <br><br><br>
+
+        <div class="image" style="text-align: center; margin-top: 20px;">
+          <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+        </div>
+
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+            <li><a href="admin_activation.php"><i class="fas fa-users icon"></i>Accounts Activation</a></li>
             <li><a href="admin_users.php"><i class="fas fa-users icon"></i>Manage Users</a></li>
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
@@ -188,9 +236,14 @@ function formatCountdown($seconds) {
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-<br><br>
-    <div class="container" id="content">
-        <h2>Manage All Investments</h2>
+
+<div class="container" id="content">
+
+<div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+</div>
+
+        <h2>Running Investments</h2>
         <table>
             <thead>
                 <tr>
@@ -202,12 +255,25 @@ function formatCountdown($seconds) {
                     <th>Status</th>
                     <th>Amount (Ksh)</th>
                     <th>Countdown</th>
+                    <th>Expected Earnings (Ksh)</th>
+                    <th>Total Maturity Value (Ksh)</th>
                 </tr>
             </thead>
             <tbody id="investments-table-body">
                 <?php
+                $totalMaturityValues = []; // Array to store total maturity values for each user
+
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                        $earnings = calculateEarnings($row['amount'], $row['package_name']);
+                        $totalMaturityValue = $row['amount'] + $earnings;
+
+                        // Store or accumulate total maturity value for each user
+                        if (!isset($totalMaturityValues[$row['username']])) {
+                            $totalMaturityValues[$row['username']] = 0;
+                        }
+                        $totalMaturityValues[$row['username']] += $totalMaturityValue;
+
                         echo "<tr>
                                 <td>" . $row['id'] . "</td>
                                 <td>" . $row['username'] . "</td>
@@ -217,68 +283,65 @@ function formatCountdown($seconds) {
                                 <td class='status-" . strtolower($row['status']) . "'>" . $row['status'] . "</td>
                                 <td>" . $row['amount'] . "</td>
                                 <td id='countdown-" . $row['id'] . "'>" . formatCountdown($row['countdown_seconds']) . "</td>
+                                <td>" . number_format($earnings, 2) . "</td>
+                                <td>" . number_format($totalMaturityValue, 2) . "</td>
                               </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='8'>No investments found.</td></tr>";
+                    echo "<tr><td colspan='10'>No investments found.</td></tr>";
                 }
-                $conn->close();
                 ?>
             </tbody>
         </table>
     </div>
 
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; <?php echo date('Y'); ?> Your Website. All rights reserved. | Designed by <a href="mailto:mathembo62@gmail.com">Maureen Athembo</a></p>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
-        function toggleNavbar() {
-            const navbar = document.getElementById('navbar');
-            const content = document.getElementById('content');
-            navbar.classList.toggle('show');
-            if (navbar.classList.contains('show')) {
-                content.style.marginLeft = '200px';
-            } else {
-                content.style.marginLeft = '0';
-            }
+     <script>
+          function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
-
-        // Function to update countdowns
+    }
         function updateCountdowns() {
-            const rows = document.querySelectorAll('#investments-table-body tr');
-            rows.forEach(row => {
-                const countdownCell = row.querySelector('td[id^="countdown-"]');
-                if (countdownCell) {
-                    let timeParts = countdownCell.textContent.split(/[\s,]+/);
-                    let days = parseInt(timeParts[0]);
-                    let hours = parseInt(timeParts[2]);
-                    let minutes = parseInt(timeParts[4]);
-                    let seconds = parseInt(timeParts[6]);
+            var countdownElements = document.querySelectorAll('[id^="countdown-"]');
+            countdownElements.forEach(function(element) {
+                var countdownValue = element.innerHTML;
+                var parts = countdownValue.split(' ');
+                var days = parseInt(parts[0]);
+                var hours = parseInt(parts[2]);
+                var minutes = parseInt(parts[4]);
+                var seconds = parseInt(parts[6]);
 
-                    if (seconds > 0) {
-                        seconds--;
-                    } else {
-                        if (minutes > 0) {
-                            seconds = 59;
-                            minutes--;
-                        } else {
-                            if (hours > 0) {
-                                seconds = 59;
-                                minutes = 59;
-                                hours--;
-                            } else {
-                                if (days > 0) {
-                                    seconds = 59;
-                                    minutes = 59;
-                                    hours = 23;
-                                    days--;
-                                }
-                            }
-                        }
-                    }
-                    countdownCell.textContent = `${days} days, ${hours} hrs, ${minutes} mins, ${seconds} secs`;
+                var totalSeconds = days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60 + seconds;
+
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+
+                    var newDays = Math.floor(totalSeconds / (24 * 60 * 60));
+                    var newHours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                    var newMinutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                    var newSeconds = totalSeconds % 60;
+
+                    element.innerHTML = (newDays < 10 ? '0' : '') + newDays + " days, " + 
+                                        (newHours < 10 ? '0' : '') + newHours + " hrs, " + 
+                                        (newMinutes < 10 ? '0' : '') + newMinutes + " mins, " + 
+                                        (newSeconds < 10 ? '0' : '') + newSeconds + " secs";
+                } else {
+                    element.innerHTML = "Matured";
                 }
             });
         }

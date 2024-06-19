@@ -49,9 +49,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    // Check if username already exists
+    $sql = "SELECT id FROM users WHERE username = ?";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("s", $param_username);
+        $param_username = $username;
+
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            echo "<script>alert('Username already exists. Please choose a different username.');</script>";
+            header("Location: user_register.php");
+            exit();
+        }
+
+        $stmt->close();
+    }
+
     // Prepare an INSERT statement
     $sql = "INSERT INTO users (username, phone_number, password) VALUES (?, ?, ?)";
-
     if ($stmt = $conn->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
         $stmt->bind_param("sss", $param_username, $param_phone_number, $param_password);
@@ -65,17 +82,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute()) {
             // Redirect to login page after successful registration
             $_SESSION['success'] = "Registration successful. Please login.";
-            header("Location: user_registrationsuccess.php");
+            header("Location: account_activation.php");
             exit();
         } else {
             $_SESSION['error'] = "Oops! Something went wrong. Please try again later.";
             header("Location: user_register.php");
             exit();
         }
-    }
 
-    // Close statement
-    $stmt->close();
+     
+    }
 
     // Close connection
     $conn->close();

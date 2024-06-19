@@ -190,15 +190,6 @@
             background-color: #4CAF50; /* Dark green on hover */
         }
 
-        .logo {
-            margin-bottom: 10px;
-            border-radius: 50px;
-        }
-
-        .logo img {
-            width: 8%; /* Set width to 10% of the container */
-            border-radius: 100px; /* Add border-radius for rounded corners */
-        }
     </style>
 </head>
 
@@ -208,7 +199,12 @@
 
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+       
+
+        <div class="image" style="text-align: center; margin-top: 20px;">
+         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+            </div>
+
         <h2>ALPHA FINANCE</h2>
         <ul>
         <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
@@ -224,11 +220,11 @@
 
     <!-- Main Content -->
     <div class="container" id="mainContent">
+    <div class="image" style="text-align: center; margin-top: 20px;">
+         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+            </div>
         <h1>Alpha Investments Launching Soon 💥💥</h1>
 
-        <div class="logo">
-            <img src="images/alpha.webp" alt="Logo">
-        </div>
         <p><strong>Investment Packages</strong></p>
 
         <div class="investment-package silver-package">
@@ -388,11 +384,21 @@
     <script>
         // JavaScript to handle menu icon click and toggle the navbar
         function toggleNavbar() {
-            var navbar = document.getElementById('navbar');
-            var mainContent = document.getElementById('mainContent');
-            navbar.classList.toggle('show');
-            mainContent.classList.toggle('shifted');
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
+    }
     </script>
 </body>
 </html>

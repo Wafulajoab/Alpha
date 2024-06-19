@@ -177,7 +177,11 @@
 
 <!-- Navigation Bar -->
 <nav class="navbar" id="navbar">
-    <br><br><br>
+   
+    <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+    </div>
+
     <h2>ALPHA FINANCE</h2>
     <ul>
         <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
@@ -209,10 +213,10 @@
       <!-- Bronze Package form -->
       <div class="section investment-options-section bronze-package">
             <img src="images/bronze.jpeg" alt="Bronze Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
-            <form action="process_investment.php" onsubmit="return validateInvestment('Bronze Package', 1000, 150000)" method="POST">
+            <form action="process_investment.php" onsubmit="return validateInvestment('Bronze Package', 500, 150000)" method="POST">
                 <h3>Bronze Package</h3>
                 <p>Earn 25% after 4 days</p>
-                <p>Minimum capital - Ksh 1,000</p>
+                <p>Minimum capital - Ksh 500</p>
                 <p>Maximum capital - Ksh 150,000</p>
                 <input type="hidden" name="package_name" value="Bronze Package">
                 <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
@@ -225,10 +229,10 @@
 <div class="section investment-options-section bronze-package">
 <img src="images/gold.jpg" alt="Bronze Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
 
-            <form onsubmit="return validateInvestment('Gold Package', 1500, 150000)" method="POST">
+            <form action="process_investment.php" onsubmit="return validateInvestment('Gold Package', 500, 150000)" method="POST">
                 <h3>Gold Package</h3>
                 <p>Earn 50% after 6 days</p>
-                <p>Minimum capital - Ksh 1,500 </p>
+                <p>Minimum capital - Ksh 500 </p>
                 <p>Maximum capital - Ksh 150,000 </p>
                 <input type="hidden" name="package_name" value="Gold Package">
                 <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
@@ -241,10 +245,10 @@
         <div class="section investment-options-section bronze-package">
 <img src="images/exe.jpg" alt="Bronze Package Image" style="width: 100px; height: 100px; border-radius: 50%;">
 
-            <form onsubmit="return validateInvestment('Executive Package', 2000, 150000)" method="POST">
+            <form action="process_investment.php" onsubmit="return validateInvestment('Executive Package', 500, 150000)" method="POST">
                 <h3>Executive Package</h3>
                 <p>Earn 100% after 10 days</p>
-                <p>Minimum capital - Ksh 2,000 </p>
+                <p>Minimum capital - Ksh 500 </p>
                 <p>Maximum capital - Ksh 150,000 </p>
                 <input type="hidden" name="package_name" value="Executive Package">
                 <input type="number" name="amount" placeholder="Enter investment amount (Ksh)" style="width: 200px; height: 30px;" required>
@@ -260,16 +264,22 @@
 
 
     <script>
-        // Function to toggle the navbar
-        function toggleNavbar() {
-            var navbar = document.getElementById('navbar');
-            var container = document.getElementById('container');
-            var body = document.body;
-            navbar.classList.toggle('show');
-            container.classList.toggle('shifted');
-            body.classList.toggle('shifted');
+           function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
-
+    }
         // Validation function
         function validateInvestment(packageName, minAmount, maxAmount) {
             var amount = parseInt(document.querySelector(`form[onsubmit="return validateInvestment('${packageName}', ${minAmount}, ${maxAmount})"] input[name='amount']`).value);
@@ -280,5 +290,18 @@
             return true;
         }
     </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const packageName = urlParams.get('package');
+
+            if (status === 'success' && packageName) {
+                alert('Successfully Invested in ' + decodeURIComponent(packageName));
+            }
+        });
+    </script>
+
 </body>
 </html>

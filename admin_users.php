@@ -129,22 +129,59 @@ if (isset($_POST['delete_user'])) {
             font-size: 25px;
             font-family: Arial, sans-serif;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #444;
-            color: white;
-        }
+     
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: darkgrey;
+    transition: margin-left 0.3s ease;
+}
+
+.container {
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #444;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.status-active {
+    color: green;
+}
+
+.status-matured {
+    color: red;
+}
+
+.status-pending {
+    color: orange;
+}
+
+
+
         footer {
             position: fixed;
             bottom: 0;
@@ -182,7 +219,12 @@ if (isset($_POST['delete_user'])) {
     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+  
+
+        <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
+
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
@@ -196,6 +238,11 @@ if (isset($_POST['delete_user'])) {
     </nav>
     <!-- Main Content -->
 <div class="container" id="container">
+
+<div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
+
     <div class="admin-name">Manage Users</div>
     <table>
         <tr>
@@ -227,12 +274,22 @@ if (isset($_POST['delete_user'])) {
     </footer>
 
     <script>
-        function toggleNavbar() {
-            var navbar = document.getElementById('navbar');
-            var container = document.getElementById('container');
-            navbar.classList.toggle('show');
-            container.classList.toggle('shifted');
+           function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
+    }
     </script>
 </body>
 </html>

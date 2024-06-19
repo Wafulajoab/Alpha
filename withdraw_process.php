@@ -1,81 +1,61 @@
 <?php
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if all required fields are filled
-    if (isset($_POST["phone_number"]) && isset($_POST["withdraw_amount"])) {
-        // Get form data
-        $phone_number = $_POST["phone_number"];
-        $withdraw_amount = $_POST["withdraw_amount"];
+session_start();
+include 'db_connection.php';
 
-        // Validate input data (you can add more validations as needed)
-        if (!empty($phone_number) && !empty($withdraw_amount) && is_numeric($withdraw_amount) && $withdraw_amount > 0) {
-            // Assuming you have a database connection established
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "alpha";
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
 
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
+$username = $_SESSION['username'];
+$withdraw_amount = $_POST['withdraw_amount'];
+$phone_number = $_POST['phone_number'];
+$status = 'Pending'; // Default status for new withdrawals
 
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+// Fetch the current account balance
+$sql = "SELECT accountBalance FROM accounts WHERE username = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$stmt->bind_result($accountBalance);
+$stmt->fetch();
+$stmt->close();
 
-            // Check if the user exists in the database
-            $check_user_sql = "SELECT id, account_balance FROM users WHERE phone_number = ?";
-            $stmt = $conn->prepare($check_user_sql);
-            $stmt->bind_param("s", $phone_number);
-            $stmt->execute();
-            $result = $stmt->get_result();
+// Check if the withdrawal amount is available
+if ($withdraw_amount > $accountBalance) {
+    echo "Insufficient funds for this withdrawal.";
+    $conn->close();
+    exit();
+}
 
-            if ($result->num_rows > 0) {
-                // User exists, update account balance with withdrawal
-                $user_data = $result->fetch_assoc();
-                $user_id = $user_data["id"];
-                $account_balance = $user_data["account_balance"];
-
-                if ($account_balance >= $withdraw_amount) {
-                    // Sufficient balance, proceed with withdrawal
-                    $withdraw_sql = "INSERT INTO withdrawals (user_id, withdrawal_amount) VALUES (?, ?)";
-                    $stmt = $conn->prepare($withdraw_sql);
-                    $stmt->bind_param("id", $user_id, $withdraw_amount);
-
-                    if ($stmt->execute()) {
-                        // Update account balance after withdrawal
-                        $new_balance = $account_balance - $withdraw_amount;
-                        $update_balance_sql = "UPDATE users SET account_balance = ? WHERE id = ?";
-                        $stmt = $conn->prepare($update_balance_sql);
-                        $stmt->bind_param("di", $new_balance, $user_id);
-
-                        if ($stmt->execute()) {
-                            // Withdrawal successful
-                            echo '<script>alert("Withdrawal Successful"); window.location.href = "withdraw.php";</script>';
-                            exit; // Prevent further execution
-                        } else {
-                            echo "Error updating account balance: " . $conn->error;
-                        }
-                    } else {
-                        echo "Error recording withdrawal: " . $conn->error;
-                    }
-                } else {
-                    echo "Insufficient balance for withdrawal";
-                }
+// Insert withdrawal request into the database
+$sql = "INSERT INTO withdrawals (username, amount, phone_number, status, date_requested) VALUES (?, ?, ?, ?, NOW())";
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("ssss", $username, $withdraw_amount, $phone_number, $status);
+    if ($stmt->execute()) {
+        // Deduct the withdrawn amount from the account balance
+        $new_balance = $accountBalance - $withdraw_amount;
+        $update_sql = "UPDATE accounts SET accountBalance = ? WHERE username = ?";
+        if ($update_stmt = $conn->prepare($update_sql)) {
+            $update_stmt->bind_param("ds", $new_balance, $username);
+            if ($update_stmt->execute()) {
+                echo "Withdrawal request submitted and balance updated successfully.";
             } else {
-                echo "User not found";
+                echo "Error updating balance: " . $update_stmt->error;
             }
-
-            // Close statement and connection
-            $stmt->close();
-            $conn->close();
+            $update_stmt->close();
         } else {
-            echo "Invalid input data";
+            echo "Error preparing update statement: " . $conn->error;
         }
     } else {
-        echo "Missing required fields";
+        echo "Error executing statement: " . $stmt->error;
     }
+    $stmt->close();
 } else {
-    echo "Form not submitted";
+    echo "Error preparing statement: " . $conn->error;
 }
+$conn->close();
+
+header("Location: withdraw.php");
+exit();
 ?>

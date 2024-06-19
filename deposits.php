@@ -243,7 +243,11 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding
 
 <!-- Navigation Bar -->
 <nav class="navbar" id="navbar">
-    <br><br><br>
+   
+    <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+    </div>
+
     <h2>ALPHA FINANCE</h2>
     <ul>
     <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
@@ -321,17 +325,22 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding
     </footer>
 
     <script>
-        function toggleNavbar() {
-            var navbar = document.getElementById('navbar');
-            var container = document.getElementById('container');
-            if (navbar.classList.contains('show')) {
-                navbar.classList.remove('show');
-                container.style.marginLeft = '0';
-            } else {
-                navbar.classList.add('show');
-                container.style.marginLeft = '200px';
-            }
+         function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
+    }
 
         document.getElementById('transaction_code').addEventListener('input', function(event) {
             const input = event.target;

@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['package_name'], $_POS
 
         $stmt->close();
 
-        // Redirect or show a success message
-        header("Location: investments.php?status=success");
+        // Redirect with a success status and package name
+        header("Location: investments.php?status=success&package=" . urlencode($packageName));
         exit();
     } else {
         // Redirect or show an error message if the balance is insufficient

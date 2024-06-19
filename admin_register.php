@@ -164,7 +164,22 @@ if (isset($_GET['error'])) {
                 <label for="username" class="sign"><b><i class="fas fa-user"></i> Username</b></label>
                 <input type="text" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete="off" required>
                 <label for="phonenumber" class="sign"><b><i class="fas fa-phone"></i> Enter Phone Number</b></label>
-                <input type="text" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" required>
+<input type="text" id="phone_number" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" 
+       pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputField = document.getElementById('phone_number');
+
+    // Enforce max length of 10 characters
+    inputField.addEventListener('input', function() {
+        if (this.value.length > 10) {
+            this.value = this.value.slice(0, 10); // Trim input to first 10 characters
+        }
+    });
+});
+</script>
+
                 <label class="sign" for="psw"><b><i class="fas fa-lock"></i> Password</b></label>
                 <input type="password" class="sign" placeholder="Enter Password" name="psw" required autocomplete="off">
                 <label for="psw-confirm" class="sign"><b><i class="fas fa-lock"></i> Confirm Password</b></label>

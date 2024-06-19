@@ -268,7 +268,9 @@ $conn->close();
 
 <!-- Navigation Bar -->
 <nav class="navbar" id="navbar">
-    <br><br><br>
+<div class="image" style="text-align: center; margin-top: 20px;">
+         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+            </div>
     <h2>ALPHA FINANCE</h2>
     <ul>
         <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
@@ -323,6 +325,8 @@ $conn->close();
 <footer>
         <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
+
+    
 
 <script>
     function toggleNavbar() {

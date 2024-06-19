@@ -236,10 +236,16 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+ 
+
+        <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
+
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+            <li><a href="admin_activation.php"><i class="fas fa-users icon"></i>Accounts Activation</a></li>
             <li><a href="admin_users.php"><i class="fas fa-users icon"></i>Manage Users</a></li>
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
@@ -256,6 +262,10 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
 
         <!-- Section for displaying deposits -->
         <div class="section deposits">
+            
+        <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
         <h2 style="color: darkblue; font-family: 'Georgia', serif; font-size: 52px;">All Deposits</h2>
 
             <?php
@@ -309,12 +319,22 @@ echo '<p style="font-size: 24px; font-weight: bold; color: green;"><strong>Total
     </footer>
 
     <script>
-        function toggleNavbar() {
-            var navbar = document.getElementById("navbar");
-            var container = document.getElementById("container");
-            navbar.classList.toggle("show");
-            container.classList.toggle("shifted");
+            function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
+    }
     </script>
 </body>
 </html>

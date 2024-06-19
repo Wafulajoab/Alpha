@@ -32,6 +32,11 @@ if (!$conn->query($updateSql)) {
 // Fetch all active investments for the logged-in user from the database
 $sql = "SELECT *, TIMESTAMPDIFF(SECOND, NOW(), maturity_date) AS countdown_seconds FROM investments WHERE status = 'Active' AND username = ?";
 $stmt = $conn->prepare($sql);
+
+if ($stmt === false) {
+    die("Error preparing statement: " . $conn->error);
+}
+
 $stmt->bind_param("s", $loggedInUsername);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -44,6 +49,22 @@ function formatCountdown($seconds) {
     $seconds = $seconds % 60;
 
     return sprintf("%02d days, %02d hrs, %02d mins, %02d secs", $days, $hours, $minutes, $seconds);
+}
+
+// Function to calculate expected earnings based on package type
+function calculateEarnings($amount, $package_name) {
+    switch (strtolower($package_name)) {
+        case 'silver package':
+            return $amount * 0.15;
+        case 'bronze package':
+            return $amount * 0.25;
+        case 'gold package':
+            return $amount * 0.50;
+        case 'executive package':
+            return $amount * 1.00;
+        default:
+            return 0;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -184,7 +205,10 @@ function formatCountdown($seconds) {
 
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+        <div class="image" style="text-align: center; margin-top: 20px;">
+          <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+            </div>
+
         <h2>ALPHA FINANCE</h2>
         <ul>
         <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
@@ -198,7 +222,7 @@ function formatCountdown($seconds) {
         </ul>
     </nav>
 <br>
-    <div class="container" id="content">
+<div class="container" id="content">
         <h2>Running Investments</h2>
         <table>
             <thead>
@@ -211,12 +235,25 @@ function formatCountdown($seconds) {
                     <th>Status</th>
                     <th>Amount (Ksh)</th>
                     <th>Countdown</th>
+                    <th>Expected Earnings (Ksh)</th>
+                    <th>Total Maturity Value (Ksh)</th>
                 </tr>
             </thead>
             <tbody id="investments-table-body">
                 <?php
+                $totalMaturityValues = []; // Array to store total maturity values for each user
+
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                        $earnings = calculateEarnings($row['amount'], $row['package_name']);
+                        $totalMaturityValue = $row['amount'] + $earnings;
+
+                        // Store or accumulate total maturity value for each user
+                        if (!isset($totalMaturityValues[$row['username']])) {
+                            $totalMaturityValues[$row['username']] = 0;
+                        }
+                        $totalMaturityValues[$row['username']] += $totalMaturityValue;
+
                         echo "<tr>
                                 <td>" . $row['id'] . "</td>
                                 <td>" . $row['username'] . "</td>
@@ -226,69 +263,69 @@ function formatCountdown($seconds) {
                                 <td class='status-" . strtolower($row['status']) . "'>" . $row['status'] . "</td>
                                 <td>" . $row['amount'] . "</td>
                                 <td id='countdown-" . $row['id'] . "'>" . formatCountdown($row['countdown_seconds']) . "</td>
+                                <td>" . number_format($earnings, 2) . "</td>
+                                <td>" . number_format($totalMaturityValue, 2) . "</td>
                               </tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='8'>No active investments found.</td></tr>";
+                    echo "<tr><td colspan='10'>No active investments found.</td></tr>";
                 }
-                $conn->close();
                 ?>
             </tbody>
         </table>
     </div>
 
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; 2024 ALPHA FINANCE. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
     <script>
-        function toggleNavbar() {
-            const navbar = document.getElementById('navbar');
-            const content = document.getElementById('content');
-            navbar.classList.toggle('show');
-            if (navbar.classList.contains('show')) {
-                content.style.marginLeft = '200px';
-            } else {
-                content.style.marginLeft = '0';
-            }
+          function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
-
-        // Function to update countdowns
+    }
         function updateCountdowns() {
-            const rows = document.querySelectorAll('#investments-table-body tr');
-            rows.forEach(row => {
-                const countdownCell = row.querySelector('td[id^="countdown-"]');
-                if (countdownCell) {
-                    let timeParts = countdownCell.textContent.split(/[\s,]+/);
-                    let days = parseInt(timeParts[0]);
-                    let hours = parseInt(timeParts[2]);
-                    let minutes = parseInt(timeParts[4]);
-                    let seconds = parseInt(timeParts[6]);
+            var countdownElements = document.querySelectorAll('[id^="countdown-"]');
+            countdownElements.forEach(function(element) {
+                var countdownValue = element.innerHTML;
+                var parts = countdownValue.split(' ');
+                var days = parseInt(parts[0]);
+                var hours = parseInt(parts[2]);
+                var minutes = parseInt(parts[4]);
+                var seconds = parseInt(parts[6]);
 
-                    // Decrement the countdown
-                    if (seconds > 0) {
-                        seconds--;
-                    } else if (minutes > 0) {
-                        minutes--;
-                        seconds = 59;
-                    } else if (hours > 0) {
-                        hours--;
-                        minutes = 59;
-                        seconds = 59;
-                    } else if (days > 0) {
-                        days--;
-                        hours = 23;
-                        minutes = 59;
-                        seconds = 59;
-                    }
+                var totalSeconds = days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60 + seconds;
 
-                    countdownCell.textContent = `${days.toString().padStart(2, '0')} days, ${hours.toString().padStart(2, '0')} hrs, ${minutes.toString().padStart(2, '0')} mins, ${seconds.toString().padStart(2, '0')} secs`;
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+
+                    var newDays = Math.floor(totalSeconds / (24 * 60 * 60));
+                    var newHours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                    var newMinutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                    var newSeconds = totalSeconds % 60;
+
+                    element.innerHTML = (newDays < 10 ? '0' : '') + newDays + " days, " + 
+                                        (newHours < 10 ? '0' : '') + newHours + " hrs, " + 
+                                        (newMinutes < 10 ? '0' : '') + newMinutes + " mins, " + 
+                                        (newSeconds < 10 ? '0' : '') + newSeconds + " secs";
+                } else {
+                    element.innerHTML = "Matured";
                 }
             });
         }
 
-        // Update countdowns every second
         setInterval(updateCountdowns, 1000);
     </script>
 </body>

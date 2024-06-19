@@ -1,10 +1,45 @@
+<?php
+session_start();
+include 'db_connection.php';
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+// Fetch account balance
+$sql = "SELECT accountBalance FROM accounts WHERE username = ?";
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->bind_result($accountBalance);
+    $stmt->fetch();
+    $stmt->close();
+} else {
+    echo "Error preparing statement: " . $conn->error;
+}
+
+$sql = "SELECT id, amount, phone_number, status, date_requested FROM withdrawals WHERE username = ?";
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $withdrawals = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
+} else {
+    echo "Error preparing statement: " . $conn->error;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
+    <title>Withdrawal Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,25 +47,25 @@
             padding: 0;
             background-color: darkgrey;
             display: flex;
-            transition: margin-left 0.3s ease; /* Add transition for body sliding effect */
+            flex-direction: column;
+            align-items: center;
+            transition: margin-left 0.3s ease;
         }
-
         .menu-icon {
-            color: white; /* Icon color */
-            font-size: 40px; /* Icon size */
-            margin-right: 10px; /* Right margin for spacing */
-            cursor: pointer; /* Change cursor to pointer on hover */
-            position: absolute; /* Position the icon */
-            top: 10px; /* Adjust top position */
-            left: 10px; /* Adjust left position */
-            z-index: 1000; /* Ensure icon appears above other content */
-            transition: left 0.3s ease; /* Add transition for sliding effect */
+            color: white;
+            font-size: 40px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            transition: left 0.3s ease;
         }
-
         .navbar {
             position: fixed;
             top: 0;
-            left: -200px; /* Initially hide the navbar */
+            left: -200px;
             width: 200px;
             height: 100vh;
             background-color: #444;
@@ -39,37 +74,31 @@
             flex-direction: column;
             align-items: center;
             padding: 0;
-            transition: left 0.3s ease; /* Add transition for sliding effect */
+            transition: left 0.3s ease;
         }
-
         .navbar.show {
-            left: 0; /* Show the navbar */
+            left: 0;
         }
-
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
-
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
-
         .navbar ul {
             display: flex;
             flex-direction: column;
             list-style-type: none;
             padding: 0;
         }
-
         .navbar ul li {
             padding: .5rem;
             margin: .5rem 0;
         }
-
         .navbar ul li a {
             text-decoration: none;
             color: rgb(250, 246, 246);
@@ -78,7 +107,6 @@
             display: flex;
             align-items: center;
         }
-
         .navbar h2 {
             font-size: 1.5rem;
             padding: 0.5px;
@@ -86,38 +114,33 @@
             font-family: Arial, sans-serif;
             color: rgb(250, 245, 245);
         }
-
-         /* Styles for centering and fixing the withdrawal section */
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh; /* Set the container height to viewport height */
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 999; /* Ensure it stays above other content */
-    }
-
-    .section {
-        width: 50vh;
-        text-align: center;
-        border-radius: 10px;
-        background-color: #f0f0f0; /* Light gray background */
-        color: #333; /* Dark text color */
-        padding: 20px;
-    }
-
-    /* Styles for the logout link */
-    .logout {
-        position: fixed;
-        bottom: 20px; /* Adjust bottom position */
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000; /* Ensure it stays above other content */
-    }
-
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 100px;
+            transition: margin-left 0.3s ease;
+        }
+        .container.shifted {
+            margin-left: 200px;
+        }
+        .section {
+            width: 50vh;
+            text-align: center;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
         button {
             background-color: green;
             color: white;
@@ -127,66 +150,90 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         button:hover {
-            background-color: #8a2be2; /* Dark purple on hover */
+            background-color: #8a2be2;
         }
-
         .btn-back {
             background-color: #333;
         }
-
         .btn-logout {
-            background-color: #f00; /* Red for logout button */
+            background-color: #f00;
         }
-
-
         footer {
             position: fixed;
             bottom: 0;
-            left: 0; /* Adjust to be aligned with the container */
-            width: 100%; /* Adjust width based on the navbar width */
+            left: 0;
+            width: 100%;
             background: #444;
             text-align: center;
             padding: 0.01rem;
-            z-index: 999; /* Ensure it stays above other content */
+            z-index: 999;
         }
-
         footer p {
             justify-content: center;
-            margin: 0; /* Remove default margin */
+            margin: 0;
         }
-
         footer a {
             color: green;
             text-decoration: underline;
             font-weight: bold;
         }
+        .withdrawals-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            transition: margin-left 0.3s ease;
+        }
+        .withdrawals-section.shifted {
+            margin-left: 200px;
+        }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            background-color: #fff;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
-    <!-- Menu Icon -->
     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
-
-    <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+        <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+</div>
+
         <h2>ALPHA FINANCE</h2>
         <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
-        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
-        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+            <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+            <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+            <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Withdrawal Section -->
+    <div class="container" id="container">
         <div class="section">
             <form action="withdraw_process.php" method="POST">
                 <h3>Withdrawal Section</h3>
@@ -194,47 +241,84 @@
                     <div>
                         <h4>Account Balance</h4>
                         <?php
-                        if (isset($total_balance)) {
-                            echo "<p>Ksh " . $total_balance . "</p>";
-                        } else {
-                            echo "<p>Account balance not available</p>";
-                        }
+                        echo "<p>Ksh " . $accountBalance . "</p>";
                         ?>
                     </div>
                 </div>
                 <div>
-                    <h4>Phone Number</h4>
-                    <input type="text" name="phone_number" placeholder="Enter your phone number" style="width: 200px; height: 30px;">
-                </div>
+    <h4>Phone Number</h4>
+    <input type="text" name="phone_number" placeholder="Enter your phone number" 
+           style="width: 200px; height: 30px;" maxlength="10" 
+           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" required>
+</div>
+
                 <div>
                     <h4>Enter Amount</h4>
                     <input type="text" name="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
                 </div>
                 <br>
                 <button type="submit">Withdraw</button>
+                <br><br>
+                <a href="home_page.php">
+                    <button type="button" class="btn-back">Back</button>
+                </a>
             </form>
         </div>
-        <a href="" class="logout"><i class=""></i></a>
     </div>
+    <div class="withdrawals-section" id="withdrawals-section">
+    <h4>Withdrawals</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount (Ksh)</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+                <th>Date Requested</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($withdrawals as $withdrawal): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($withdrawal['id']); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['amount']); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['phone_number']); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['status']); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['date_requested']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
-    <!-- Footer -->
+
+<br><br><br>
+</div>
+
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; 2023-<?php echo date("Y"); ?> ALPHA FINANCE. All rights reserved.</p>
     </footer>
-
-
-    <!-- JavaScript -->
     <script>
         function toggleNavbar() {
             const navbar = document.getElementById('navbar');
-            navbar.classList.toggle('show');
             const container = document.querySelector('.container');
-            if (navbar.classList.contains('show')) {
-                container.style.marginLeft = '200px'; /* Adjust margin when navbar is shown */
+            const withdrawalsSection = document.querySelector('.withdrawals-section');
+            const menuIcon = document.querySelector('.menu-icon');
+            const isOpen = navbar.classList.contains('show');
+
+            if (isOpen) {
+                navbar.classList.remove('show');
+                container.style.marginLeft = '0';
+                withdrawalsSection.style.marginLeft = '0';
+                menuIcon.style.left = '10px';
             } else {
-                container.style.marginLeft = '0'; /* Reset margin when navbar is hidden */
+                navbar.classList.add('show');
+                container.style.marginLeft = '200px';
+                withdrawalsSection.style.marginLeft = '200px';
+                menuIcon.style.left = '210px';
             }
         }
     </script>
+
+
 </body>
 </html>
