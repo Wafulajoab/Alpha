@@ -160,7 +160,7 @@
     <br><br><br>
     <h2>ALPHA FINANCE</h2>
     <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
         <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
         <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
         <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>

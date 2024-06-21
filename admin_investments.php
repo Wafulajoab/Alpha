@@ -174,8 +174,8 @@ function calculateNetProfitLoss($totalMaturityValues) {
             padding: 0;
         }
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
         .navbar ul li a {
             text-decoration: none;
@@ -218,11 +218,11 @@ function calculateNetProfitLoss($totalMaturityValues) {
      <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
-        <br><br><br>
+      
 
-        <div class="image" style="text-align: center; margin-top: 20px;">
-          <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
-        </div>
+    <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
 
         <h2>ADMIN PANEL</h2>
         <ul>
@@ -240,7 +240,7 @@ function calculateNetProfitLoss($totalMaturityValues) {
 <div class="container" id="content">
 
 <div class="image" style="text-align: center; margin-top: 20px;">
-    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
 </div>
 
         <h2>Running Investments</h2>

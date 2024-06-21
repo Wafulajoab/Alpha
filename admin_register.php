@@ -31,34 +31,7 @@ if (isset($_GET['error'])) {
     <link href="https://fonts.googleapis.com/css2?family=Inspiration&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
     <title>Admin Register</title>
     <style>
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            width: 100%;
-            top: 0;
-            background-color: #444;
-            padding: 10px;
-            text-align: center;
-            z-index: 1000;
-        }
-        .navbar ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 20px 0;
-        }
-        .navbar ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-        .navbar ul li a {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-        }
-        .navbar ul li a:hover {
-            color: lightgray;
-        }
-        /* Other Styles */
+        
         body {
             background-color: darkgrey;
             border-radius: 25px;
@@ -141,15 +114,12 @@ if (isset($_GET['error'])) {
             }
         }
         body {
-            background-color: white;
+            background-color: #444;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1 style="color: white; margin: 0;">Alpha Finance - Admin Registration</h1>
-    </div>
+ 
 
     <br><br><br>
     <!-- Form -->

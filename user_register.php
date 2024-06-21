@@ -42,7 +42,7 @@
         }
         /* Other Styles */
         body {
-            background-color: darkgrey;
+            background-color: #444;
             border-radius: 25px;
             margin: 0;
             padding: 0;
@@ -123,9 +123,7 @@
                 width: 100%;
             }
         }
-        body {
-            background-color: white;
-        }
+       
     </style>
 </head>
 <body> 

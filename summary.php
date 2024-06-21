@@ -70,8 +70,8 @@
         }
 
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
 
         .navbar ul li a {
@@ -113,11 +113,30 @@
             font-weight: bold;
         }
 
-        .container {
-            padding: 20px;
-            text-align: center; /* Center the content */
-            transition: margin-left 0.3s ease; /* Add transition for sliding effect */
-        }
+       /* Main Content */
+.container {
+    padding: 20px;
+    text-align: center; /* Center the content */
+    transition: margin-left 0.3s ease; /* Add transition for sliding effect */
+}
+
+/* Grid Container for Investment Packages */
+.investment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 20px; /* Space between grid items */
+    margin-top: 20px;
+}
+
+/* Individual Investment Package */
+.investment-package {
+    margin: 0; /* Remove margin since grid-gap handles spacing */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s; /* Add hover effect transition */
+}
+
 
         .container.shifted {
             margin-left: 200px; /* Shift content to the right when navbar is shown */
@@ -128,13 +147,6 @@
             text-align: center;
         }
 
-        .investment-package {
-            width: 40%; /* Set the width to 40% */
-            margin: 20px auto; /* Center the divs and add margin for spacing */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
 
         .silver-package {
             background-color: #e6f2ff; /* Light blue */
@@ -202,12 +214,12 @@
        
 
         <div class="image" style="text-align: center; margin-top: 20px;">
-         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
             </div>
 
         <h2>ALPHA FINANCE</h2>
         <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
         <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
         <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
         <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
@@ -218,15 +230,15 @@
         </ul>
     </nav>
 
-    <!-- Main Content -->
     <div class="container" id="mainContent">
     <div class="image" style="text-align: center; margin-top: 20px;">
-         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
-            </div>
-        <h1>Alpha Investments Launching Soon 💥💥</h1>
+        <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+    </div>
+    <h1>Alpha Investments Launching Soon 💥💥</h1>
 
-        <p><strong>Investment Packages</strong></p>
+    <p><strong>Investment Packages</strong></p>
 
+    <div class="investment-grid">
         <div class="investment-package silver-package">
             <h3>SILVER PACKAGE 🥈</h3>
             <p>Earn 15% profits of your investments in 3 days</p>
@@ -375,6 +387,8 @@
             </div>
         </div>
     </div>
+</div>
+
     
     <footer>
         <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>

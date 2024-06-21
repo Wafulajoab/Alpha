@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Investments</title>
+    <title>Admin - Manage Withdrawals</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
@@ -85,6 +85,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         .status-pending {
             color: orange;
+        }
+        .status-approved {
+            color: green;
+        }
+        .status-rejected {
+            color: red;
         }
         .menu-icon {
             color: white;
@@ -131,8 +137,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 0;
         }
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
         .navbar ul li a {
             text-decoration: none;
@@ -185,34 +191,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .navbar.show + .container {
             margin-left: 200px;
         }
-
-           /* Styles for action buttons */
-    button[type="submit"] {
-        background-color: #4CAF50; /* Default background color */
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button[type="submit"]:hover {
-        background-color: #45a049; /* Hover background color */
-    }
-
-
-    /* Adjust margin for body section */
-    .container {
-        padding: 20px;
-        transition: margin-left 0.3s ease;
-        margin-left: 0;
-    }
-
-    /* Slide content when navbar is shown */
-    .navbar.show + .container {
-        margin-left: 200px;
-    }
 
     footer {
         position: fixed;
@@ -284,12 +262,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <tbody>
                     <?php foreach ($withdrawals as $withdrawal) : ?>
                     <tr>
-                        <td><?php echo $withdrawal['id']; ?></td>
-                        <td><?php echo $withdrawal['username']; ?></td>
-                        <td><?php echo $withdrawal['phone_number']; ?></td>
-                        <td><?php echo $withdrawal['amount']; ?></td>
-                        <td><?php echo $withdrawal['status']; ?></td>
-                        <td><?php echo $withdrawal['date_requested']; ?></td>
+                        <td><?php echo htmlspecialchars($withdrawal['id']); ?></td>
+                        <td><?php echo htmlspecialchars($withdrawal['username']); ?></td>
+                        <td><?php echo htmlspecialchars($withdrawal['phone_number']); ?></td>
+                        <td><?php echo htmlspecialchars($withdrawal['amount']); ?></td>
+                        <td class="<?php echo strtolower($withdrawal['status']); ?>"><?php echo htmlspecialchars($withdrawal['status']); ?></td>
+                        <td><?php echo htmlspecialchars($withdrawal['date_requested']); ?></td>
                         <td>
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                                 <input type="hidden" name="withdrawal_id" value="<?php echo $withdrawal['id']; ?>">

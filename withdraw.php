@@ -32,6 +32,12 @@ if ($stmt = $conn->prepare($sql)) {
     echo "Error preparing statement: " . $conn->error;
 }
 
+// Check for success message
+$success_message = '';
+if (isset($_SESSION['success_message'])) {
+    $success_message = $_SESSION['success_message'];
+    unset($_SESSION['success_message']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,8 +102,8 @@ if ($stmt = $conn->prepare($sql)) {
             padding: 0;
         }
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
         .navbar ul li a {
             text-decoration: none;
@@ -218,8 +224,8 @@ if ($stmt = $conn->prepare($sql)) {
     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <nav class="navbar" id="navbar">
         <div class="image" style="text-align: center; margin-top: 20px;">
-    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
-</div>
+            <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+        </div>
 
         <h2>ALPHA FINANCE</h2>
         <ul>
@@ -235,7 +241,7 @@ if ($stmt = $conn->prepare($sql)) {
     </nav>
     <div class="container" id="container">
         <div class="section">
-            <form action="withdraw_process.php" method="POST">
+        <form action="withdraw_process.php" method="POST" onsubmit="return validateWithdrawal()">
                 <h3>Withdrawal Section</h3>
                 <div>
                     <div>
@@ -246,15 +252,14 @@ if ($stmt = $conn->prepare($sql)) {
                     </div>
                 </div>
                 <div>
-    <h4>Phone Number</h4>
-    <input type="text" name="phone_number" placeholder="Enter your phone number" 
-           style="width: 200px; height: 30px;" maxlength="10" 
-           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" required>
-</div>
-
+                    <h4>Phone Number</h4>
+                    <input type="text" name="phone_number" placeholder="Enter your phone number" 
+                           style="width: 200px; height: 30px;" maxlength="10" 
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" required>
+                </div>
                 <div>
                     <h4>Enter Amount</h4>
-                    <input type="text" name="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
+                    <input type="text" name="withdraw_amount" id="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
                 </div>
                 <br>
                 <button type="submit">Withdraw</button>
@@ -262,63 +267,75 @@ if ($stmt = $conn->prepare($sql)) {
                 <a href="home_page.php">
                     <button type="button" class="btn-back">Back</button>
                 </a>
+                <br><br>
+             
             </form>
         </div>
     </div>
+
+    <?php if (!empty($success_message)): ?>
+        <div class="success-message" style="color: green; font-size: 1.2em; margin-top: 20px;">
+            <?php echo $success_message; ?>
+        </div>
+    <?php endif; ?>
+
     <div class="withdrawals-section" id="withdrawals-section">
-    <h4>Withdrawals</h4>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Amount (Ksh)</th>
-                <th>Phone Number</th>
-                <th>Status</th>
-                <th>Date Requested</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($withdrawals as $withdrawal): ?>
+        <h3>Withdrawal History</h3>
+        <?php if (!empty($withdrawals)): ?>
+            <table>
                 <tr>
-                    <td><?php echo htmlspecialchars($withdrawal['id']); ?></td>
-                    <td><?php echo htmlspecialchars($withdrawal['amount']); ?></td>
-                    <td><?php echo htmlspecialchars($withdrawal['phone_number']); ?></td>
-                    <td><?php echo htmlspecialchars($withdrawal['status']); ?></td>
-                    <td><?php echo htmlspecialchars($withdrawal['date_requested']); ?></td>
+                    <th>ID</th>
+                    <th>Amount</th>
+                    <th>Phone Number</th>
+                    <th>Status</th>
+                    <th>Date Requested</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+                <?php foreach ($withdrawals as $withdrawal): ?>
+                    <tr>
+                        <td><?php echo $withdrawal['id']; ?></td>
+                        <td><?php echo $withdrawal['amount']; ?></td>
+                        <td><?php echo $withdrawal['phone_number']; ?></td>
+                        <td><?php echo $withdrawal['status']; ?></td>
+                        <td><?php echo $withdrawal['date_requested']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php else: ?>
+            <p>No withdrawal history found.</p>
+        <?php endif; ?>
+    </div>
 
-
-<br><br><br>
-</div>
-
-    <footer>
-        <p>&copy; 2023-<?php echo date("Y"); ?> ALPHA FINANCE. All rights reserved.</p>
-    </footer>
+    <br><br><br>
     <script>
-        function toggleNavbar() {
-            const navbar = document.getElementById('navbar');
-            const container = document.querySelector('.container');
-            const withdrawalsSection = document.querySelector('.withdrawals-section');
-            const menuIcon = document.querySelector('.menu-icon');
-            const isOpen = navbar.classList.contains('show');
+    function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const withdrawalsSection = document.querySelector('.withdrawals-section');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
 
-            if (isOpen) {
-                navbar.classList.remove('show');
-                container.style.marginLeft = '0';
-                withdrawalsSection.style.marginLeft = '0';
-                menuIcon.style.left = '10px';
-            } else {
-                navbar.classList.add('show');
-                container.style.marginLeft = '200px';
-                withdrawalsSection.style.marginLeft = '200px';
-                menuIcon.style.left = '210px';
-            }
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            withdrawalsSection.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            withdrawalsSection.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
-    </script>
+    }
 
+    function validateWithdrawal() {
+        var withdrawAmount = document.getElementById('withdraw_amount').value;
+        if (withdrawAmount < 500 || withdrawAmount > 100000) {
+            alert("Please enter a withdrawal amount between Ksh 500 and Ksh 100,000.");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 </body>
 </html>

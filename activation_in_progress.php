@@ -11,10 +11,13 @@
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
             max-width: 400px;
-            margin: 50px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
@@ -44,7 +47,7 @@
 <body>
     <div class="container">
         <div class="message">
-            Your account activation is in progress. Please wait for a few minutes while the admin activates your account.
+            Your account activation is in progress. <br>Please wait for a few minutes while the admin activates your account.
         </div>
         <div class="loader"></div>
     </div>
@@ -56,6 +59,8 @@
                 .then(data => {
                     if (data.status === 'activated') {
                         window.location.href = 'user_registration_success.php';
+                    } else if (data.status === 'rejected') {
+                        window.location.href = 'user_register.php';
                     }
                 })
                 .catch(error => console.error('Error checking activation status:', error));

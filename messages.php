@@ -146,8 +146,8 @@ $conn->close();
         }
 
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
 
         .navbar ul li a {
@@ -269,11 +269,11 @@ $conn->close();
 <!-- Navigation Bar -->
 <nav class="navbar" id="navbar">
 <div class="image" style="text-align: center; margin-top: 20px;">
-         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+         <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
             </div>
     <h2>ALPHA FINANCE</h2>
     <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
         <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
         <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
         <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>

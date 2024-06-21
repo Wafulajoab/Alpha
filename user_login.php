@@ -11,11 +11,12 @@
     <style>
         /* Styles for body, navbar, and footer */
         body {
-            background-color: darkgrey;
+            background-color: #444;
             border-radius: 25px;
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            margin: 0; /* Added to remove default margin */
-            padding: 0; /* Added to remove default padding */
+            
         }
         .navbar {
             background-color:#444;

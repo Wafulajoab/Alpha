@@ -31,7 +31,7 @@ if ($balance_row = $result_balance->fetch_assoc()) {
         echo "<div style='color: red; font-weight: bold;'>Error: totalDepositsBalance column not found in the query result.</div>";
     }
 } else {
-    echo "<div style='color: red; font-weight: bold;'>Error: No result returned for the total deposits balance query.</div>";
+    echo "<div style='color: green; font-weight: bold;'>No result returned for the total deposits balance query.</div>";
 }
 
 // Output the total deposit balance for debugging
@@ -102,8 +102,8 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding
             padding: 0;
         }
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
         .navbar ul li a {
             text-decoration: none;
@@ -245,12 +245,12 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding
 <nav class="navbar" id="navbar">
    
     <div class="image" style="text-align: center; margin-top: 20px;">
-    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #444;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
     </div>
 
     <h2>ALPHA FINANCE</h2>
     <ul>
-    <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
+    <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
     <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
     <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
     <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>

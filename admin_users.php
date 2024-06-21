@@ -92,8 +92,8 @@ if (isset($_POST['delete_user'])) {
             padding: 0;
         }
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
         .navbar ul li a {
             text-decoration: none;
@@ -121,7 +121,7 @@ if (isset($_POST['delete_user'])) {
             margin-left: 200px;
         }
         .admin-name {
-            position: absolute;
+            position: flex;
             top: 20px;
             left: 220px;
             color: black;

@@ -327,7 +327,7 @@ footer a {
 
 
 
-styles for <table>
+
 body {
             font-family: Arial, sans-serif;
             margin: 0;

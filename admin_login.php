@@ -10,23 +10,13 @@
     <style>
         /* Styles for body, navbar, and footer */
         body {
-            background-color: darkgrey;
+            background-color: #444;
             border-radius: 25px;
             font-family: Arial, sans-serif;
             margin: 0; /* Added to remove default margin */
             padding: 0; /* Added to remove default padding */
         }
-        .navbar {
-            background-color:#444;
-            position: fixed; /* Fixed position */
-            top: 0; /* Fixed to top */
-            left: 0; /* Fixed to left */
-            right: 0; /* Fixed to right */
-            z-index: 1000; /* Ensuring navbar stays on top */
-            padding: 10px ;
-            text-align: center;
-            width: 100%; /* Full width */
-        }
+       
 
         /* Existing Styles */
         img {

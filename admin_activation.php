@@ -152,8 +152,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
         }
 
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
 
         .navbar ul li a {
@@ -220,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
 
     <!-- Container -->
     <div class="container">
-        <h2>Pending Account Activations</h2>
+        <h2>Pending Accounts Activation</h2>
         <table>
             <thead>
                 <tr>

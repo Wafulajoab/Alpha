@@ -100,6 +100,54 @@ function getTotalActiveInvestments($username) {
     return $totalActiveInvestments;
 }
 
+// Function to fetch the total matured investments
+function getTotalMaturedInvestments($username) {
+    global $conn;
+
+    $totalMaturedInvestments = 0;
+
+    $sql = "SELECT SUM(amount) AS total FROM investments WHERE username = ? AND status = 'Matured'";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
+    }
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->bind_result($total);
+    $stmt->fetch();
+
+    if ($total) {
+        $totalMaturedInvestments = $total;
+    }
+
+    $stmt->close();
+
+    // Reset matured investments to zero after fetching the total
+    if ($totalMaturedInvestments > 0) {
+        // Update account balance with matured investments
+        $sql = "UPDATE accounts SET accountBalance = accountBalance + ? WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $conn->error);
+        }
+        $stmt->bind_param("ds", $totalMaturedInvestments, $username);
+        $stmt->execute();
+        $stmt->close();
+
+        // Reset the matured investments to zero
+        $sql = "UPDATE investments SET amount = 0 WHERE username = ? AND status = 'Matured'";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $conn->error);
+        }
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    return $totalMaturedInvestments;
+}
+
 // Check if a session is not already active before starting one
 if (session_status() == PHP_SESSION_NONE) {
     session_start(); // Start the session
@@ -121,7 +169,11 @@ $referralsEarnings = $accountInfo['referralsEarnings'];
 
 // Fetch the total active investments for the logged-in user
 $totalActiveInvestments = getTotalActiveInvestments($username);
+
+// Fetch the total matured investments for the logged-in user
+$totalMaturedInvestments = getTotalMaturedInvestments($username);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -193,8 +245,8 @@ $totalActiveInvestments = getTotalActiveInvestments($username);
     }
 
     .navbar ul li {
-        padding: .5rem;
-        margin: .5rem 0;
+        padding: .2rem;
+        margin: .2rem 0;
     }
 
     .navbar ul li a {
@@ -220,20 +272,29 @@ $totalActiveInvestments = getTotalActiveInvestments($username);
         max-width: 1000px;
         width: 100%;
         transition: margin-left 0.3s ease; /* Add transition for sliding effect */
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
     }
 
     .container.shifted {
-        margin-left: 200px; /* Adjust margin-left when navbar is shown */
+        margin-left: 200px;
     }
 
     .section {
-        width: 60%;
+        width: 100%; /* Adjusted width to fit grid layout */
         margin: 20px 0;
         padding: 20px;
         text-align: center;
-        border-radius: 100%;
+        border-radius: 10px;
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .section:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .total-deposits {
@@ -261,13 +322,18 @@ $totalActiveInvestments = getTotalActiveInvestments($username);
         color: #333; /* Dark text color */
     }
 
+    .matured-investments {
+        background-color: #ffff99; /* Light yellow background */
+        color: #333; /* Dark text color */
+    }
+
     .total-withdrawals {
         background-color: #ffcccb; /* Light salmon background */
         color: #333; /* Dark text color */
     }
 
     .username {
-        position: absolute;
+        position: flex;
         top: 20px;
         left: 220px;
         color: black;
@@ -318,7 +384,9 @@ $totalActiveInvestments = getTotalActiveInvestments($username);
         <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
         <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
         <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+        <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+
         </ul>
     </nav>
     <!-- Main Content -->
@@ -327,23 +395,28 @@ $totalActiveInvestments = getTotalActiveInvestments($username);
         <br>
         <div class="section total-deposits">
             <h2>Total Deposits Balance</h2>
-            <p>Ksh <?php echo number_format($totalDepositsBalance, 2); ?></p>
+            <p style="font-size: 24px; font-weight: bold;">Ksh <?php echo number_format($totalDepositsBalance, 2); ?></p>
+
         </div>
         <div class="section account-balance">
             <h2>Account Balance</h2>
-            <p>Ksh <?php echo number_format($accountBalance, 2); ?></p>
+            <p style="font-size: 24px; font-weight: bold;">Ksh <?php echo number_format($accountBalance, 2); ?></p>
         </div>
         <div class="section total-withdrawn">
             <h2>Total Withdrawn</h2>
-            <p>Ksh <?php echo number_format($totalWithdrawn, 2); ?></p>
+             <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalWithdrawn, 2); ?></p>
         </div>
         <div class="section referral-earnings">
             <h2>Referrals Earnings</h2>
-            <p>Ksh <?php echo number_format($referralsEarnings, 2); ?></p>
+             <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($referralsEarnings, 2); ?></p>
         </div>
         <div class="section active-investments">
             <h2>Total Active Investments</h2>
-            <p>Ksh <?php echo number_format($totalActiveInvestments, 2); ?></p>
+             <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalActiveInvestments, 2); ?></p>
+        </div>
+        <div class="section matured-investments">
+            <h2>Total Matured Investments</h2>
+             <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalMaturedInvestments, 2); ?></p>
         </div>
     </div>
     <footer>

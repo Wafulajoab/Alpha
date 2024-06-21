@@ -102,8 +102,8 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
             padding: 0;
         }
         .navbar ul li {
-            padding: .5rem;
-            margin: .5rem 0;
+            padding: .2rem;
+            margin: .2rem 0;
         }
         .navbar ul li a {
             text-decoration: none;
@@ -156,7 +156,7 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
             color: #333;
         }
         .admin-name {
-            position: absolute;
+            position: flex;
             top: 20px;
             left: 220px;
             color: black;
@@ -257,15 +257,19 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
 
     <!-- Main Content -->
     <div class="container" id="container">
-        <!-- Existing admin name display -->
-        <div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
-
+        
         <!-- Section for displaying deposits -->
         <div class="section deposits">
+
+        
             
         <div class="image" style="text-align: center; margin-top: 20px;">
     <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
 </div>
+
+<!-- Existing admin name display -->
+<div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
+
         <h2 style="color: darkblue; font-family: 'Georgia', serif; font-size: 52px;">All Deposits</h2>
 
             <?php
