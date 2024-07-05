@@ -139,6 +139,7 @@ function calculateEarnings($amount, $package_name) {
             align-items: center;
             padding: 0;
             transition: left 0.3s ease;
+            overflow-y: auto; /* Added for scrollbar */
         }
         .navbar.show {
             left: 0;

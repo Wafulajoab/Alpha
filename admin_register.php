@@ -8,6 +8,8 @@ if (isset($_GET['error'])) {
         echo '<p class="error-message">Fill in all fields!</p>';
     } else if ($_GET['error'] == "passwordcheck") {
         echo '<p class="error-message">Passwords do not match!</p>';
+    } else if ($_GET['error'] == "weakpassword") {
+        echo '<p class="error-message">Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character!</p>';
     } else if ($_GET['error'] == "sqlerror") {
         echo '<p class="error-message">Database error. Please try again!</p>';
     }
@@ -15,7 +17,6 @@ if (isset($_GET['error'])) {
     echo '<p class="success-message">Registration successful! You can now log in.</p>';
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +32,6 @@ if (isset($_GET['error'])) {
     <link href="https://fonts.googleapis.com/css2?family=Inspiration&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
     <title>Admin Register</title>
     <style>
-        
         body {
             background-color: darkgrey;
             border-radius: 25px;
@@ -70,6 +70,16 @@ if (isset($_GET['error'])) {
             border: 1px solid wheat;
             box-sizing: border-box;
             border-radius: 8px;
+        }
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
         }
         button {
             background-color: #444;
@@ -119,8 +129,6 @@ if (isset($_GET['error'])) {
     </style>
 </head>
 <body>
- 
-
     <br><br><br>
     <!-- Form -->
     <form action="admin_register_process.php" method="post">
@@ -131,29 +139,21 @@ if (isset($_GET['error'])) {
                 </div>
                 <h1 class="sign" style="text-align: center;"><i class="fas fa-user-plus"></i> Admin Sign Up</h1>
                 <p class="sign">Please fill this form to register as an admin at Alpha Finance</p>
-                <label for="username" class="sign"><b><i class="fas fa-user"></i> Username</b></label>
-                <input type="text" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete="off" required>
-                <label for="phonenumber" class="sign"><b><i class="fas fa-phone"></i> Enter Phone Number</b></label>
-<input type="text" id="phone_number" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" 
-       pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const inputField = document.getElementById('phone_number');
-
-    // Enforce max length of 10 characters
-    inputField.addEventListener('input', function() {
-        if (this.value.length > 10) {
-            this.value = this.value.slice(0, 10); // Trim input to first 10 characters
-        }
-    });
-});
-</script>
-
-                <label class="sign" for="psw"><b><i class="fas fa-lock"></i> Password</b></label>
-                <input type="password" class="sign" placeholder="Enter Password" name="psw" required autocomplete="off">
-                <label for="psw-confirm" class="sign"><b><i class="fas fa-lock"></i> Confirm Password</b></label>
-                <input type="password" class="sign" placeholder="Confirm Your Password" name="psw-confirm" required autocomplete="off">
+                <label for="username" class="sign"><b><i class="fas fa-user"></i> Username: ADMIN</b></label>
+            
+                
+                <div class="password-container">
+                    <label class="sign" for="psw"><b><i class="fas fa-lock"></i> Password</b></label>
+                    <input type="password" class="sign" placeholder="Enter Password" name="psw" id="psw" required autocomplete="off">
+                    <i class="fa fa-eye toggle-password" id="toggle-password"></i>
+                </div>
+                
+                <div class="password-container">
+                    <label for="psw-confirm" class="sign"><b><i class="fas fa-lock"></i> Confirm Password</b></label>
+                    <input type="password" class="sign" placeholder="Confirm Your Password" name="psw-confirm" id="psw-confirm" required autocomplete="off">
+                    <i class="fa fa-eye toggle-password" id="toggle-password-confirm"></i>
+                </div>
+                
                 <label>
                     <input type="checkbox" checked="checked" name="remember">
                     <name class="sign"><i class="fas fa-check"></i> Remember me</name>
@@ -196,5 +196,24 @@ document.addEventListener('DOMContentLoaded', function() {
             <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('toggle-password');
+            const password = document.getElementById('psw');
+            togglePassword.addEventListener('click', function() {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+            });
+
+            const togglePasswordConfirm = document.getElementById('toggle-password-confirm');
+            const passwordConfirm = document.getElementById('psw-confirm');
+            togglePasswordConfirm.addEventListener('click', function() {
+                const type = passwordConfirm.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordConfirm.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+            });
+        });
+    </script>
 </body>
 </html>

@@ -30,11 +30,10 @@
             transition: left 0.3s ease; /* Add transition for sliding effect */
         }
 
-        /* Navbar styles */
         .navbar {
             position: fixed;
             top: 0;
-            left: -200px; /* Initially hide the navbar */
+            left: -200px;
             width: 200px;
             height: 100vh;
             background-color: #444;
@@ -43,37 +42,32 @@
             flex-direction: column;
             align-items: center;
             padding: 0;
-            transition: left 0.3s ease; /* Add transition for sliding effect */
+            transition: left 0.3s ease;
+            overflow-y: auto; /* Added for scrollbar */
         }
-
         .navbar.show {
-            left: 0; /* Show the navbar */
+            left: 0;
         }
-
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
-
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
-
         .navbar ul {
             display: flex;
             flex-direction: column;
             list-style-type: none;
             padding: 0;
         }
-
         .navbar ul li {
             padding: .2rem;
             margin: .2rem 0;
         }
-
         .navbar ul li a {
             text-decoration: none;
             color: rgb(250, 246, 246);
@@ -82,7 +76,6 @@
             display: flex;
             align-items: center;
         }
-
         .navbar h2 {
             font-size: 1.5rem;
             padding: 0.5px;

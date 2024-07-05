@@ -138,6 +138,7 @@ if ($resultApprovedWithdrawals) {
             align-items: center;
             padding: 0;
             transition: left 0.3s ease;
+            overflow-y: auto; /* Added for scrollbar */
         }
         .navbar.show {
             left: 0;
@@ -267,7 +268,7 @@ if ($resultApprovedWithdrawals) {
     </nav>
     <!-- Main Content -->
     <div class="container" id="container">
-        <div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
+        <div class="admin-name">Welcome <?php echo htmlspecialchars($admin_username); ?>!</div>
         <div class="section total-users">
             <h2>Total Active Users</h2>
             <p><?php echo number_format($totalUsers); ?></p>

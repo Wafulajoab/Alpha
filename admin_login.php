@@ -16,7 +16,6 @@
             margin: 0; /* Added to remove default margin */
             padding: 0; /* Added to remove default padding */
         }
-       
 
         /* Existing Styles */
         img {
@@ -45,6 +44,16 @@
             border: 1px solid wheat;
             box-sizing: border-box;
             border-radius: 8px;
+        }
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
         }
         button {
             background-color: green;
@@ -108,8 +117,11 @@
         <label class="username" for="username"><b><i class="fas fa-user"></i> Admin Username</b></label>
         <input type="text" placeholder="Enter Username" name="username" required autocomplete="off">
 
-        <label class="password" for="psw"><b><i class="fas fa-lock"></i> Admin Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required autocomplete="off">
+        <div class="password-container">
+            <label class="password" for="psw"><b><i class="fas fa-lock"></i> Admin Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" required autocomplete="off">
+            <i class="fa fa-eye toggle-password" id="toggle-password"></i>
+        </div>
 
         <button id="buttonMe" type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
         <label>
@@ -119,7 +131,7 @@
     </div>
 
     <div class="container" style="background-color: whitesmoke; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
-        <li><a href="admin_register.php"><i class="fas fa-user-plus"></i> Register as Admin</a></li>
+        <!-- <li><a href="admin_register.php"><i class="fas fa-user-plus"></i> Register as Admin</a></li> -->
         <br>
         <span class="psw"><a href="#" style="font-family: Arial, sans-serif; color: rgb(1, 1, 104);"><i class="fas fa-question-circle"></i> Forgot password?</a></span>
     </div>
@@ -152,5 +164,16 @@
         <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
     </div>
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.getElementById('toggle-password');
+        const password = document.getElementById('psw');
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
 </body>
 </html>

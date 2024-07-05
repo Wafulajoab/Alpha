@@ -126,30 +126,44 @@ $conn->close();
             transition: left 0.3s ease;
         }
 
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: -200px;
+            width: 200px;
+            height: 100vh;
+            background-color: #444;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            transition: left 0.3s ease;
+            overflow-y: auto; /* Added for scrollbar */
+        }
+        .navbar.show {
+            left: 0;
+        }
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
-
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
-
         .navbar ul {
             display: flex;
             flex-direction: column;
             list-style-type: none;
             padding: 0;
         }
-
         .navbar ul li {
             padding: .2rem;
             margin: .2rem 0;
         }
-
         .navbar ul li a {
             text-decoration: none;
             color: rgb(250, 246, 246);
@@ -158,7 +172,6 @@ $conn->close();
             display: flex;
             align-items: center;
         }
-
         .navbar h2 {
             font-size: 1.5rem;
             padding: 0.5px;
@@ -166,7 +179,6 @@ $conn->close();
             font-family: Arial, sans-serif;
             color: rgb(250, 245, 245);
         }
-
         .thank-you-message {
             display: none;
             position: fixed;
@@ -282,15 +294,16 @@ $conn->close();
         <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
         <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
-
-        </ul>
+ </ul>
+ <br>
 </nav>
+
 
 <div class="thank-you-message" id="thankYouMessage">
     Thank you, <?php echo $_SESSION['username']; ?>,
     <br>For entrusting us with your funds and investing with us,<br> We are glad you are part of us!
 </div>
-
+<br><br>
 <div class="container">
     <h2>Send Message</h2>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -330,17 +343,28 @@ $conn->close();
 
     
 
-<script>
-    function toggleNavbar() {
-        var navbar = document.getElementById('navbar');
-        var thankYouMessage = document.getElementById('thankYouMessage');
-        navbar.classList.toggle('show');
-        if (navbar.classList.contains('show')) {
-            thankYouMessage.style.display = 'block';
-        } else {
-            thankYouMessage.style.display = 'none';
-        }
+    <script>
+function toggleNavbar() {
+    var navbar = document.getElementById('navbar');
+    var thankYouMessage = document.getElementById('thankYouMessage');
+    var container = document.querySelector('.container');
+    var menuIcon = document.querySelector('.menu-icon');
+    var isOpen = navbar.classList.contains('show');
+    
+    navbar.classList.toggle('show');
+    
+    if (isOpen) {
+        navbar.classList.remove('show');
+        container.style.marginLeft = '0';
+        menuIcon.style.left = '10px';
+        thankYouMessage.style.display = 'none';
+    } else {
+        navbar.classList.add('show');
+        container.style.marginLeft = '200px';
+        menuIcon.style.left = '210px';
+        thankYouMessage.style.display = 'block';
     }
+}
 </script>
 
 </body>

@@ -81,6 +81,7 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
             align-items: center;
             padding: 0;
             transition: left 0.3s ease;
+            overflow-y: auto; /* Added for scrollbar */
         }
         .navbar.show {
             left: 0;
