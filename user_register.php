@@ -133,8 +133,8 @@
 </div> -->
 
 <br><br><br>
-    <!-- Form -->
-    <form action="users_register_process.php" method="post">
+  <!-- Form -->
+  <form action="user_register_process.php" method="post">
         <div class="container">
             <div class="icon" id="icon">
                 <div class="image" style="text-align: center;">
@@ -143,73 +143,69 @@
                 <h1 class="sign" style="text-align: center;"><i class="fas fa-user-plus"></i> Sign Up</h1>
                 <p class="sign">Please fill this form to register to Alpha Finance</p>
                 <label for="username" class="sign"><b><i class="fas fa-user"></i> Username</b></label>
-                <input type="text" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete ="off" required>
+                <input type="text" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete="off" required>
                 <label for="phonenumber" class="sign"><b><i class="fas fa-phone"></i> Enter Phone Number</b></label>
-<input type="text" id="phone_number" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" 
-       pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const inputField = document.getElementById('phone_number');
-
-    // Enforce max length of 10 characters
-    inputField.addEventListener('input', function() {
-        if (this.value.length > 10) {
-            this.value = this.value.slice(0, 10); // Trim input to first 10 characters
-        }
-    });
-});
-</script>
-
+                <input type="text" id="phone_number" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const inputField = document.getElementById('phone_number');
+                        inputField.addEventListener('input', function() {
+                            if (this.value.length > 10) {
+                                this.value = this.value.slice(0, 10);
+                            }
+                        });
+                    });
+                </script>
                 <label class="sign" for="psw"><b><i class="fas fa-lock"></i> Password</b></label>
-                <input type="password" class="sign" placeholder="Enter Password" name="psw" required autocomplete ="off">
+                <input type="password" class="sign" placeholder="Enter Password" name="psw" required autocomplete="off">
                 <label for="psw-confirm" class="sign"><b><i class="fas fa-lock"></i> Confirm Password</b></label>
-                <input type="password" class="sign" placeholder="Confirm Your Password" name="psw-confirm" required autocomplete ="off">
+                <input type="password" class="sign" placeholder="Confirm Your Password" name="psw-confirm" required autocomplete="off">
+                
+                <!-- Upline Username -->
+                <label for="upline_username" class="sign"><b><i class="fas fa-user"></i> Upline Username (Optional)</b></label>
+                <input type="text" name="upline_username" class="sign" placeholder="Enter Upline Username" autocomplete="off">
+
                 <label>
                     <input type="checkbox" checked="checked" name="remember">
                     <name class="sign"><i class="fas fa-check"></i> Remember me</name>
                 </label>
-                <p class="sign">By creating an account with this security system, you agree to our<a href="#" style="color:blue">Terms & Privacy</a></p>
+                <p class="sign">By creating an account with this security system, you agree to our <a href="#" style="color:blue">Terms & Privacy</a></p>
                 <div class="clearfix">
                     <button class="sign" type="submit" class="signupbtn"><i class="fas fa-check icon"></i> Sign Up</button>
-                    <li><a href="user_login.php"><i class="fas fa-info-circle icon"></i> Already have an account Login as User here</a></li> 
-                    <!-- <br>
-                    <li><a href="admin_login.php"><i class="fas fa-info-circle"></i> Already have an account Login as Admin here</a></li> -->
+                    <li><a href="user_login.php"><i class="fas fa-info-circle icon"></i> Already have an account? Login as User here</a></li>
                 </div>
             </div>
         </div>
     </form>
 
-
     <br><br><br>
     <!-- Footer -->
     <footer id="footer">
-    <style>
-        #footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: lavender;
-            text-align: center;
-            padding: 0.1rem;
-        }
+        <style>
+            #footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: lavender;
+                text-align: center;
+                padding: 0.1rem;
+            }
 
-        .footer p {
-            justify-content: center;
-        }
+            .footer p {
+                justify-content: center;
+            }
 
-        .footer a {
-            color: green;
-            text-decoration: underline;
-            font-weight: bold;
-        }
-    </style>
+            .footer a {
+                color: green;
+                text-decoration: underline;
+                font-weight: bold;
+            }
+        </style>
 
-    <div class="footer">
-        <p><span>Company.<strong>All Rights Reserved.</strong>Designed By <a href="jmtech.php">JMTech</a></span></p>
-    </div>
-</footer>
-
+        <div class="footer">
+            <p><span>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></span></p>
+        </div>
+    </footer>
 </body>
 </html>

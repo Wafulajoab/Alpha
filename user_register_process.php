@@ -4,10 +4,10 @@ session_start();
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Database credentials
-    $servername = "localhost"; // Change this if your database is hosted on a different server
-    $username = "root"; // Change this to your database username
-    $password = ""; // Change this to your database password
-    $dbname = "alpha"; // Change this to your database name
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "alpha";
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -17,10 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Define variables and initialize with empty values
-    $username = $phone_number = $password = $confirm_password = "";
-
-    // Processing form data when form is submitted
+    // Retrieve form data
     $username = $_POST["username"];
     $phone_number = $_POST["phone_number"];
     $password = $_POST["psw"];
@@ -36,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: user_register.php");
         exit();
     } elseif (!preg_match('/^\d{10}$/', $phone_number)) {
-        echo "<script>alert('Phone number must have at least 10 digits');</script>";
+        echo "<script>alert('Phone number must have exactly 10 digits');</script>";
         header("Location: user_register.php");
         exit();
     } elseif (strlen($password) < 6) {
@@ -80,7 +77,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Attempt to execute the prepared statement
         if ($stmt->execute()) {
-            // Redirect to login page after successful registration
+            // Get the last inserted ID
+            $user_id = $stmt->insert_id;
+
+            // Generate referral link
+            $referral_link = "https://yourwebsite.com/register?ref=" . urlencode($username) . $user_id;
+
+            // Store the referral link and username in the session
+            $_SESSION['referral_link'] = $referral_link;
+            $_SESSION['username'] = $username;
+
+            // Check if the user was referred by someone
+            if (isset($_GET['ref'])) {
+                $referrer = $_GET['ref'];
+                $referral_level = 1; // Direct referral
+
+                // Insert referral information
+                $sql = "INSERT INTO referrals (referrer_username, referred_username, referral_level) VALUES (?, ?, ?)";
+                if ($stmt = $conn->prepare($sql)) {
+                    $stmt->bind_param("ssi", $referrer, $username, $referral_level);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+            }
+
+            // Redirect to account activation or login page after successful registration
             $_SESSION['success'] = "Registration successful. Please login.";
             header("Location: account_activation.php");
             exit();
@@ -89,8 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: user_register.php");
             exit();
         }
-
-     
     }
 
     // Close connection

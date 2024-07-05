@@ -35,7 +35,7 @@ if ($balance_row = $result_balance->fetch_assoc()) {
 }
 
 // Output the total deposit balance for debugging
-echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'>
+echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);'>
         <strong>Total Deposits Balance:</strong><br> KSH " . htmlspecialchars($totalDepositsBalance) . "
       </div>";
 
@@ -250,15 +250,17 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 300px; padding
 
     <h2>ALPHA FINANCE</h2>
     <ul>
-    <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
-    <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-    <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-    <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-    <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-    <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-    <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
-    <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
-    </ul>
+        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
+        <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+
+     </ul>
 </nav>
 
     <div class="container" id="container">

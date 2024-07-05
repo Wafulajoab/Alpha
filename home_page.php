@@ -386,8 +386,7 @@ $totalMaturedInvestments = getTotalMaturedInvestments($username);
         <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
         <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
-
-        </ul>
+    </ul>
     </nav>
     <!-- Main Content -->
     <div class="container" id="container">
