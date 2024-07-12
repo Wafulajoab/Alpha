@@ -244,6 +244,47 @@ if ($resultApprovedWithdrawals) {
             text-decoration: underline;
             font-weight: bold;
         }
+
+        .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+    .section {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.2s;
+        width: 30%;
+    }
+    .admin-name {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    /* Hover Effect */
+    .section:hover {
+        animation: shake 0.5s;
+        animation-iteration-count: 1;
+    }
+
+    /* Shake Animation */
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
     </style>
 </head>
 <body>
@@ -271,29 +312,28 @@ if ($resultApprovedWithdrawals) {
         <div class="admin-name">Welcome <?php echo htmlspecialchars($admin_username); ?>!</div>
         <div class="section total-users">
             <h2>Total Active Users</h2>
-            <p><?php echo number_format($totalUsers); ?></p>
+            <p style="font-size: 24px; font-weight: bold;"><?php echo number_format($totalUsers); ?></p>
         </div>
         <div class="section total-deposits">
             <h2>Total Approved Deposits</h2>
-              <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalApprovedDeposits, 2); ?></p>
+            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalApprovedDeposits, 2); ?></p>
         </div>
         <div class="section total-withdrawals">
             <h2>Total Withdrawals</h2>
-              <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalWithdrawals, 2); ?></p>
+            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalWithdrawals, 2); ?></p>
         </div>
         <div class="section total-investments">
             <h2>Total Investments</h2>
-              <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalInvestments, 2); ?></p>
+            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalInvestments, 2); ?></p>
         </div>
         <div class="section total-matured-investments">
             <h2>Total Matured Investments</h2>
-              <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalMaturedInvestments, 2); ?></p>
+            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalMaturedInvestments, 2); ?></p>
         </div>
         <div class="section total-approved-withdrawals">
-    <h2>Total Approved Withdrawals</h2>
-      <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalApprovedWithdrawals, 2); ?></p>
-</div>
-
+            <h2>Total Approved Withdrawals</h2>
+            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalApprovedWithdrawals, 2); ?></p>
+        </div>
     </div>
     <footer>
         <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>

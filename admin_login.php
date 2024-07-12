@@ -133,7 +133,7 @@
     <div class="container" style="background-color: whitesmoke; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;">
         <!-- <li><a href="admin_register.php"><i class="fas fa-user-plus"></i> Register as Admin</a></li> -->
         <br>
-        <span class="psw"><a href="#" style="font-family: Arial, sans-serif; color: rgb(1, 1, 104);"><i class="fas fa-question-circle"></i> Forgot password?</a></span>
+        <span class="psw"><a href="admin_reset_password.php" style="font-family: Arial, sans-serif; color: rgb(1, 1, 104);"><i class="fas fa-question-circle"></i> Forgot password?</a></span>
     </div>
 </form>
 
