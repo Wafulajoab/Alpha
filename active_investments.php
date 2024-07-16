@@ -218,7 +218,6 @@ function calculateEarnings($amount, $package_name) {
         <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
         <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
         <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
         <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
 

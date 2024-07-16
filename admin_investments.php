@@ -41,12 +41,13 @@ function formatCountdown($seconds) {
 // Function to calculate earnings based on amount and package name
 function calculateEarnings($amount, $packageName) {
     // Dummy logic for calculating earnings. Adjust this based on your actual logic.
-    $interestRate = 0.05; // 5% interest rate as an example
+    $interestRate = 0.5; // 50% interest rate as an example
     if ($packageName === "Gold") {
         $interestRate = 0.1; // 10% interest rate for Gold package
     } elseif ($packageName === "Silver") {
         $interestRate = 0.07; // 7% interest rate for Silver package
     }
+    
     return $amount * $interestRate;
 }
 
@@ -96,15 +97,34 @@ function calculateNetProfitLoss($totalMaturityValues) {
             background-color: darkgrey;
             transition: margin-left 0.3s ease;
         }
-        .container {
-            padding: 20px;
-            transition: margin-left 0.3s ease;
-        }
+      
+       
+.container {
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    animation: flipInY 1.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes flipInY {
+    0% {
+        opacity: 0;
+        transform: perspective(400px) rotateY(90deg);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(400px) rotateY(0deg);
+    }
+}
         table {
-            width: 100%;
+            width: 90%;
             border-collapse: collapse;
+            margin: 0 auto;
             margin-bottom: 20px;
+            animation: scaleUp 0.6s ease-in-out;
         }
+
+
         th, td {
             padding: 10px;
             text-align: left;
@@ -223,7 +243,7 @@ function calculateNetProfitLoss($totalMaturityValues) {
 
     <div class="image" style="text-align: center; margin-top: 20px;">
     <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-</div>
+    </div>
 
         <h2>ADMIN PANEL</h2>
         <ul>
@@ -233,7 +253,6 @@ function calculateNetProfitLoss($totalMaturityValues) {
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
             <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
-            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
@@ -244,7 +263,17 @@ function calculateNetProfitLoss($totalMaturityValues) {
     <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
 </div>
 
-        <h2>Running Investments</h2>
+<head>
+    <style>
+        .centered-heading {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="centered-heading">Running Investments</h2>
+</body>
+
         <table>
             <thead>
                 <tr>

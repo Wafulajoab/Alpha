@@ -2,8 +2,10 @@
 // Database connection
 include('db_connection.php');
 
-// Fetch user data
-$query = "SELECT id, username, phone_number, balance FROM users";
+// Fetch user data along with account balance
+$query = "SELECT users.id, users.username, users.phone_number, accounts.accountBalance 
+          FROM users 
+          LEFT JOIN accounts ON users.username = accounts.username";
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
@@ -142,6 +144,19 @@ if (isset($_POST['delete_user'])) {
 .container {
     padding: 20px;
     transition: margin-left 0.3s ease;
+    animation: flipInY 1.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes flipInY {
+    0% {
+        opacity: 0;
+        transform: perspective(400px) rotateY(90deg);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(400px) rotateY(0deg);
+    }
 }
 
 table {
@@ -181,9 +196,7 @@ tr:hover {
     color: orange;
 }
 
-
-
-        footer {
+footer {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -229,11 +242,11 @@ tr:hover {
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+            <li><a href="admin_activation.php"><i class="fas fa-users icon"></i>Accounts Activation</a></li>
             <li><a href="admin_users.php"><i class="fas fa-users icon"></i>Manage Users</a></li>
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
             <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
-            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
@@ -244,13 +257,23 @@ tr:hover {
     <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
 </div>
 
-    <div class="admin-name">Manage Users</div>
+<head>
+    <style>
+        .centered-heading {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="centered-heading">Manage Users</h2>
+</body>
+
     <table>
         <tr>
-            <th>ID</th>
+            <th>Serial No</th>
             <th>Username</th>
             <th>Phone Number</th>
-            <th>Balance</th> <!-- Add Balance Column Header -->
+            <th>A/C Balance</th> <!-- Add Balance Column Header -->
             <th>Actions</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -258,7 +281,7 @@ tr:hover {
                 <td><?php echo $row['id']; ?></td>
                 <td><?php echo $row['username']; ?></td>
                 <td><?php echo $row['phone_number']; ?></td>
-                <td><?php echo $row['balance']; ?></td> <!-- Display Balance Value -->
+                <td><?php echo $row['accountBalance'] !== null ? $row['accountBalance'] : '0.00'; ?></td> <!-- Display Balance Value -->
                 <td class="actions">
                     <form method="post" style="display:inline;">
                         <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
@@ -271,11 +294,10 @@ tr:hover {
 </div>
 
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; 2024 Your Website. All rights reserved. | Designed by <a href="#">Your Name</a></p>
     </footer>
-
     <script>
-           function toggleNavbar() {
+            function toggleNavbar() {
         const navbar = document.getElementById('navbar');
         const container = document.querySelector('.container');
         const menuIcon = document.querySelector('.menu-icon');

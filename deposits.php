@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username'];
 
 // Fetch deposit history
-$query = "SELECT transaction_code, deposit_amount, created_at, status FROM deposits WHERE username = ?";
+$query = "SELECT id, transaction_code, deposit_amount, created_at, status FROM deposits WHERE username = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $username);
 $stmt->execute();
@@ -301,6 +301,7 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
             <table>
                 <thead>
                     <tr>
+                        <th>Serial No</th>
                         <th>Transaction Code</th>
                         <th>Deposit Amount</th>
                         <th>Date</th>
@@ -310,6 +311,7 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
                 <tbody>
                     <?php while($row = $result->fetch_assoc()): ?>
                         <tr>
+                            <td><?php echo htmlspecialchars($row['id']); ?></td>
                             <td><?php echo htmlspecialchars($row['transaction_code']); ?></td>
                             <td><?php echo htmlspecialchars($row['deposit_amount']); ?></td>
                             <td><?php echo htmlspecialchars($row['created_at']); ?></td>

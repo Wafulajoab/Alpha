@@ -25,7 +25,7 @@ if ($resultTotalUsers) {
 }
 
 // Fetch total approved deposits
-$queryTotalApprovedDeposits = "SELECT SUM(amount) AS total_approved_deposits FROM deposits WHERE status = 'approved'";
+$queryTotalApprovedDeposits = "SELECT SUM(deposit_amount) AS total_approved_deposits FROM deposits WHERE status = 'Approved'";
 $resultTotalApprovedDeposits = mysqli_query($conn, $queryTotalApprovedDeposits);
 
 if ($resultTotalApprovedDeposits) {
@@ -94,7 +94,6 @@ if ($resultApprovedWithdrawals) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -125,6 +124,9 @@ if ($resultApprovedWithdrawals) {
             z-index: 1000;
             transition: left 0.3s ease;
         }
+        .menu-icon.shifted {
+            left: 210px; /* Adjust this value based on the width of the navbar */
+        }
         .navbar {
             position: fixed;
             top: 0;
@@ -140,6 +142,41 @@ if ($resultApprovedWithdrawals) {
             transition: left 0.3s ease;
             overflow-y: auto; /* Added for scrollbar */
         }
+       
+       
+        .container {
+    margin-left: 0;
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    transition: margin-left 0.3s ease;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: #f4f4f4;
+    border-radius: 25px;
+    z-index: 1; /* Set lower z-index for container */
+    position: relative; /* Ensure container positioning is controlled */
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: -200px;
+    width: 200px;
+    height: 100vh;
+    background-color: #444;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20;
+    transition: left 0.3s ease;
+    overflow-y: auto; /* Added for scrollbar */
+    z-index: 2; /* Set higher z-index for navbar */
+}
+
+
         .navbar.show {
             left: 0;
         }
@@ -178,53 +215,76 @@ if ($resultApprovedWithdrawals) {
             font-family: Arial, sans-serif;
             color: rgb(250, 245, 245);
         }
-        .container {
-            margin-left: 0;
-            padding: 20px;
-            max-width: 1000px;
-            width: 100%;
-            transition: margin-left 0.3s ease;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 20px;
-        }
-        .container.shifted {
-            margin-left: 200px;
-        }
+
+       
         .section {
-            padding: 20px;
-            text-align: center;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 30%;
+    position: relative;
+    animation: rotateAndFade 2s ease-in-out forwards;
+    opacity: 0; /* Initially hidden */
+    transform-origin: center center;
+}
+
+@keyframes rotateAndFade {
+    0% {
+        opacity: 0;
+        transform: rotate(0deg); /* Start with no rotation */
+        background-color: #fff; /* Initial background color */
+    }
+    50% {
+        opacity: 1;
+        transform: rotate(360deg); /* Rotate fully */
+        background-color: #f0f0f0; /* Change background color halfway */
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg); /* Rotate back to no rotation */
+        background-color: #fff; /* Back to original background color */
+    }
+}
+
+
+        .section h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #444;
         }
-        .total-users {
-            background-color: #ffcccb;
+        .section p {
+            font-size: 1.2rem;
+            font-weight: bold;
             color: #333;
         }
-        .total-deposits {
-            background-color: #ff9999;
-            color: #333;
+        .section.total-users {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+
         }
-        .total-withdrawals {
-            background-color: #99ff99;
-            color: #333;
+        .section.total-deposits {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
-        .total-investments {
-            background-color: #99ccff;
-            color: #333;
+        .section.total-withdrawals {
+            background: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%);
         }
-        .total-matured-investments {
-            background-color: #ccccff;
-            color: #333;
+        .section.total-investments {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+        .section.total-matured-investments {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        .section.total-approved-withdrawals {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
         }
         .admin-name {
-            grid-column: span 2;
-            color: black;
-            font-weight: bold;
-            font-size: 25px;
-            font-family: Arial, sans-serif;
+            width: 100%;
             text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
         }
         footer {
             position: fixed;
@@ -233,10 +293,11 @@ if ($resultApprovedWithdrawals) {
             width: 100%;
             background: #444;
             text-align: center;
-            padding: 0.5rem;
+            padding: 0.01rem;
             z-index: 999;
         }
         footer p {
+            justify-content: center;
             margin: 0;
         }
         footer a {
@@ -244,57 +305,103 @@ if ($resultApprovedWithdrawals) {
             text-decoration: underline;
             font-weight: bold;
         }
+        .approved-withdrawals {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.2s;
+    width: 90%;
+    max-width: 1200px;
+    position: relative;
+}
 
-        .container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        padding: 20px;
-        background-color: #f4f4f4;
-    }
-    .section {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin: 10px;
-        padding: 20px;
-        text-align: center;
-        transition: transform 0.2s;
-        width: 30%;
-    }
-    .admin-name {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 20px;
-        font-size: 24px;
-        font-weight: bold;
-    }
+.approved-withdrawals h2 {
+    margin-bottom: 20px;
+    font-size: 1.75rem;
+    color: #444;
+}
 
-    /* Hover Effect */
-    .section:hover {
-        animation: shake 0.5s;
-        animation-iteration-count: 1;
-    }
+.approved-withdrawals table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    animation: flipInY 1.5s ease forwards;
+    opacity: 0;
+}
 
-    /* Shake Animation */
-    @keyframes shake {
-        0% { transform: translate(1px, 1px) rotate(0deg); }
-        20% { transform: translate(-3px, 0px) rotate(1deg); }
-        40% { transform: translate(1px, -1px) rotate(1deg); }
-        60% { transform: translate(-3px, 1px) rotate(0deg); }
-        80% { transform: translate(-1px, -1px) rotate(1deg); }
-        100% { transform: translate(1px, -2px) rotate(-1deg); }
+
+
+
+@keyframes flipInY {
+    0% {
+        opacity: 0;
+        transform: perspective(400px) rotateY(90deg);
     }
+    100% {
+        opacity: 1;
+        transform: perspective(400px) rotateY(0deg);
+    }
+}
+
+.approved-withdrawals th, .approved-withdrawals td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.approved-withdrawals th {
+    background-color: #007BFF;
+    color: white;
+    font-size: 1rem;
+}
+
+.approved-withdrawals td {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.approved-withdrawals tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.approved-withdrawals tr:hover {
+    background-color: #e9e9e9;
+    cursor: pointer;
+}
+
+.approved-withdrawals tr td:last-child {
+    font-weight: bold;
+    color: #007BFF;
+}
+
+.approved-withdrawals tr th:first-child, 
+.approved-withdrawals tr td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.approved-withdrawals tr th:last-child, 
+.approved-withdrawals tr td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
     </style>
 </head>
 <body>
-    <!-- Menu Icon -->
-    <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
-    <!-- Navigation Bar -->
-    <nav class="navbar" id="navbar">
-        <div class="image" style="text-align: center; margin-top: 20px;">
-            <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-        </div>
+    <div class="menu-icon" id="menu-icon">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="navbar" id="navbar">
+       
+    <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+    </div>
+
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
@@ -303,59 +410,104 @@ if ($resultApprovedWithdrawals) {
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
             <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
-            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-    <!-- Main Content -->
-    <div class="container" id="container">
-        <div class="admin-name">Welcome <?php echo htmlspecialchars($admin_username); ?>!</div>
+    </div>
+ <d>
+   <div>
+ <div class="container" id="container">
+ <div class="image" style="text-align: center; margin-top: 20px;">
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
+        <div class="admin-name">Welcome, <?php echo $admin_username; ?></div>
         <div class="section total-users">
-            <h2>Total Active Users</h2>
-            <p style="font-size: 24px; font-weight: bold;"><?php echo number_format($totalUsers); ?></p>
+            <h2>Total Users</h2>
+            <p><?php echo $totalUsers; ?></p>
         </div>
         <div class="section total-deposits">
             <h2>Total Approved Deposits</h2>
-            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalApprovedDeposits, 2); ?></p>
+            <p>KES <?php echo $totalApprovedDeposits; ?></p>
         </div>
         <div class="section total-withdrawals">
             <h2>Total Withdrawals</h2>
-            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalWithdrawals, 2); ?></p>
-        </div>
-        <div class="section total-investments">
-            <h2>Total Investments</h2>
-            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalInvestments, 2); ?></p>
-        </div>
-        <div class="section total-matured-investments">
-            <h2>Total Matured Investments</h2>
-            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalMaturedInvestments, 2); ?></p>
+            <p>KES <?php echo $totalWithdrawals; ?></p>
         </div>
         <div class="section total-approved-withdrawals">
             <h2>Total Approved Withdrawals</h2>
-            <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalApprovedWithdrawals, 2); ?></p>
+            <p>KES <?php echo $totalApprovedWithdrawals; ?></p>
+        </div>
+        <div class="section total-investments">
+            <h2>Total Investments</h2>
+            <p>KES <?php echo $totalInvestments; ?></p>
+        </div>
+        <div class="section total-matured-investments">
+            <h2>Total Matured Investments</h2>
+            <p>KES <?php echo $totalMaturedInvestments; ?></p>
+        </div>
         </div>
     </div>
+
+    <div class="approved-withdrawals">
+            <h2>Approved Withdrawals</h2>
+            <table>
+    <tr>
+        <th>Serial Number</th>
+        <th>Username</th>
+        <th>Phone Number</th>
+        <th>Amount</th>
+    </tr>
+    <?php 
+    $serialNumber = 1;
+    foreach ($approvedWithdrawals as $withdrawal) : ?>
+        <tr>
+            <td><?php echo $serialNumber++; ?></td>
+            <td><?php echo $withdrawal['username']; ?></td>
+            <td><?php echo $withdrawal['phone_number']; ?></td>
+            <td><?php echo $withdrawal['amount']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+        </div>
+
+                </div>
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; 2023 Admin Dashboard. All rights reserved.</p>
     </footer>
     <script>
-        function toggleNavbar() {
-            const navbar = document.getElementById('navbar');
-            const container = document.querySelector('.container');
-            const menuIcon = document.querySelector('.menu-icon');
-            const isOpen = navbar.classList.contains('show');
+        document.addEventListener("DOMContentLoaded", function() {
+            var menuIcon = document.getElementById("menu-icon");
+            var navbar = document.getElementById("navbar");
+            var container = document.getElementById("container");
 
-            if (isOpen) {
-                navbar.classList.remove('show');
-                container.classList.remove('shifted');
-                menuIcon.style.left = '10px';
-            } else {
-                navbar.classList.add('show');
-                container.classList.add('shifted');
-                menuIcon.style.left = '210px';
-            }
-        }
-    </script>
+            menuIcon.addEventListener("click", function() {
+                navbar.classList.toggle("show");
+                container.classList.toggle("shifted");
+                menuIcon.classList.toggle("shifted");
+            });
+        });
+
+        function toggleNavbar() {
+    const navbar = document.getElementById('navbar');
+    const container = document.querySelector('.container');
+    const menuIcon = document.querySelector('.menu-icon');
+    const isOpen = navbar.classList.contains('show');
     
+    if (isOpen) {
+        navbar.classList.remove('show');
+        container.style.marginLeft = '0';
+        menuIcon.style.left = '10px';
+        container.style.zIndex = '1'; // Reset container z-index when navbar is closed
+    } else {
+        navbar.classList.add('show');
+        container.style.marginLeft = '200px';
+        menuIcon.style.left = '210px';
+        container.style.zIndex = '-1'; // Send container behind navbar when navbar is open
+    }
+}
+
+
+    </script>
 </body>
 </html>

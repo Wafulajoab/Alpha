@@ -23,9 +23,9 @@ $indirect_referrals = [];
 $user_profile = null;
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-    
-    // Fetch user profile information
-    $sql = "SELECT username, phone_number FROM users WHERE username = ?";
+
+    // Fetch user profile information including account balance and other details
+    $sql = "SELECT username, full_name, email, phone_number, account_balance FROM users WHERE username = ?";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $param_username);
         $param_username = $username;
@@ -37,7 +37,7 @@ if (isset($_SESSION['username'])) {
         }
         $stmt->close();
     }
-    
+
     // Fetch direct referrals
     $sql = "SELECT username FROM users WHERE referred_by = ?";
     if ($stmt = $conn->prepare($sql)) {
@@ -69,10 +69,44 @@ if (isset($_SESSION['username'])) {
             $stmt->close();
         }
     }
+
+    // Handle referral bonuses for direct and indirect referrals if investment amount is posted
+    if (isset($_POST['investment_amount'])) {
+        $investment_amount = $_POST['investment_amount'];
+        $referrer_percentage_direct = 0.05; // 5% for direct referrals
+        $referrer_percentage_indirect = 0.02; // 2% for indirect referrals
+
+        // Direct Referrals
+        foreach ($direct_referrals as $direct_referral) {
+            $bonus_amount = $investment_amount * $referrer_percentage_direct;
+            // Update the account balance of the direct referrer
+            $sql = "UPDATE users SET account_balance = account_balance + ? WHERE username = ?";
+            if ($stmt = $conn->prepare($sql)) {
+                $stmt->bind_param("ds", $bonus_amount, $direct_referral);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+
+        // Indirect Referrals
+        foreach ($indirect_referrals as $indirect_referral) {
+            $bonus_amount = $investment_amount * $referrer_percentage_indirect;
+            // Update the account balance of the indirect referrer
+            $sql = "UPDATE users SET account_balance = account_balance + ? WHERE username = ?";
+            if ($stmt = $conn->prepare($sql)) {
+                $stmt->bind_param("ds", $bonus_amount, $indirect_referral);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+    }
 }
 
 $conn->close();
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -292,7 +326,6 @@ $conn->close();
             <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
             <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
             <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-            <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>

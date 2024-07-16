@@ -19,13 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Check password strength
-    $password_pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
-    if (!preg_match($password_pattern, $password)) {
-        header("Location: admin_register.php?error=weakpassword");
-        exit();
-    }
-
     if ($password !== $password_confirm) {
         header("Location: admin_register.php?error=passwordcheck");
         exit();

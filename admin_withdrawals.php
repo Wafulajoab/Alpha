@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,10 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: margin-left 0.3s ease;
         }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+    width: 70%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
         th, td {
             padding: 10px;
             text-align: left;
@@ -213,9 +216,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         font-weight: bold;
     }
 </style>
-
-        
-    </style>
 </head>
 <body>
      <!-- Menu Icon -->
@@ -236,22 +236,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
             <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
-            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
 
-  <div class="container">
-  <div class="image" style="text-align: center; margin-top: 20px;">
+    <div class="container">
+    <div class="image" style="text-align: center; margin-top: 20px;">
     <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-</div>
-
+    </div>
         <div class="section">
-            <h3>Manage Withdrawals</h3>
+        <h3 style="text-align: center;">Manage Withdrawals</h3>
+
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Serial No</th>
                         <th>Username</th>
                         <th>Phone Number</th>
                         <th>Amount (Ksh)</th>
@@ -267,11 +266,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td><?php echo htmlspecialchars($withdrawal['username']); ?></td>
                         <td><?php echo htmlspecialchars($withdrawal['phone_number']); ?></td>
                         <td><?php echo htmlspecialchars($withdrawal['amount']); ?></td>
-                        <td class="<?php echo strtolower($withdrawal['status']); ?>"><?php echo htmlspecialchars($withdrawal['status']); ?></td>
+                        <td class="<?php echo strtolower($withdrawal['status']); ?>">
+                            <?php
+                                if ($withdrawal['status'] == 'Approved') {
+                                    echo htmlspecialchars($withdrawal['status']) . ' ✅';
+                                } elseif ($withdrawal['status'] == 'Rejected') {
+                                    echo htmlspecialchars($withdrawal['status']) . ' ❌';
+                                } else {
+                                    echo htmlspecialchars($withdrawal['status']);
+                                }
+                            ?>
+                        </td>
                         <td><?php echo htmlspecialchars($withdrawal['date_requested']); ?></td>
                         <td>
-                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                                <input type="hidden" name="withdrawal_id" value="<?php echo $withdrawal['id']; ?>">
+                            <form action="admin_withdrawals.php" method="post" style="display:inline;">
+                                <input type="hidden" name="withdrawal_id" value="<?php echo htmlspecialchars($withdrawal['id']); ?>">
                                 <button type="submit" name="action" value="Approved">Approve</button>
                                 <button type="submit" name="action" value="Rejected">Reject</button>
                             </form>
@@ -282,11 +291,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </table>
         </div>
     </div>
-
     <footer>
-    <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
-</footer>
-<script>
+        <p>&copy; 2023-<?php echo date("Y"); ?> All rights reserved. | Designed by <a href="#">Noah</a></p>
+    </footer>
+
+    <script>
         function toggleNavbar() {
             const navbar = document.getElementById('navbar');
             const container = document.querySelector('.container');

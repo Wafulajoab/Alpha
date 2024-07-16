@@ -132,7 +132,7 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
             margin-left: 200px;
         }
         .section {
-            width: 60%;
+            width: 100%;
             margin: 20px 0;
             padding: 20px;
             text-align: center;
@@ -188,7 +188,6 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
             background-color: #eaeaea;
             color: #333;
             width: 100%;
-            
         }
         .section.deposits table {
             width: 100%;
@@ -196,9 +195,21 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
             margin-top: 20px;
         }
         .section.deposits th, .section.deposits td {
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ccc;
-            text-align: left;
+            text-align: center;
+        }
+        .section.deposits th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+        .section.deposits td {
+            background-color: #fff;
+            color: #333;
+        }
+        .section.deposits tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         .action-buttons {
             display: flex;
@@ -237,12 +248,9 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
     <!-- Navigation Bar -->
     <nav class="navbar" id="navbar">
- 
-
         <div class="image" style="text-align: center; margin-top: 20px;">
-    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-</div>
-
+            <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+        </div>
         <h2>ADMIN PANEL</h2>
         <ul>
             <li><a href="admin_dashboard.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
@@ -251,78 +259,60 @@ $totalDeposits = $totalDepositsRow['total_deposits'];
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
             <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
-            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
-
-    <!-- Main Content -->
+    <!-- Container -->
     <div class="container" id="container">
-        
-        <!-- Section for displaying deposits -->
-        <div class="section deposits">
-
-        
-            
-        <div class="image" style="text-align: center; margin-top: 20px;">
+    <div class="image" style="text-align: center; margin-top: 20px;">
     <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-</div>
-
-<!-- Existing admin name display -->
-<div class="admin-name">Welcome, Admin <?php echo htmlspecialchars($admin_username); ?>!</div>
-
-        <h2 style="color: darkblue; font-family: 'Georgia', serif; font-size: 52px;">All Deposits</h2>
-
-            <?php
-           // Display the total deposits
-echo '<p style="font-size: 24px; font-weight: bold; color: green;"><strong>Total Approved Deposits<br></strong> KSH. ' . htmlspecialchars(number_format($totalDeposits, 2)) . '</p>';
-            if (mysqli_num_rows($resultDeposits) > 0) {
-                // Table header
-                echo '<table>';
-                echo '<tr><th>ID</th><th>Username</th><th>Deposit Amount</th><th>Deposit Date</th><th>Status</th><th>Admin Reaction</th><th>Actions</th></tr>';
-
-                // Table rows
-                while ($row = mysqli_fetch_assoc($resultDeposits)) {
-                    echo '<tr>';
-                    echo '<td>' . htmlspecialchars($row['id']) . '</td>';
-                    echo '<td>' . htmlspecialchars($row['username']) . '</td>';
-                    echo '<td>KSH ' . htmlspecialchars(number_format($row['deposit_amount'], 2)) . '</td>';
-                    echo '<td>' . htmlspecialchars($row['created_at']) . '</td>';
-                    echo '<td>' . htmlspecialchars($row['status']) . '</td>';
-                    echo '<td>' . htmlspecialchars($row['admin_reaction']) . '</td>';
-                    echo '<td class="action-buttons">';
-                    if ($row['status'] === 'Pending') {
-                        echo '<form method="post" action="">
-                                <input type="hidden" name="deposit_id" value="' . htmlspecialchars($row['id']) . '">
-                                <input type="hidden" name="action" value="approve">
-                                <button type="submit" class="approve-button">Approve</button>
-                            </form>';
-                        echo '<form method="post" action="">
-                                <input type="hidden" name="deposit_id" value="' . htmlspecialchars($row['id']) . '">
-                                <input type="hidden" name="action" value="reject">
-                                <button type="submit" class="reject-button">Reject</button>
-                            </form>';
+    </div>
+        <div class="admin-name">Welcome, <?php echo $admin_username; ?></div>
+        <div class="section deposits">
+            <h2>Total Available Deposits: KSH.<?php echo number_format($totalDeposits, 2); ?></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Deposit ID</th>
+                        <th>Username</th>
+                        <th>Deposit Amount</th>
+                        <th>Deposit Date</th>
+                        <th>Status</th>
+                        <th>Admin Reaction</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    while ($row = mysqli_fetch_assoc($resultDeposits)) {
+                        echo "<tr>
+                                <td>{$row['id']}</td>
+                                <td>{$row['username']}</td>
+                                <td>{$row['deposit_amount']}</td>
+                                <td>{$row['deposit_date']}</td>
+                                <td>{$row['status']}</td>
+                                <td>{$row['admin_reaction']}</td>
+                                <td class='action-buttons'>
+                                    <form method='POST' action='admin_deposits.php'>
+                                        <input type='hidden' name='deposit_id' value='{$row['id']}'>
+                                        <button type='submit' name='action' value='approve' class='approve-button'>Approve</button>
+                                    </form>
+                                    <form method='POST' action='admin_deposits.php'>
+                                        <input type='hidden' name='deposit_id' value='{$row['id']}'>
+                                        <button type='submit' name='action' value='reject' class='reject-button'>Reject</button>
+                                    </form>
+                                </td>
+                            </tr>";
                     }
-                    echo '</td>';
-                    echo '</tr>';
-                }
-
-                echo '</table>';
-            } else {
-                echo '<p>No deposits found.</p>';
-            }
-
-            // Close the database connection
-            mysqli_close($conn);
-            ?>
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>
-
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Alpha Financial Systems</p>
+        <p>Alpha © 2023 All rights reserved. | <a href="privacy-policy.php">Privacy Policy</a></p>
     </footer>
-
     <script>
             function toggleNavbar() {
         const navbar = document.getElementById('navbar');
