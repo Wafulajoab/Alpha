@@ -102,49 +102,55 @@ if ($resultApprovedWithdrawals) {
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: darkgrey;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .menu-icon {
-            color: white;
-            font-size: 40px;
-            margin-right: 10px;
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            transition: left 0.3s ease;
-        }
-        .menu-icon.shifted {
-            left: 210px; /* Adjust this value based on the width of the navbar */
-        }
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: -200px;
-            width: 200px;
-            height: 100vh;
-            background-color: #444;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0;
-            transition: left 0.3s ease;
-            overflow-y: auto; /* Added for scrollbar */
-        }
-       
-       
-        .container {
+   body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: darkgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.menu-icon {
+    color: white;
+    font-size: 40px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    transition: left 0.3s ease;
+}
+
+.menu-icon.shifted {
+    left: 210px; /* Adjust this value based on the width of the navbar */
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: -200px;
+    width: 200px;
+    height: 100vh;
+    background-color: #444;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+}
+
+.navbar.show {
+    left: 0;
+}
+
+.container {
     margin-left: 0;
     padding: 20px;
     max-width: 600px;
@@ -159,27 +165,11 @@ if ($resultApprovedWithdrawals) {
     position: relative; /* Ensure container positioning is controlled */
 }
 
-.navbar {
-    position: fixed;
-    top: 0;
-    left: -200px;
-    width: 200px;
-    height: 100vh;
-    background-color: #444;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20;
-    transition: left 0.3s ease;
-    overflow-y: auto; /* Added for scrollbar */
-    z-index: 2; /* Set higher z-index for navbar */
+.container.shifted {
+    margin-left: 200px; /* Adjust this value based on the width of the navbar */
+    z-index: -1; /* Send container behind navbar when navbar is open */
 }
-
-
-        .navbar.show {
-            left: 0;
-        }
+       
         .navbar a {
             color: #fff;
             text-decoration: none;
@@ -312,27 +302,28 @@ if ($resultApprovedWithdrawals) {
     margin: 20px auto;
     padding: 25px;
     text-align: center;
-    transition: transform 0.2s;
+    transition: margin-left 0.3s ease;
     width: 90%;
     max-width: 1200px;
-    position: relative;
+    position: flex;
 }
+
 
 .approved-withdrawals h2 {
-    margin-bottom: 20px;
-    font-size: 1.75rem;
-    color: #444;
-}
+            margin-bottom: 20px;
+            font-size: 1.75rem;
+            color: #444;
+        }
 
 .approved-withdrawals table {
-    width: 100%;
-    border-collapse: collapse;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-    animation: flipInY 1.5s ease forwards;
-    opacity: 0;
-}
-
+            width: 100%;
+            border-collapse: flex;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            animation: flipInY 1.5s ease forwards;
+            opacity: 0;
+        }
+                
 
 
 
@@ -351,6 +342,7 @@ if ($resultApprovedWithdrawals) {
     padding: 14px 18px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
+    
 }
 
 .approved-withdrawals th {
@@ -361,7 +353,7 @@ if ($resultApprovedWithdrawals) {
 
 .approved-withdrawals td {
     font-size: 0.95rem;
-    color: #555;
+    color: black;
 }
 
 .approved-withdrawals tr:nth-child(even) {
@@ -369,7 +361,7 @@ if ($resultApprovedWithdrawals) {
 }
 
 .approved-withdrawals tr:hover {
-    background-color: #e9e9e9;
+    background-color: #fecfef;
     cursor: pointer;
 }
 
@@ -380,13 +372,13 @@ if ($resultApprovedWithdrawals) {
 
 .approved-withdrawals tr th:first-child, 
 .approved-withdrawals tr td:first-child {
-    border-top-left-radius: 10px;
+    border-top-left-radius: 50px;
     border-bottom-left-radius: 10px;
 }
 
 .approved-withdrawals tr th:last-child, 
 .approved-withdrawals tr td:last-child {
-    border-top-right-radius: 10px;
+    border-top-right-radius: 50px;
     border-bottom-right-radius: 10px;
 }
 
@@ -476,17 +468,21 @@ if ($resultApprovedWithdrawals) {
         <p>&copy; 2023 Admin Dashboard. All rights reserved.</p>
     </footer>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var menuIcon = document.getElementById("menu-icon");
-            var navbar = document.getElementById("navbar");
-            var container = document.getElementById("container");
+ document.addEventListener("DOMContentLoaded", function() {
+    var menuIcon = document.getElementById("menu-icon");
+    var navbar = document.getElementById("navbar");
+    var container = document.getElementById("container");
+    var approvedWithdrawalsTable = document.querySelector(".approved-withdrawals table");
 
-            menuIcon.addEventListener("click", function() {
-                navbar.classList.toggle("show");
-                container.classList.toggle("shifted");
-                menuIcon.classList.toggle("shifted");
-            });
-        });
+    menuIcon.addEventListener("click", function() {
+        navbar.classList.toggle("show");
+        container.classList.toggle("shifted");
+        menuIcon.classList.toggle("shifted");
+        approvedWithdrawalsTable.classList.toggle("shifted");
+    });
+});
+
+
 
         function toggleNavbar() {
     const navbar = document.getElementById('navbar');

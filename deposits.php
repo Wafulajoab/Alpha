@@ -200,25 +200,7 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
         .transaction-input-section button:hover {
             background-color: #006666;
         }
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #444;
-            text-align: center;
-            padding: 0.01rem;
-            z-index: 999;
-        }
-        footer p {
-            justify-content: center;
-            margin: 0;
-        }
-        footer a {
-            color: green;
-            text-decoration: underline;
-            font-weight: bold;
-        }
+      
         .container {
     width: 40%;
     height: 90%; /* Adjust height as needed */
@@ -234,6 +216,27 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
 }
 
 
+footer {
+        position: fixed;
+        bottom: 0;
+        left: 0; /* Start from the left edge of the screen */
+        width: 100%; /* Full width */
+        background: #444;
+        text-align: center;
+        padding: 0.01rem;
+        z-index: 999; /* Ensure it stays above other content */
+    }
+
+    footer p {
+        justify-content: center;
+        margin: 0; /* Remove default margin */
+    }
+
+    footer a {
+        color: green;
+        text-decoration: underline;
+        font-weight: bold;
+    }
         
     </style>
 </head>
@@ -251,17 +254,17 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
 
     <h2>ALPHA FINANCE</h2>
     <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
-        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
-        <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
-        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+    <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+    <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+    <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+    <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+    <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+    <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+    <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+    <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li> <!-- Customer Care Module -->
+    <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+    </ul>
 
-     </ul>
 </nav>
 
     <div class="container" id="container">
@@ -326,7 +329,7 @@ echo "<div style='position: fixed; top: 10px; right: 10px; width: 200px; padding
     </div>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Alpha Finance. All rights reserved. | Design by <a href="https://github.com/YourProfile">YourName</a></p>
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
 
     <script>

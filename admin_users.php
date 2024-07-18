@@ -132,15 +132,6 @@ if (isset($_POST['delete_user'])) {
             font-size: 25px;
             font-family: Arial, sans-serif;
         }
-     
-        body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: darkgrey;
-    transition: margin-left 0.3s ease;
-}
-
 .container {
     padding: 20px;
     transition: margin-left 0.3s ease;

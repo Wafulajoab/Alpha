@@ -282,7 +282,7 @@ function calculateEarnings($amount, $package_name) {
     </div>
 
     <footer>
-        <p>&copy; 2024 ALPHA FINANCE. All rights reserved.</p>
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
 
     <script>

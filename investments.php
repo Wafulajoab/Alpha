@@ -89,30 +89,22 @@
     background-color: #ffc0cb; /* Pink background for Bronze Package */
     color: #333; /* Dark text color */
 }
+.silver-package {
+    background-color: #ffc0cb; /* Pink background for Bronze Package */
+    color: #333; /* Dark text color */
+}
+.gold-package {
+    background-color: #ffc0cb; /* Pink background for Bronze Package */
+    color: #333; /* Dark text color */
+}
+.executive-package {
+    background-color: #ffc0cb; /* Pink background for Bronze Package */
+    color: #333; /* Dark text color */
+}
 
 /* Other package styles (Silver, Gold, Executive) can be similarly defined with different background colors */
 
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0; /* Adjust to be aligned with the container */
-            width: 100%; /* Adjust width based on the navbar width */
-            background: #444;
-            text-align: center;
-            padding: 0.01rem;
-            z-index: 999; /* Ensure it stays above other content */
-        }
-
-        footer p {
-            justify-content: center;
-            margin: 0; /* Remove default margin */
-        }
-
-        footer a {
-            color: green;
-            text-decoration: underline;
-            font-weight: bold;
-        }
+      
         
         .container {
             display: flex;
@@ -160,6 +152,29 @@
         button:hover {
             background-color: #8a2be2; /* Dark purple on hover */
         }
+
+        
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0; /* Start from the left edge of the screen */
+        width: 100%; /* Full width */
+        background: #444;
+        text-align: center;
+        padding: 0.01rem;
+        z-index: 999; /* Ensure it stays above other content */
+    }
+
+    footer p {
+        justify-content: center;
+        margin: 0; /* Remove default margin */
+    }
+
+    footer a {
+        color: green;
+        text-decoration: underline;
+        font-weight: bold;
+    }
     </style>
 </head>
 <body>
@@ -176,16 +191,17 @@
 
     <h2>ALPHA FINANCE</h2>
     <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
-        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-        <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
-        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+    <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+    <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+    <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+    <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+    <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+    <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+    <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+    <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li>
+    <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+</ul>
 
-        </ul>
 </nav>
 <div class="container" id="container">
         <!-- Silver Package form -->
