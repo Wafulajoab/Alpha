@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $message = "Transaction code must be exactly 10 alphanumeric characters.";
             }
         } else {
-            $message = "Deposit amount must be exactly Ksh. 100.00 for account activation.";
+            $message = "Account activation fee is Ksh. 100.00.";
         }
     } else {
         $message = "Please fill in all required fields.";

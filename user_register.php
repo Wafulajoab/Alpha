@@ -13,34 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inspiration&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
     <title>Register</title>
     <style>
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            width: 100%;
-            top: 0;
-            background-color:#444;
-            padding: 10px ;
-            text-align: center;
-            z-index: 1000;
-        }
-        .navbar ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 20px 0;
-        }
-        .navbar ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-        .navbar ul li a {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-        }
-        .navbar ul li a:hover {
-            color: lightgray;
-        }
-        /* Other Styles */
+       
         body {
             background-color: #444;
             border-radius: 25px;
@@ -82,8 +55,8 @@
             border-radius: 8px;
         }
         button {
-            background-color:#444;
-            color: rgb(252, 252, 252);
+            background-color:black;
+            color:white;
             padding: 14px 20px;
             margin: 8px;
             border: none;
@@ -99,16 +72,16 @@
             text-decoration: rgb(253, 253, 253);
         }
         input[type=text]:focus, input[type=password]:focus {
-            background-color: rgb(255, 255, 255);
+            background-color: yellowgreen;
             outline: none;
         }
         .cancelbtn {
             padding: 14px 20px;
-            background-color: rgb(0, 26, 255);
+            background-color: green;
         }
         .signupbtn {
             float: center;
-            width: 50%;
+            width: 100%;
         }
         .container {
             padding: 16px;
@@ -123,18 +96,90 @@
                 width: 100%;
             }
         }
-       
+        
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 30%; 
+            height: 30%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            border-radius: 25px;
+            
+        }
+        .close {
+            color: #aaa;
+            float: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script>
+   function checkUsername(event) {
+    event.preventDefault();
+    var username = document.getElementById('username').value;
+    var form = document.getElementById('registerForm');
+
+    if (username.length >= 4) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'check_username.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                if (xhr.responseText == 'exists') {
+                    var modal = document.getElementById("myModal");
+                    modal.style.display = "block";
+                } else if (xhr.responseText == 'success') {
+                    form.submit(); // Submit form if username is available
+                }
+            }
+        };
+        xhr.send('username=' + encodeURIComponent(username));
+    }
+}
+
+    // Close the modal
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
 </head>
 <body> 
-    <!-- Navbar -->
-    <!-- <div class="navbar">
-    <h1 style="color: white; margin: 0;">Alpha Finance</h1>
-</div> -->
+  
 
-<br><br><br>
+
   <!-- Form -->
-  <form action="user_register_process.php" method="post">
+  <form id="registerForm" onsubmit="checkUsername(event)" method="post" action="user_register_process.php">
         <div class="container">
             <div class="icon" id="icon">
                 <div class="image" style="text-align: center;">
@@ -143,7 +188,9 @@
                 <h1 class="sign" style="text-align: center;"><i class="fas fa-user-plus"></i> Sign Up</h1>
                 <p class="sign">Please fill this form to register to Alpha Finance</p>
                 <label for="username" class="sign"><b><i class="fas fa-user"></i> Username</b></label>
-                <input type="text" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete="off" required>
+                <input type="text" id="username" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete="off" required>
+
+
                 <label for="phonenumber" class="sign"><b><i class="fas fa-phone"></i> Enter Phone Number</b></label>
                 <input type="text" id="phone_number" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
                 <script>
@@ -169,43 +216,22 @@
                     <input type="checkbox" checked="checked" name="remember">
                     <name class="sign"><i class="fas fa-check"></i> Remember me</name>
                 </label>
-                <p class="sign">By creating an account with this security system, you agree to our <a href="#" style="color:blue">Terms & Privacy</a></p>
-                <div class="clearfix">
-                    <button class="sign" type="submit" class="signupbtn"><i class="fas fa-check icon"></i> Sign Up</button>
-                    <li><a href="user_login.php"><i class="fas fa-info-circle icon"></i> Already have an account? Login as User here</a></li>
-                </div>
+            </div>
+            <p class="psw">By creating an account you agree to our <a href="https://policies.google.com/terms" target="_blank">Terms & Privacy</a></p>
+
+            <div class="clearfix">
+                <button type="button" class="cancelbtn"><a href="user_login.php">Login Instead</a></button>
+                <button type="submit" class="signupbtn">Sign Up</button>
             </div>
         </div>
     </form>
 
-    <br><br><br>
-    <!-- Footer -->
-    <footer id="footer">
-        <style>
-            #footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background: lavender;
-                text-align: center;
-                padding: 0.1rem;
-            }
-
-            .footer p {
-                justify-content: center;
-            }
-
-            .footer a {
-                color: green;
-                text-decoration: underline;
-                font-weight: bold;
-            }
-        </style>
-
-        <div class="footer">
-            <p><span>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></span></p>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>Username already exists. Please choose another username.</p>
         </div>
-    </footer>
+    </div>
 </body>
 </html>

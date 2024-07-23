@@ -3,7 +3,7 @@
 include('db_connection.php');
 
 // Fetch user data along with account balance
-$query = "SELECT users.id, users.username, users.phone_number, accounts.accountBalance 
+$query = "SELECT users.id, users.username, users.phone_number, accounts.accountBalance,users.account_status
           FROM users 
           LEFT JOIN accounts ON users.username = accounts.username";
 $result = mysqli_query($conn, $query);
@@ -266,6 +266,7 @@ footer {
             <th>Phone Number</th>
             <th>A/C Balance</th> <!-- Add Balance Column Header -->
             <th>Actions</th>
+            <th>Account Status</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
             <tr>
@@ -274,21 +275,31 @@ footer {
                 <td><?php echo $row['phone_number']; ?></td>
                 <td><?php echo $row['accountBalance'] !== null ? $row['accountBalance'] : '0.00'; ?></td> <!-- Display Balance Value -->
                 <td class="actions">
-                    <form method="post" style="display:inline;">
+                    <form method="post" onsubmit="return confirmDelete('<?php echo $row['id']; ?>', '<?php echo $row['username']; ?>')">
                         <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
                         <button type="submit" name="delete_user" class="delete">Delete</button>
                     </form>
                 </td>
+                <td><?php echo $row['account_status']; ?></td>
             </tr>
         <?php } ?>
     </table>
 </div>
 
-    <footer>
-        <p>&copy; 2024 Your Website. All rights reserved. | Designed by <a href="#">Your Name</a></p>
-    </footer>
-    <script>
-            function toggleNavbar() {
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Your Website. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
+
+<script>
+   
+
+    function confirmDelete(userId, username) {
+        const confirmation = confirm(`Are you sure you want to delete user '${username}' with ID ${userId}?`);
+        return confirmation; // Only submit the form if the user confirms
+    }
+
+    function toggleNavbar() {
         const navbar = document.getElementById('navbar');
         const container = document.querySelector('.container');
         const menuIcon = document.querySelector('.menu-icon');
@@ -304,6 +315,6 @@ footer {
             menuIcon.style.left = '210px';
         }
     }
-    </script>
+</script>
 </body>
 </html>

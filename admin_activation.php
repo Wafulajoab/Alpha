@@ -19,12 +19,24 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $pending_transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle activation
+// Handle activation and deactivation
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
     $transaction_id = $_POST['transaction_id'];
-    $sql = "UPDATE transactions SET activation_status = 'activated' WHERE id = ?";
+    $action = $_POST['action'];
+
+    // Update transaction status
+    $activation_status = $action === 'Activate' ? 'activated' : 'inactive';
+    $sql = "UPDATE transactions SET activation_status = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$transaction_id]);
+    $stmt->execute([$activation_status, $transaction_id]);
+
+    // Update user account status
+    $username = $_POST['username'];
+    $account_status = $action === 'Activate' ? 'Active' : 'Inactive';
+    $sql = "UPDATE users SET account_status = ? WHERE username = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$account_status, $username]);
+
     header("Location: admin_activation.php"); // Refresh the page to see updated list
     exit();
 }
@@ -93,11 +105,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
             background-color: #45a049;
         }
 
-        button[name="action"][value="Rejected"] {
+        button[name="action"][value="Deactivate"] {
             background-color: #f44336;
         }
 
-        button[name="action"][value="Rejected"]:hover {
+        button[name="action"][value="Deactivate"]:hover {
             background-color: #e53935;
         }
 
@@ -234,7 +246,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
                         <td>
                             <form method="post" action="admin_activation.php" style="display:inline;">
                                 <input type="hidden" name="transaction_id" value="<?php echo htmlspecialchars($transaction['id']); ?>">
-                                <button type="submit" class="btn-activate">Activate</button>
+                                <input type="hidden" name="username" value="<?php echo htmlspecialchars($transaction['username']); ?>">
+                                <button type="submit" name="action" value="Activate">Activate</button>
+                            </form>
+                            <form method="post" action="admin_activation.php" style="display:inline;">
+                                <input type="hidden" name="transaction_id" value="<?php echo htmlspecialchars($transaction['id']); ?>">
+                                <input type="hidden" name="username" value="<?php echo htmlspecialchars($transaction['username']); ?>">
+                                <button type="submit" name="action" value="Deactivate">Deactivate</button>
                             </form>
                         </td>
                     </tr>
@@ -243,29 +261,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
         </table>
     </div>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; <?php echo date('Y'); ?> Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; <?php echo date('Y'); ?> <a href="#">Alpha Finance</a>. All rights reserved.</p>
     </footer>
 
-    <!-- JavaScript -->
     <script>
+ document.addEventListener("DOMContentLoaded", function() {
+    var menuIcon = document.getElementById("menu-icon");
+    var navbar = document.getElementById("navbar");
+    var container = document.getElementById("container");
+    var approvedWithdrawalsTable = document.querySelector(".approved-withdrawals table");
+
+    menuIcon.addEventListener("click", function() {
+        navbar.classList.toggle("show");
+        container.classList.toggle("shifted");
+        menuIcon.classList.toggle("shifted");
+        approvedWithdrawalsTable.classList.toggle("shifted");
+    });
+});
+
+
+
         function toggleNavbar() {
-            const navbar = document.getElementById('navbar');
-            const container = document.querySelector('.container');
-            const menuIcon = document.querySelector('.menu-icon');
-            const isOpen = navbar.classList.contains('show');
-            
-            if (isOpen) {
-                navbar.classList.remove('show');
-                container.style.marginLeft = '0';
-                menuIcon.style.left = '10px';
-            } else {
-                navbar.classList.add('show');
-                container.style.marginLeft = '200px';
-                menuIcon.style.left = '210px';
-            }
-        }
+    const navbar = document.getElementById('navbar');
+    const container = document.querySelector('.container');
+    const menuIcon = document.querySelector('.menu-icon');
+    const isOpen = navbar.classList.contains('show');
+    
+    if (isOpen) {
+        navbar.classList.remove('show');
+        container.style.marginLeft = '0';
+        menuIcon.style.left = '10px';
+        container.style.zIndex = '1'; // Reset container z-index when navbar is closed
+    } else {
+        navbar.classList.add('show');
+        container.style.marginLeft = '200px';
+        menuIcon.style.left = '210px';
+        container.style.zIndex = '-1'; // Send container behind navbar when navbar is open
+    }
+}
+
+
     </script>
 </body>
 </html>

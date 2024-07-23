@@ -160,15 +160,17 @@
     <br><br><br>
     <h2>ALPHA FINANCE</h2>
     <ul>
-        <li><a href="home_page.php"><i class="fas fa-home icon"></i>Home</a></li>
-        <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-        <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-        <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-        <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-        <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-        <li><a href="messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
-        <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
-   </ul>
+   <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+   <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+   <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+   <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+   <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+   <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+   <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+   <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li> <!-- Customer Care Module -->
+   <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+</ul>
+
 </nav>
     <div class="container" id="container">
               <!-- Gold Package form -->   

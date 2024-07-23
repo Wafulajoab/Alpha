@@ -1,81 +1,75 @@
 <?php
 session_start();
 
+// Database credentials
+$servername = "localhost";
+$db_username = "root";
+$db_password = "";
+$dbname = "alpha";
+
+// Create a connection
+$conn = new mysqli($servername, $db_username, $db_password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Function to validate form data
+function validateFormData($data)
+{
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
+// Function to redirect with error
+function redirectWithError($error)
+{
+    $_SESSION['error'] = $error;
+    header("Location: user_register.php");
+    exit();
+}
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Database credentials
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "alpha";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // Retrieve form data
-    $username = $_POST["username"];
-    $phone_number = $_POST["phone_number"];
-    $password = $_POST["psw"];
-    $confirm_password = $_POST["psw-confirm"];
+    // Retrieve and validate form data
+    $username = validateFormData($_POST["username"]);
+    $phone_number = validateFormData($_POST["phone_number"]);
+    $password = validateFormData($_POST["psw"]);
+    $confirm_password = validateFormData($_POST["psw-confirm"]);
 
     // Validate username, phone number, and password
     if (empty($username) || empty($phone_number) || empty($password)) {
-        echo "<script>alert('All fields are required');</script>";
-        header("Location: user_register.php");
-        exit();
+        redirectWithError("All fields are required");
     } elseif (strlen($username) < 4) {
-        echo "<script>alert('Username must have at least 4 characters');</script>";
-        header("Location: user_register.php");
-        exit();
+        redirectWithError("Username must have at least 4 characters");
     } elseif (!preg_match('/^\d{10}$/', $phone_number)) {
-        echo "<script>alert('Phone number must have exactly 10 digits');</script>";
-        header("Location: user_register.php");
-        exit();
+        redirectWithError("Phone number must have exactly 10 digits");
     } elseif (strlen($password) < 6) {
-        echo "<script>alert('Password must have at least 6 characters');</script>";
-        header("Location: user_register.php");
-        exit();
-    } elseif ($password != $confirm_password) {
-        echo "<script>alert('Passwords do not match');</script>";
-        header("Location: user_register.php");
-        exit();
+        redirectWithError("Password must have at least 6 characters");
+    } elseif ($password !== $confirm_password) {
+        redirectWithError("Passwords do not match");
     }
 
     // Check if username already exists
     $sql = "SELECT id FROM users WHERE username = ?";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("s", $param_username);
-        $param_username = $username;
-
+        $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            echo "<script>alert('Username already exists. Please choose a different username.');</script>";
-            header("Location: user_register.php");
-            exit();
+            $stmt->close();
+            redirectWithError("Username already exists. Please choose a different username.");
         }
-
         $stmt->close();
     }
 
-    // Prepare an INSERT statement
+    // Insert user into the database
     $sql = "INSERT INTO users (username, phone_number, password) VALUES (?, ?, ?)";
     if ($stmt = $conn->prepare($sql)) {
-        // Bind variables to the prepared statement as parameters
-        $stmt->bind_param("sss", $param_username, $param_phone_number, $param_password);
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt->bind_param("sss", $username, $phone_number, $hashed_password);
 
-        // Set parameters
-        $param_username = $username;
-        $param_phone_number = $phone_number;
-        $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-
-        // Attempt to execute the prepared statement
         if ($stmt->execute()) {
             // Get the last inserted ID
             $user_id = $stmt->insert_id;
@@ -89,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Check if the user was referred by someone
             if (isset($_GET['ref'])) {
-                $referrer = $_GET['ref'];
+                $referrer = validateFormData($_GET['ref']);
                 $referral_level = 1; // Direct referral
 
                 // Insert referral information
@@ -106,9 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: account_activation.php");
             exit();
         } else {
-            $_SESSION['error'] = "Oops! Something went wrong. Please try again later.";
-            header("Location: user_register.php");
-            exit();
+            redirectWithError("Oops! Something went wrong. Please try again later.");
         }
     }
 

@@ -17,29 +17,13 @@ if ($conn->connect_error) {
 
 // Initialize referral arrays
 $direct_referrals = [];
-$indirect_referrals = [];
 
 // Fetch user profile information if logged in
-$user_profile = null;
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
 
-    // Fetch user profile information including account balance and other details
-    $sql = "SELECT username, full_name, email, phone_number, account_balance FROM users WHERE username = ?";
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("s", $param_username);
-        $param_username = $username;
-
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows == 1) {
-            $user_profile = $result->fetch_assoc();
-        }
-        $stmt->close();
-    }
-
-    // Fetch direct referrals
-    $sql = "SELECT username FROM users WHERE referred_by = ?";
+    // Fetch direct referrals with additional details
+    $sql = "SELECT username, phone_number, account_status FROM users WHERE referred_by = ?";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $param_username);
         $param_username = $username;
@@ -47,54 +31,23 @@ if (isset($_SESSION['username'])) {
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
-            $direct_referrals[] = $row['username'];
+            $direct_referrals[] = $row;
         }
         $stmt->close();
     }
 
-    // Fetch indirect referrals (assuming indirect referrals are one level deeper)
-    if (!empty($direct_referrals)) {
-        $placeholders = implode(',', array_fill(0, count($direct_referrals), '?'));
-        $types = str_repeat('s', count($direct_referrals));
-
-        $sql = "SELECT username FROM users WHERE referred_by IN ($placeholders)";
-        if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param($types, ...$direct_referrals);
-
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                $indirect_referrals[] = $row['username'];
-            }
-            $stmt->close();
-        }
-    }
-
-    // Handle referral bonuses for direct and indirect referrals if investment amount is posted
+    // Handle referral bonuses for direct referrals if investment amount is posted
     if (isset($_POST['investment_amount'])) {
         $investment_amount = $_POST['investment_amount'];
         $referrer_percentage_direct = 0.05; // 5% for direct referrals
-        $referrer_percentage_indirect = 0.02; // 2% for indirect referrals
 
         // Direct Referrals
-        foreach ($direct_referrals as $direct_referral) {
+        foreach ($direct_referrals as $referral) {
             $bonus_amount = $investment_amount * $referrer_percentage_direct;
             // Update the account balance of the direct referrer
             $sql = "UPDATE users SET account_balance = account_balance + ? WHERE username = ?";
             if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("ds", $bonus_amount, $direct_referral);
-                $stmt->execute();
-                $stmt->close();
-            }
-        }
-
-        // Indirect Referrals
-        foreach ($indirect_referrals as $indirect_referral) {
-            $bonus_amount = $investment_amount * $referrer_percentage_indirect;
-            // Update the account balance of the indirect referrer
-            $sql = "UPDATE users SET account_balance = account_balance + ? WHERE username = ?";
-            if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("ds", $bonus_amount, $indirect_referral);
+                $stmt->bind_param("ds", $bonus_amount, $referral['username']);
                 $stmt->execute();
                 $stmt->close();
             }
@@ -104,9 +57,6 @@ if (isset($_SESSION['username'])) {
 
 $conn->close();
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -265,76 +215,60 @@ $conn->close();
             margin-bottom: 10px;
         }
 
-        .profile-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .referral-table-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9; /* Light background for the table container */
+            border-radius: 8px; /* Rounded corners */
         }
 
-        .profile-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
+        .referral-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
         }
 
-        .profile-container p {
-            font-size: 18px;
-            margin-bottom: 10px;
+        .referral-table th, .referral-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
 
         
+        .referral-table th, .referral-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .referral-table th {
+            background-color: #444;
+            color: white;
+        }
     </style>
-    <script>
-        function toggleNavbar() {
-            const navbar = document.getElementById('navbar');
-            const container = document.querySelector('.container');
-            const menuIcon = document.querySelector('.menu-icon');
-            const isOpen = navbar.classList.contains('show');
-            
-            if (isOpen) {
-                navbar.classList.remove('show');
-                container.style.marginLeft = '0';
-                menuIcon.style.left = '10px';
-            } else {
-                navbar.classList.add('show');
-                container.style.marginLeft = '200px';
-                menuIcon.style.left = '210px';
-            }
-        }
-        
-        function copyToClipboard() {
-            var copyText = document.getElementById("referral-link");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); // For mobile devices
-            document.execCommand("copy");
-            alert("Referral link copied to clipboard: " + copyText.value);
-        }
-    </script>
 </head>
 <body>
-    <!-- Menu Icon -->
-    <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar" id="navbar">
+    <div class="menu-icon" onclick="toggleNavbar()">
+        <i class="fas fa-bars"></i>
+    </div>
+    <nav class="navbar">
+        <h2>Menu</h2>
         <div class="image" style="text-align: center; margin-top: 20px;">
-            <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-        </div>
-        <h2>ALPHA FINANCE</h2>
-        <ul>
-    <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
-    <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-    <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-    <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-    <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-    <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-    <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
-    <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li>
-    <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+    </div>
+
+    <h2>ALPHA FINANCE</h2>
+    <ul>
+   <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+   <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+   <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+   <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+   <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+   <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+   <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+   <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li> <!-- Customer Care Module -->
+   <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
 </ul>
-
     </nav>
-
     <div class="container">
         <div class="home-content">
             <h1>Welcome to Alpha Platform</h1>
@@ -342,45 +276,53 @@ $conn->close();
                 <input type="text" id="referral-link" value="http://example.com/register.php?ref=<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>" readonly>
                 <button class="copy-btn" onclick="copyToClipboard()">Copy Referral Link</button>
             </div>
-        </div>
-        <div class="profile-container">
-            <?php if ($user_profile): ?>
-                <h2>User Profile</h2>
-                <p><strong>Username:</strong> <?php echo htmlspecialchars($user_profile['username']); ?></p>
-                <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($user_profile['phone_number']); ?></p>
-            <?php else: ?>
-                <p>No user profile information available.</p>
-            <?php endif; ?>
-        </div>
-        <div class="profile-container">
-            <h2>Direct Referrals</h2>
-            <?php if (!empty($direct_referrals)): ?>
-                <ul>
-                    <?php foreach ($direct_referrals as $referral): ?>
-                        <li><?php echo htmlspecialchars($referral); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>No direct referrals available.</p>
-            <?php endif; ?>
-        </div>
-        <div class="profile-container">
-            <h2>Indirect Referrals</h2>
-            <?php if (!empty($indirect_referrals)): ?>
-                <ul>
-                    <?php foreach ($indirect_referrals as $referral): ?>
-                        <li><?php echo htmlspecialchars($referral); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>No indirect referrals available.</p>
-            <?php endif; ?>
+            <div class="referral-table-container">
+                <h2>Direct Referrals</h2>
+                <?php if (!empty($direct_referrals)): ?>
+                    <table class="referral-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Phone Number</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($direct_referrals as $index => $referral): ?>
+                                <tr>
+                                    <td><?php echo $index + 1; ?></td>
+                                    <td><?php echo htmlspecialchars($referral['username']); ?></td>
+                                    <td><?php echo htmlspecialchars($referral['phone_number']); ?></td>
+                                    <td><?php echo htmlspecialchars($referral['account_status'] == 'activated' ? 'Active' : 'Inactive'); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>No direct referrals available.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
-
     <footer>
-        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
+        <p>&copy; 2024 Alpha Platform. All rights reserved. <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
     </footer>
+    <script>
+        function toggleNavbar() {
+            const navbar = document.querySelector('.navbar');
+            const container = document.querySelector('.container');
+            const menuIcon = document.querySelector('.menu-icon');
+            navbar.classList.toggle('show');
+            container.classList.toggle('shifted');
+        }
 
+        function copyToClipboard() {
+            const referralLink = document.getElementById('referral-link');
+            referralLink.select();
+            document.execCommand('copy');
+            alert('Referral link copied to clipboard!');
+        }
+    </script>
 </body>
 </html>
