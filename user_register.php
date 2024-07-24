@@ -13,14 +13,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inspiration&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
     <title>Register</title>
     <style>
-       
         body {
             background-color: #444;
             border-radius: 25px;
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            
         }
         img {
             width: 5rem;
@@ -96,7 +94,6 @@
                 width: 100%;
             }
         }
-        
         .modal {
             display: none; 
             position: fixed; 
@@ -117,7 +114,6 @@
             border: 1px solid #888;
             width: 30%;
             border-radius: 25px;
-            
         }
         .close {
             color: #aaa;
@@ -131,53 +127,70 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .login-link a {
+            color: dodgerblue;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        function checkUsername(event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var form = document.getElementById('registerForm');
 
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script>
-   function checkUsername(event) {
-    event.preventDefault();
-    var username = document.getElementById('username').value;
-    var form = document.getElementById('registerForm');
-
-    if (username.length >= 4) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'check_username.php', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                if (xhr.responseText == 'exists') {
-                    var modal = document.getElementById("myModal");
-                    modal.style.display = "block";
-                } else if (xhr.responseText == 'success') {
-                    form.submit(); // Submit form if username is available
-                }
+            if (username.length >= 4) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'check_username.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        if (xhr.responseText == 'exists') {
+                            var modal = document.getElementById("myModal");
+                            modal.style.display = "block";
+                        } else if (xhr.responseText == 'success') {
+                            form.submit(); // Submit form if username is available
+                        }
+                    }
+                };
+                xhr.send('username=' + encodeURIComponent(username));
             }
-        };
-        xhr.send('username=' + encodeURIComponent(username));
-    }
-}
+        }
 
-    // Close the modal
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        var modal = document.getElementById("myModal");
-        if (event.target == modal) {
+        // Close the modal
+        function closeModal() {
+            var modal = document.getElementById("myModal");
             modal.style.display = "none";
         }
-    }
-</script>
 
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Populate the upline username field if it is present in the URL
+        function populateUplineUsername() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const uplineUsername = urlParams.get('ref');
+            if (uplineUsername) {
+                document.getElementById('upline_username').value = uplineUsername;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateUplineUsername);
+    </script>
 </head>
 <body> 
-  
-
-
   <!-- Form -->
   <form id="registerForm" onsubmit="checkUsername(event)" method="post" action="user_register_process.php">
         <div class="container">
@@ -189,8 +202,6 @@
                 <p class="sign">Please fill this form to register to Alpha Finance</p>
                 <label for="username" class="sign"><b><i class="fas fa-user"></i> Username</b></label>
                 <input type="text" id="username" name="username" class="sign" placeholder="Enter Username of Your Choice" autocomplete="off" required>
-
-
                 <label for="phonenumber" class="sign"><b><i class="fas fa-phone"></i> Enter Phone Number</b></label>
                 <input type="text" id="phone_number" name="phone_number" class="sign" placeholder="Enter phone number" autocomplete="off" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
                 <script>
@@ -209,19 +220,19 @@
                 <input type="password" class="sign" placeholder="Confirm Your Password" name="psw-confirm" required autocomplete="off">
                 
                 <!-- Upline Username -->
-                <label for="upline_username" class="sign"><b><i class="fas fa-user"></i> Upline Username (Optional)</b></label>
-                <input type="text" name="upline_username" class="sign" placeholder="Enter Upline Username" autocomplete="off">
+                <label for="upline_username" class="sign"><b><i class="fas fa-user"></i> Upline Username</b></label>
+                <input type="text" id="upline_username" name="upline_username" class="sign" placeholder="Enter Upline Username" autocomplete="off" required>
 
-                <label>
-                    <input type="checkbox" checked="checked" name="remember">
-                    <name class="sign"><i class="fas fa-check"></i> Remember me</name>
+                <label class="sign">
+                    <input type="checkbox" name="remember" style="margin-bottom: 15px"> Remember me 
                 </label>
-            </div>
-            <p class="psw">By creating an account you agree to our <a href="https://policies.google.com/terms" target="_blank">Terms & Privacy</a></p>
-
-            <div class="clearfix">
-                <button type="button" class="cancelbtn"><a href="user_login.php">Login Instead</a></button>
-                <button type="submit" class="signupbtn">Sign Up</button>
+                <p class="sign">By creating an account, you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+                <div class="clearfix">
+                    <button type="submit" class="signupbtn">Sign Up</button>
+                </div>
+                <div class="login-link">
+                    <p>Already have an account? <a href="user_login.php">Login</a></p>
+                </div>
             </div>
         </div>
     </form>
@@ -230,7 +241,7 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <p>Username already exists. Please choose another username.</p>
+            <p>Username already exists. Please choose a different username.</p>
         </div>
     </div>
 </body>

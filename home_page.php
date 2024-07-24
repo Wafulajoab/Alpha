@@ -122,6 +122,25 @@ function getTotalMaturedInvestments($username) {
 
     $stmt->close();
 
+    function updateReferralEarnings($referrerUsername, $activationFee) {
+    global $conn;
+
+    // Calculate the referral bonus (50% of the activation fee)
+    $referralBonus = $activationFee * 0.50;
+
+    // Update the referrer's earnings
+    $sql = "UPDATE accounts SET referralsEarnings = referralsEarnings + ? WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
+    }
+    $stmt->bind_param("ds", $referralBonus, $referrerUsername);
+    $stmt->execute();
+    $stmt->close();
+}
+
+
+
     // Reset matured investments to zero after fetching the total
     if ($totalMaturedInvestments > 0) {
         // Update account balance with matured investments
@@ -173,6 +192,9 @@ $totalActiveInvestments = getTotalActiveInvestments($username);
 // Fetch the total matured investments for the logged-in user
 $totalMaturedInvestments = getTotalMaturedInvestments($username);
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -400,9 +422,9 @@ $totalMaturedInvestments = getTotalMaturedInvestments($username);
              <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalWithdrawn, 2); ?></p>
         </div>
         <div class="section referral-earnings">
-            <h2>Referrals Earnings</h2>
-             <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($referralsEarnings, 2); ?></p>
-        </div>
+        <h2>Referrals Earnings</h2>
+        <p style="font-size: 24px; font-weight: bold;">Ksh <?php echo number_format($referralsEarnings, 2); ?></p>
+    </div>
         <div class="section active-investments">
             <h2>Total Active Investments</h2>
              <p style="font-size: 24px; font-weight: bold;">Ksh<?php echo number_format($totalActiveInvestments, 2); ?></p>

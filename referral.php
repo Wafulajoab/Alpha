@@ -15,22 +15,38 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Initialize referral arrays
-$direct_referrals = [];
+// Function to update referral earnings
+function updateReferralEarnings($referrerUsername, $activationFee) {
+    global $conn;
+
+    // Calculate the referral bonus (50% of the activation fee)
+    $referralBonus = $activationFee * 0.50;
+
+    // Update the referrer's earnings
+    $sql = "UPDATE accounts SET referralsEarnings = referralsEarnings + ? WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
+    }
+    $stmt->bind_param("ds", $referralBonus, $referrerUsername);
+    $stmt->execute();
+    $stmt->close();
+}
 
 // Fetch user profile information if logged in
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
+    $direct_referrals = [];
 
     // Fetch direct referrals with additional details
-    $sql = "SELECT username, phone_number, account_status FROM users WHERE referred_by = ?";
+    $sql = "SELECT username, phone_number, account_status FROM users WHERE upline_username = ?";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("s", $param_username);
-        $param_username = $username;
+        $stmt->bind_param("s", $username);
 
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
+            $row['amount_earned'] = $row['account_status'] == 'Active' ? ' 50' : ' 0.0';
             $direct_referrals[] = $row;
         }
         $stmt->close();
@@ -64,7 +80,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -78,18 +94,18 @@ $conn->close();
             overflow-x: hidden;
         }
 
-        /* Menu icon styles */
         .menu-icon {
-            color: white; /* Icon color */
-            font-size: 40px; /* Icon size */
-            margin-right: 10px; /* Right margin for spacing */
-            cursor: pointer; /* Change cursor to pointer on hover */
-            position: absolute; /* Position the icon */
-            top: 10px; /* Adjust top position */
-            left: 10px; /* Adjust left position */
-            z-index: 1000; /* Ensure icon appears above other content */
-            transition: left 0.3s ease; /* Add transition for sliding effect */
+            color: white;
+            font-size: 40px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            transition: left 0.3s ease;
         }
+
         .navbar {
             position: fixed;
             top: 0;
@@ -103,31 +119,37 @@ $conn->close();
             align-items: center;
             padding: 0;
             transition: left 0.3s ease;
-            overflow-y: auto; /* Added for scrollbar */
+            overflow-y: auto;
         }
+
         .navbar.show {
             left: 0;
         }
+
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
+
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
+
         .navbar ul {
             display: flex;
             flex-direction: column;
             list-style-type: none;
             padding: 0;
         }
+
         .navbar ul li {
             padding: .2rem;
             margin: .2rem 0;
         }
+
         .navbar ul li a {
             text-decoration: none;
             color: rgb(250, 246, 246);
@@ -136,6 +158,7 @@ $conn->close();
             display: flex;
             align-items: center;
         }
+
         .navbar h2 {
             font-size: 1.5rem;
             padding: 0.5px;
@@ -145,11 +168,11 @@ $conn->close();
         }
 
         .container {
-            margin-left: 0; /* Start with no margin-left */
+            margin-left: 0;
             padding: 20px;
             max-width: 1000px;
             width: 100%;
-            transition: margin-left 0.3s ease; /* Add transition for sliding effect */
+            transition: margin-left 0.3s ease;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-gap: 20px;
@@ -162,17 +185,17 @@ $conn->close();
         footer {
             position: fixed;
             bottom: 0;
-            left: 0; /* Start from the left edge of the screen */
-            width: 100%; /* Full width */
+            left: 0;
+            width: 100%;
             background: #444;
             text-align: center;
             padding: 0.01rem;
-            z-index: 999; /* Ensure it stays above other content */
+            z-index: 999;
         }
 
         footer p {
             justify-content: center;
-            margin: 0; /* Remove default margin */
+            margin: 0;
         }
 
         footer a {
@@ -218,8 +241,8 @@ $conn->close();
         .referral-table-container {
             margin-top: 20px;
             padding: 10px;
-            background-color: #f9f9f9; /* Light background for the table container */
-            border-radius: 8px; /* Rounded corners */
+            background-color: #f9f9f9;
+            border-radius: 8px;
         }
 
         .referral-table {
@@ -234,12 +257,6 @@ $conn->close();
             text-align: left;
         }
 
-        
-        .referral-table th, .referral-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
         .referral-table th {
             background-color: #444;
             color: white;
@@ -253,21 +270,20 @@ $conn->close();
     <nav class="navbar">
         <h2>Menu</h2>
         <div class="image" style="text-align: center; margin-top: 20px;">
-    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-    </div>
-
-    <h2>ALPHA FINANCE</h2>
-    <ul>
-   <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
-   <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-   <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-   <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-   <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-   <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-   <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
-   <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li> <!-- Customer Care Module -->
-   <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
-</ul>
+            <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+        </div>
+        <h2>ALPHA FINANCE</h2>
+        <ul>
+            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+            <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+            <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+            <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+            <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+        </ul>
     </nav>
     <div class="container">
         <div class="home-content">
@@ -286,6 +302,7 @@ $conn->close();
                                 <th>Username</th>
                                 <th>Phone Number</th>
                                 <th>Status</th>
+                                <th>Amount Earned (KSH)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -294,7 +311,8 @@ $conn->close();
                                     <td><?php echo $index + 1; ?></td>
                                     <td><?php echo htmlspecialchars($referral['username']); ?></td>
                                     <td><?php echo htmlspecialchars($referral['phone_number']); ?></td>
-                                    <td><?php echo htmlspecialchars($referral['account_status'] == 'activated' ? 'Active' : 'Inactive'); ?></td>
+                                    <td><?php echo htmlspecialchars($referral['account_status'] == 'Active' ? 'Active' : 'Inactive'); ?></td>
+                                    <td><?php echo htmlspecialchars($referral['amount_earned']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
