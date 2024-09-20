@@ -42,11 +42,10 @@ if (isset($_SESSION['username'])) {
     $sql = "SELECT username, phone_number, account_status FROM users WHERE upline_username = ?";
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $username);
-
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
-            $row['amount_earned'] = $row['account_status'] == 'Active' ? ' 50' : ' 0.0';
+            $row['amount_earned'] = $row['account_status'] == 'Active' ? '50' : '0.0';
             $direct_referrals[] = $row;
         }
         $stmt->close();
@@ -223,44 +222,63 @@ $conn->close();
             border: none;
             cursor: pointer;
         }
-
         .referral-container {
-            text-align: center;
-            margin-top: 20px;
-        }
+    text-align: center;
+    margin-top: 20px;
+    animation: slideInLeft 1s ease-in-out;
+    
+}
 
-        .referral-container input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
+.referral-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    animation: slideInLeft 1s ease-in-out;
+}
 
-        .referral-table-container {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-        }
+.referral-table-container {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    animation: slideInLeft 1s ease-in-out;
+    width: 600px;
+}
 
-        .referral-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+.referral-table {
+    width: 600px;
+    border-collapse: collapse;
+    margin-top: 10px;
+    animation: slideInLeft 1s ease-in-out;
+}
 
-        .referral-table th, .referral-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+.referral-table th, .referral-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    animation: slideInLeft 1s ease-in-out;
+}
 
-        .referral-table th {
-            background-color: #444;
-            color: white;
-        }
+.referral-table th {
+    background-color: #444;
+    color: white;
+    animation: slideInLeft 1s ease-in-out;
+}
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
     </style>
 </head>
 <body>
@@ -287,7 +305,7 @@ $conn->close();
     </nav>
     <div class="container">
         <div class="home-content">
-            <h1>Welcome to Alpha Platform</h1>
+            <h2>Copy the link below and invite more Investors and Earn Referral Bonus</h2>
             <div class="referral-container">
                 <input type="text" id="referral-link" value="http://example.com/register.php?ref=<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>" readonly>
                 <button class="copy-btn" onclick="copyToClipboard()">Copy Referral Link</button>
