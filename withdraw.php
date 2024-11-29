@@ -38,6 +38,19 @@ if (isset($_SESSION['success_message'])) {
     $success_message = $_SESSION['success_message'];
     unset($_SESSION['success_message']);
 }
+
+// Fetch user's phone number from the users table
+$sql = "SELECT phone_number FROM users WHERE username = ?";
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->bind_result($phone_number);
+    $stmt->fetch();
+    $stmt->close();
+} else {
+    echo "Error preparing statement: " . $conn->error;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,8 +165,8 @@ if (isset($_SESSION['success_message'])) {
             background-color: green;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 10px 90px;
+            border-radius: 50px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
@@ -185,41 +198,7 @@ if (isset($_SESSION['success_message'])) {
             text-decoration: underline;
             font-weight: bold;
         }
-        .withdrawals-section {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            transition: margin-left 0.3s ease;
-        }
-        .withdrawals-section.shifted {
-            margin-left: 200px;
-        }
-        table {
-            width: 50%;
-            border-collapse: collapse;
-            background-color: #fff;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #333;
-            color: #fff;
-        }
-        td {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
+       
         
     footer {
         position: fixed;
@@ -271,18 +250,19 @@ if (isset($_SESSION['success_message'])) {
                 <h3>Withdrawal Section</h3>
                 <div>
                     <div>
-                        <h4>Account Balance</h4>
+                    <h4 style="font-size: 1.5rem; font-family: times 'Times New Roman', Times, serif;  font-weight: bold; color: blue; margin-bottom: 10px;">Account Balance</h4>
                         <?php
-                        echo "<p>Ksh " . $accountBalance . "</p>";
-                        ?>
+                                echo "<p style='font-size: 2rem; font-weight: bold;  color: black;'>Ksh " . $accountBalance . "</p>";
+                         ?>
+
                     </div>
                 </div>
                 <div>
-                    <h4>Phone Number</h4>
-                    <input type="text" name="phone_number" placeholder="Enter your phone number" 
-                           style="width: 200px; height: 30px;" maxlength="10" 
-                           oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" required>
+               <h4>Phone Number</h4>
+                    <input type="text" name="phone_number" value="<?php echo htmlspecialchars($phone_number); ?>" 
+                        style="width: 200px; height: 30px; background: transparent; font-weight: bold; font-size: 35px; border: transparent;" maxlength="10" readonly>
                 </div>
+
                 <div>
                     <h4>Enter Amount</h4>
                     <input type="text" name="withdraw_amount" id="withdraw_amount" placeholder="Enter withdrawal amount (Ksh)" style="width: 200px; height: 30px;">
@@ -306,30 +286,122 @@ if (isset($_SESSION['success_message'])) {
     <?php endif; ?>
 
     <div class="withdrawals-section" id="withdrawals-section">
-        <h3>Withdrawal History</h3>
-        <?php if (!empty($withdrawals)): ?>
-            <table>
-                <tr>
-                    <th>Serial No</th>
-                    <th>Amount</th>
-                    <th>Phone Number</th>
-                    <th>Status</th>
-                    <th>Date Requested</th>
-                </tr>
-                <?php foreach ($withdrawals as $withdrawal): ?>
-                    <tr>
-                        <td><?php echo $withdrawal['id']; ?></td>
-                        <td><?php echo $withdrawal['amount']; ?></td>
-                        <td><?php echo $withdrawal['phone_number']; ?></td>
-                        <td><?php echo $withdrawal['status']; ?></td>
-                        <td><?php echo $withdrawal['date_requested']; ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No withdrawal history found.</p>
-        <?php endif; ?>
+    <h3>Withdrawal History</h3>
+    <style>
+        /* Styles for the withdrawals section */
+        .withdrawals-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .withdrawals-section h3 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .total-amount {
+            text-align: center;
+            font-size: 18px;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            color: #555;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .withdrawals-section p {
+            text-align: center;
+            color: #999;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .withdrawals-section {
+                padding: 10px;
+            }
+        }
+    </style>
+
+    <?php
+    // Calculate the total amount withdrawn
+    $totalWithdrawn = 0;
+    if (!empty($withdrawals)) {
+        foreach ($withdrawals as $withdrawal) {
+            $totalWithdrawn += $withdrawal['amount'];
+        }
+    }
+    ?>
+
+    <div class="total-amount">
+        Total Amount Withdrawn: KSH <?php echo number_format($totalWithdrawn, 2); ?>
     </div>
+
+    <?php if (!empty($withdrawals)): ?>
+        <table>
+            <tr>
+                <th>Serial No</th>
+                <th>Amount</th>
+                <th>Phone Number</th>
+                <th>Status</th>
+                <th>Date Requested</th>
+            </tr>
+            <?php foreach ($withdrawals as $withdrawal): ?>
+                <tr>
+                    <td><?php echo $withdrawal['id']; ?></td>
+                    <td><?php echo number_format($withdrawal['amount'], 2); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['phone_number']); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['status']); ?></td>
+                    <td><?php echo htmlspecialchars($withdrawal['date_requested']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>No withdrawal history found.</p>
+    <?php endif; ?>
+</div>
+
+
     <footer>
         <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>

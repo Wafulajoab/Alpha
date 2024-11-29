@@ -131,17 +131,48 @@ include 'db_connection.php';
         .container a:hover {
             text-decoration: underline;
         }
-
         footer {
-            background-color: #444;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: absolute;
+            position: fixed;
             bottom: 0;
+            left: 0;
             width: 100%;
-            font-size: 0.9rem;
+            background: #444;
+            text-align: center;
+            padding: 0.01rem;
+            z-index: 999;
         }
+        footer p {
+            justify-content: center;
+            margin: 0;
+        }
+        footer a {
+            color: green;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+       
+        
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0; /* Start from the left edge of the screen */
+        width: 100%; /* Full width */
+        background: #444;
+        text-align: center;
+        padding: 0.01rem;
+        z-index: 999; /* Ensure it stays above other content */
+    }
+
+    footer p {
+        justify-content: center;
+        margin: 0; /* Remove default margin */
+    }
+
+    footer a {
+        color: green;
+        text-decoration: underline;
+        font-weight: bold;
+    }
     </style>
 </head>
 <body>
@@ -171,11 +202,19 @@ include 'db_connection.php';
 <div class="container">
     <h2>Alpha Finance <br> Contact Customer Care</h2>
     <p>Click the link below to contact us via WhatsApp.</p>
-    <a href="https://wa.me/254791302603" target="_blank"><i class="fas fa-headset icon"></i> Customer Care</a>
+    <a href="https://wa.me/254793594637" target="_blank">
+        <i class="fas fa-headset icon"></i> Customer Care via WhatsApp
+    </a>
+    <br><br>
+    <p>Or give us a call at:</p>
+    <a href="tel:+254793594637">
+        <i class="fas fa-phone-alt icon"></i> 0793594637 - ceo-alphafinance
+    </a>
 </div>
 
+
 <footer>
-    &copy; 2024 ALPHA FINANCE. All Rights Reserved.
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
 </footer>
 
 <script>

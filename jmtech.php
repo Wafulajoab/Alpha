@@ -153,12 +153,12 @@
 </nav>
 <br>
 <div class="container">
-    <img src="images/jmtech.jpg" alt="Profile Picture" class="profile-picture">
-    <h1>Eng. Joab Wafula <br>(ceo JMTech. Dev.)</h1>
+    <img src="images/jmtlogo.png" alt="Profile Picture" class="profile-picture">
+    <h1>Eng. Jooh <br>(ceo JMTech. Dev.)</h1>
     <p>I am a passionate individual with a keen interest in technology and innovation. I enjoy exploring new ideas and solving problems through creative thinking and collaboration.</p>
     <ul>
-        <li><strong>Name:</strong>Eng. Joab Wafula</li>
-        <li><strong>Age:</strong> 25</li>
+        <li><strong>Name:</strong>Eng. Jooh</li>
+        <li><strong>Age:</strong> 28 yrs</li>
         <li><strong>Location:</strong> Nairobi, Kenya</li>
         <li><strong>Occupation:</strong> Software Engineer</li>
         <li><strong>Interests:</strong> Technology, Programming, Forex Trading</li>
@@ -168,14 +168,15 @@
 
     <h2 id="skills">Proficient Skills</h2>
     <ul>
-        <li><strong>Programming Languages:</strong> JavaScript, Python, Java</li>
+        <li><strong>Programming Languages:</strong> python</li>
         <li><strong>Frontend Technologies:</strong> HTML5, CSS3, JavaScript (ES6+)</li>
-        <li><strong>Backend Technologies:</strong> Node.js, Express.js, Django</li>
-        <li><strong>Frameworks:</strong> React.js, Vue.js, Flask</li>
+        <li><strong>Backend Technologies:</strong> python</li>
+        <li><strong>Frameworks:</strong> Django</li>
     </ul>
 
     <h2 id="about">About Me</h2>
-    <p>I have been working in the tech industry for over 7 years. Throughout my career, I have gained experience in developing web applications, designing databases, and implementing scalable solutions. I am passionate about staying up-to-date with the latest technologies and continuously improving my skills.</p>
+    <p>I have been working in the tech industry for over 7 years. Throughout my career, I have gained experience in developing web applications, designing databases, and implementing scalable solutions.
+        <br> I am passionate about staying up-to-date with the latest technologies and continuously improving my skills.</p>
 
     <div class="company-section" id="company">
         <h2>Company Overview</h2>

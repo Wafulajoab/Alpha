@@ -141,54 +141,60 @@
     </style>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
-        function checkUsername(event) {
-            event.preventDefault();
-            var username = document.getElementById('username').value;
-            var form = document.getElementById('registerForm');
+    function checkUsername(event) {
+        event.preventDefault();
+        var username = document.getElementById('username').value;
+        var form = document.getElementById('registerForm');
+        var modal = document.getElementById("myModal");
+        var modalMessage = document.getElementById("modalMessage");
 
-            if (username.length >= 4) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'check_username.php', true);
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        if (xhr.responseText == 'exists') {
-                            var modal = document.getElementById("myModal");
-                            modal.style.display = "block";
-                        } else if (xhr.responseText == 'success') {
-                            form.submit(); // Submit form if username is available
-                        }
+        if (username.length < 4) {
+            modalMessage.innerText = "Username must be at least 4 characters long.";
+            modal.style.display = "block"; // Show the modal with the message
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'check_username.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.responseText == 'exists') {
+                        modalMessage.innerText = "Username already exists.";
+                        modal.style.display = "block"; // Show the modal if username exists
+                    } else if (xhr.responseText == 'success') {
+                        form.submit(); // Submit form if username is available
                     }
-                };
-                xhr.send('username=' + encodeURIComponent(username));
-            }
+                }
+            };
+            xhr.send('username=' + encodeURIComponent(username));
         }
+    }
 
-        // Close the modal
-        function closeModal() {
-            var modal = document.getElementById("myModal");
+    // Close the modal
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
 
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            var modal = document.getElementById("myModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+    // Populate the upline username field if it is present in the URL
+    function populateUplineUsername() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const uplineUsername = urlParams.get('ref');
+        if (uplineUsername) {
+            document.getElementById('upline_username').value = uplineUsername;
         }
+    }
 
-        // Populate the upline username field if it is present in the URL
-        function populateUplineUsername() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const uplineUsername = urlParams.get('ref');
-            if (uplineUsername) {
-                document.getElementById('upline_username').value = uplineUsername;
-            }
-        }
+    document.addEventListener('DOMContentLoaded', populateUplineUsername);
+</script>
 
-        document.addEventListener('DOMContentLoaded', populateUplineUsername);
-    </script>
 </head>
 <body> 
   <!-- Form -->
@@ -237,12 +243,21 @@
         </div>
     </form>
 
-    <!-- Modal -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <p>Username already exists. Please choose a different username.</p>
-        </div>
+   <!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p>Username must be at least 4 characters long. <br> Use a unique username!</p>
     </div>
+</div>
+
+
+    <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="modalMessage"></p> <!-- Message will be updated here -->
+    </div>
+</div>
+
 </body>
 </html>

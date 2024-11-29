@@ -1,22 +1,3 @@
-<?php
-// Start the session
-session_start();
-
-// Include this part in the form body of admin_register.php where you want to display error messages
-if (isset($_GET['error'])) {
-    if ($_GET['error'] == "emptyfields") {
-        echo '<p class="error-message">Fill in all fields!</p>';
-    } else if ($_GET['error'] == "passwordcheck") {
-        echo '<p class="error-message">Passwords do not match!</p>';
-    } else if ($_GET['error'] == "weakpassword") {
-        echo '<p class="error-message">Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character!</p>';
-    } else if ($_GET['error'] == "sqlerror") {
-        echo '<p class="error-message">Database error. Please try again!</p>';
-    }
-} else if (isset($_GET['register']) && $_GET['register'] == "success") {
-    echo '<p class="success-message">Registration successful! You can now log in.</p>';
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -136,6 +117,28 @@ if (isset($_GET['error'])) {
             <div class="icon" id="icon">
                 <div class="image" style="text-align: center;">
                     <img src="images/alpha.webp" class="image2" alt="avatar">
+                </div>
+                <div>
+                <?php
+// Start the session
+session_start();
+
+// Include this part in the form body of admin_register.php where you want to display error messages
+if (isset($_GET['error'])) {
+    if ($_GET['error'] == "emptyfields") {
+        echo '<p class="error-message">Fill in all fields!</p>';
+    } else if ($_GET['error'] == "passwordcheck") {
+        echo '<p class="error-message">Passwords do not match!</p>';
+    } else if ($_GET['error'] == "weakpassword") {
+        echo '<p class="error-message">Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one digit, and one special character!</p>';
+    } else if ($_GET['error'] == "sqlerror") {
+        echo '<p class="error-message">Database error. Please try again!</p>';
+    }
+} else if (isset($_GET['register']) && $_GET['register'] == "success") {
+    echo '<p class="success-message">Registration successful! You can now log in.</p>';
+}
+?>
+
                 </div>
                 <h1 class="sign" style="text-align: center;"><i class="fas fa-user-plus"></i> Admin Sign Up</h1>
                 <p class="sign">Please fill this form to register as an admin at Alpha Finance</p>

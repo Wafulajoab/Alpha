@@ -18,6 +18,7 @@ if ($conn->connect_error) {
 // Function to update referral earnings
 function updateReferralEarnings($referrerUsername, $activationFee) {
     global $conn;
+    
 
     // Calculate the referral bonus (50% of the activation fee)
     $referralBonus = $activationFee * 0.50;
@@ -37,6 +38,7 @@ function updateReferralEarnings($referrerUsername, $activationFee) {
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $direct_referrals = [];
+    $total_earnings = 0; // Initialize total earnings
 
     // Fetch direct referrals with additional details
     $sql = "SELECT username, phone_number, account_status FROM users WHERE upline_username = ?";
@@ -46,6 +48,10 @@ if (isset($_SESSION['username'])) {
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
             $row['amount_earned'] = $row['account_status'] == 'Active' ? '50' : '0.0';
+            // Add the earned amount to total earnings if referral is active
+            if ($row['account_status'] == 'Active') {
+                $total_earnings += 50; // Assuming the earnings are 50 for each active referral
+            }
             $direct_referrals[] = $row;
         }
         $stmt->close();
@@ -222,86 +228,129 @@ $conn->close();
             border: none;
             cursor: pointer;
         }
+
         .referral-container {
+            text-align: center;
+            margin-top: 20px;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .referral-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .referral-table-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            animation: slideInLeft 1s ease-in-out;
+            width: 600px;
+        }
+
+        .referral-table {
+            width: 600px;
+            border-collapse: collapse;
+            margin-top: 10px;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .referral-table th, .referral-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .referral-table th {
+            background-color: #444;
+            color: white;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
+        .referral-subtotal {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        @keyframes slideInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+
+        /* Referral Earnings Container Styles */
+.referral-subtotal-container {
+    width: 80%; /* Adjust the width as needed */
+    max-width: 600px; /* Limit the maximum width */
+    margin: 20px auto; /* Center the container with some margin */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
     text-align: center;
-    margin-top: 20px;
-    animation: slideInLeft 1s ease-in-out;
-    
 }
 
-.referral-container input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    animation: slideInLeft 1s ease-in-out;
+/* Referral Subtotal Text Styling */
+.referral-subtotal h3 {
+    font-size: 1.8rem; /* Font size for the heading */
+    font-weight: bold; /* Make the text bold */
+    color: #007bff; /* Set the text color to blue */
+    margin: 0; /* Remove default margin */
 }
 
-.referral-table-container {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    animation: slideInLeft 1s ease-in-out;
-    width: 600px;
-}
-
-.referral-table {
-    width: 600px;
-    border-collapse: collapse;
-    margin-top: 10px;
-    animation: slideInLeft 1s ease-in-out;
-}
-
-.referral-table th, .referral-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    animation: slideInLeft 1s ease-in-out;
-}
-
-.referral-table th {
-    background-color: #444;
-    color: white;
-    animation: slideInLeft 1s ease-in-out;
-}
-
-@keyframes slideInLeft {
-    0% {
-        opacity: 0;
-        transform: translateX(-100%);
+/* Make the text more responsive on smaller screens */
+@media (max-width: 600px) {
+    .referral-subtotal-container {
+        width: 90%;
+        padding: 15px;
     }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
+    .referral-subtotal h3 {
+        font-size: 1.5rem;
     }
 }
 
     </style>
 </head>
 <body>
-    <div class="menu-icon" onclick="toggleNavbar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <nav class="navbar">
-        <h2>Menu</h2>
+   
+     <!-- Menu Icon -->
+     <i class="fas fa-bars menu-icon" onclick="toggleNavbar()"></i>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+      
         <div class="image" style="text-align: center; margin-top: 20px;">
-            <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
-        </div>
+    <img src="images/alpha.webp" class="image2" alt="avatar" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #444;">
+</div>
+
         <h2>ALPHA FINANCE</h2>
         <ul>
-            <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
-            <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
-            <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
-            <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
-            <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
-            <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
-            <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
-            <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li>
-            <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
-        </ul>
+   <li><a href="home_page.php"><i class="fas fa-home icon"></i>Dashboard</a></li>
+   <li><a href="deposits.php"><i class="fas fa-money-bill-alt icon"></i>Deposit</a></li>
+   <li><a href="summary.php"><i class="fas fa-file-alt icon"></i>Summary</a></li>
+   <li><a href="investments.php"><i class="fas fa-chart-line icon"></i>Invest</a></li>
+   <li><a href="active_investments.php"><i class="fas fa-chart-line icon"></i>Active Investments</a></li>
+   <li><a href="withdraw.php"><i class="fas fa-credit-card icon"></i>Withdrawals</a></li>
+   <li><a href="referral.php"><i class="fas fa-user-friends icon"></i>Referral</a></li>
+   <li><a href="customer_care.php"><i class="fas fa-headset icon"></i>Customer Care</a></li> <!-- Customer Care Module -->
+   <li><a href="logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
+</ul>
+
     </nav>
     <div class="container">
         <div class="home-content">
@@ -315,6 +364,13 @@ $conn->close();
                 <?php if (!empty($direct_referrals)): ?>
                     <table class="referral-table">
                         <thead>
+               <!-- Display Subtotal Earnings -->
+<div class="referral-subtotal-container">
+    <div class="referral-subtotal">
+        <h3>Total Earnings from Referrals: KSH <?php echo number_format($total_earnings, 2); ?></h3>
+    </div>
+</div>
+
                             <tr>
                                 <th>#</th>
                                 <th>Username</th>
@@ -339,19 +395,31 @@ $conn->close();
                     <p>No direct referrals available.</p>
                 <?php endif; ?>
             </div>
+           
         </div>
     </div>
-    <footer>
-        <p>&copy; 2024 Alpha Platform. All rights reserved. <a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
+     <footer>
+        <p>Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
+   
     <script>
-        function toggleNavbar() {
-            const navbar = document.querySelector('.navbar');
-            const container = document.querySelector('.container');
-            const menuIcon = document.querySelector('.menu-icon');
-            navbar.classList.toggle('show');
-            container.classList.toggle('shifted');
+           function toggleNavbar() {
+        const navbar = document.getElementById('navbar');
+        const container = document.querySelector('.container');
+        const menuIcon = document.querySelector('.menu-icon');
+        const isOpen = navbar.classList.contains('show');
+        
+        if (isOpen) {
+            navbar.classList.remove('show');
+            container.style.marginLeft = '0';
+            menuIcon.style.left = '10px';
+        } else {
+            navbar.classList.add('show');
+            container.style.marginLeft = '200px';
+            menuIcon.style.left = '210px';
         }
+    }
+   
 
         function copyToClipboard() {
             const referralLink = document.getElementById('referral-link');
