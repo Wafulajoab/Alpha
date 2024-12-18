@@ -20,49 +20,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $transaction_code = strtoupper($_POST['transaction_code']);
         $username = $_POST['username'];
 
-        // Check if the entered username exists in the database
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $stmt->execute([$username]);
-        $user = $stmt->fetch();
+        if ($deposit_amount == 100.00) {
+            if (preg_match('/^[A-Z0-9]{10}$/', $transaction_code)) {
+                $user_id = 123; // Replace with the actual user ID from your session or form data
+                $sql = "INSERT INTO transactions (user_id, username, amount, transaction_code, activation_status) 
+                        VALUES (?, ?, 100.00, ?, 'pending')";
+                $stmt = $pdo->prepare($sql);
 
-        if ($user) {
-            // Check if the username already has a transaction
-            $user_id = $user['id'];
-            $stmt = $pdo->prepare("SELECT * FROM transactions WHERE user_id = ? AND (activation_status = 'pending' OR activation_status = 'completed')");
-            $stmt->execute([$user_id]);
-            $existingTransaction = $stmt->fetch();
-
-            if ($existingTransaction) {
-                $message = "This username has already been used for activation. Please contact support for further assistance.";
-            } else {
-                if ($deposit_amount == 100.00) {
-                    if (preg_match('/^[A-Z0-9]{10}$/', $transaction_code)) {
-                        $sql = "INSERT INTO transactions (user_id, username, amount, transaction_code, activation_status) 
-                                VALUES (?, ?, 100.00, ?, 'pending')";
-                        $stmt = $pdo->prepare($sql);
-
-                        try {
-                            $stmt->execute([$user_id, $username, $transaction_code]);
-                            header("Location: activation_in_progress.php");
-                            exit();
-                        } catch (PDOException $e) {
-                            $message = "Error: " . $e->getMessage();
-                        }
-                    } else {
-                        $message = "Transaction code must be exactly 10 alphanumeric characters.";
-                    }
-                } else {
-                    $message = "Account activation fee is Ksh. 100.00.";
+                try {
+                    $stmt->execute([$user_id, $username, $transaction_code]);
+                    header("Location: activation_in_progress.php");
+                    exit();
+                } catch (PDOException $e) {
+                    $message = "Error: " . $e->getMessage();
                 }
+            } else {
+                $message = "Transaction code must be exactly 10 alphanumeric characters.";
             }
         } else {
-            $message = "Username not found. Please use the correct registered username.";
+            $message = "Deposit amount must be exactly Ksh. 100.00 for account activation.";
         }
     } else {
         $message = "Please fill in all required fields.";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -201,8 +184,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li>Go to M-Pesa menu on your phone.</li>
                 <li>Select Lipa Na M-Pesa.</li>
                 <li>Choose Paybill.</li>
-                <li>Enter Paybill Number: <strong>123456</strong>.</li>
-                <li>Enter Account Number: <strong>YourAccountNumber</strong>.</li>
+                <li>Enter Paybill Number: <strong>247247</strong>.</li>
+                <li>Enter Account Number: <strong>17101764567</strong>.</li>
                 <li>Enter Amount.</li>
                 <li>Enter your M-Pesa PIN and confirm the transaction.</li>
             </ol>
@@ -212,9 +195,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="section transaction-input-section">
             <h3>Enter M-Pesa Transaction Details</h3>
             <form action="account_activation.php" method="post">
-            <label for="username">Username:</label>
+                <label for="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder="Enter Username" required>
-
 
                 <label for="deposit_amount">Deposited Amount:</label>
                 <input type="text" id="deposit_amount" name="deposit_amount" placeholder="Enter Deposited Amount" required>

@@ -19,24 +19,12 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $pending_transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle activation and deactivation
+// Handle activation
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
     $transaction_id = $_POST['transaction_id'];
-    $action = $_POST['action'];
-
-    // Update transaction status
-    $activation_status = $action === 'Activate' ? 'activated' : 'inactive';
-    $sql = "UPDATE transactions SET activation_status = ? WHERE id = ?";
+    $sql = "UPDATE transactions SET activation_status = 'activated' WHERE id = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$activation_status, $transaction_id]);
-
-    // Update user account status
-    $username = $_POST['username'];
-    $account_status = $action === 'Activate' ? 'Active' : 'Inactive';
-    $sql = "UPDATE users SET account_status = ? WHERE username = ?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$account_status, $username]);
-
+    $stmt->execute([$transaction_id]);
     header("Location: admin_activation.php"); // Refresh the page to see updated list
     exit();
 }
@@ -105,11 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
             background-color: #45a049;
         }
 
-        button[name="action"][value="Deactivate"] {
+        button[name="action"][value="Rejected"] {
             background-color: #f44336;
         }
 
-        button[name="action"][value="Deactivate"]:hover {
+        button[name="action"][value="Rejected"]:hover {
             background-color: #e53935;
         }
 
@@ -128,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
         .navbar {
             position: fixed;
             top: 0;
-            left: -200px;
+            left: -200px; /* Initially hide the navbar */
             width: 200px;
             height: 100vh;
             background-color: #444;
@@ -137,32 +125,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
             flex-direction: column;
             align-items: center;
             padding: 0;
-            transition: left 0.3s ease;
-            overflow-y: auto; /* Added for scrollbar */
+            transition: left 0.3s ease; /* Add transition for sliding effect */
         }
+
         .navbar.show {
-            left: 0;
+            left: 0; /* Show the navbar */
         }
+
         .navbar a {
             color: #fff;
             text-decoration: none;
             margin: 10px 0;
             border-radius: 25px;
         }
+
         .navbar .icon {
             font-size: 20px;
             margin-right: 15px;
         }
+
         .navbar ul {
             display: flex;
             flex-direction: column;
             list-style-type: none;
             padding: 0;
         }
+
         .navbar ul li {
             padding: .2rem;
             margin: .2rem 0;
         }
+
         .navbar ul li a {
             text-decoration: none;
             color: rgb(250, 246, 246);
@@ -171,6 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
             display: flex;
             align-items: center;
         }
+
         .navbar h2 {
             font-size: 1.5rem;
             padding: 0.5px;
@@ -219,6 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
             <li><a href="admin_deposits.php"><i class="fas fa-money-bill-alt icon"></i>Manage Deposits</a></li>
             <li><a href="admin_withdrawals.php"><i class="fas fa-credit-card icon"></i>Manage Withdrawals</a></li>
             <li><a href="admin_investments.php"><i class="fas fa-chart-line icon"></i>Manage Investments</a></li>
+            <li><a href="admin_messages.php"><i class="fas fa-envelope icon"></i>Messages</a></li>
             <li><a href="admin_logout.php"><i class="fas fa-sign-out-alt icon"></i>Logout</a></li>
         </ul>
     </nav>
@@ -246,13 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
                         <td>
                             <form method="post" action="admin_activation.php" style="display:inline;">
                                 <input type="hidden" name="transaction_id" value="<?php echo htmlspecialchars($transaction['id']); ?>">
-                                <input type="hidden" name="username" value="<?php echo htmlspecialchars($transaction['username']); ?>">
-                                <button type="submit" name="action" value="Activate">Activate</button>
-                            </form>
-                            <form method="post" action="admin_activation.php" style="display:inline;">
-                                <input type="hidden" name="transaction_id" value="<?php echo htmlspecialchars($transaction['id']); ?>">
-                                <input type="hidden" name="username" value="<?php echo htmlspecialchars($transaction['username']); ?>">
-                                <button type="submit" name="action" value="Deactivate">Deactivate</button>
+                                <button type="submit" class="btn-activate">Activate</button>
                             </form>
                         </td>
                     </tr>
@@ -261,47 +250,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['transaction_id'])) {
         </table>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; <?php echo date('Y'); ?> <a href="#">Alpha Finance</a>. All rights reserved.</p>
+        <p>&copy; <?php echo date('Y'); ?> Company. <strong>All Rights Reserved.</strong> Designed By <a href="jmtech.php">JMTech</a></p>
     </footer>
 
+    <!-- JavaScript -->
     <script>
- document.addEventListener("DOMContentLoaded", function() {
-    var menuIcon = document.getElementById("menu-icon");
-    var navbar = document.getElementById("navbar");
-    var container = document.getElementById("container");
-    var approvedWithdrawalsTable = document.querySelector(".approved-withdrawals table");
-
-    menuIcon.addEventListener("click", function() {
-        navbar.classList.toggle("show");
-        container.classList.toggle("shifted");
-        menuIcon.classList.toggle("shifted");
-        approvedWithdrawalsTable.classList.toggle("shifted");
-    });
-});
-
-
-
         function toggleNavbar() {
-    const navbar = document.getElementById('navbar');
-    const container = document.querySelector('.container');
-    const menuIcon = document.querySelector('.menu-icon');
-    const isOpen = navbar.classList.contains('show');
-    
-    if (isOpen) {
-        navbar.classList.remove('show');
-        container.style.marginLeft = '0';
-        menuIcon.style.left = '10px';
-        container.style.zIndex = '1'; // Reset container z-index when navbar is closed
-    } else {
-        navbar.classList.add('show');
-        container.style.marginLeft = '200px';
-        menuIcon.style.left = '210px';
-        container.style.zIndex = '-1'; // Send container behind navbar when navbar is open
-    }
-}
-
-
+            const navbar = document.getElementById('navbar');
+            const container = document.querySelector('.container');
+            const menuIcon = document.querySelector('.menu-icon');
+            const isOpen = navbar.classList.contains('show');
+            
+            if (isOpen) {
+                navbar.classList.remove('show');
+                container.style.marginLeft = '0';
+                menuIcon.style.left = '10px';
+            } else {
+                navbar.classList.add('show');
+                container.style.marginLeft = '200px';
+                menuIcon.style.left = '210px';
+            }
+        }
     </script>
 </body>
 </html>
